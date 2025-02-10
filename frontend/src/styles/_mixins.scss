@@ -1,0 +1,59 @@
+@mixin header-style($fontSize) {
+    text-align: center;
+    font-size: $fontSize;
+    font-weight: 500;
+    padding: 0 15px;
+    background:linear-gradient(0deg, #d8ecf8, #98c0ef);
+    background-clip: text;
+    color: transparent;
+    display: block;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 1px 5px rgba(174, 207, 242, .24);
+}
+@mixin betweenLines{
+    content: "";
+    height: 1px;
+    background: linear-gradient(90deg, rgba(216, 236, 248, 0), rgba(184, 216, 254, .32));
+    width: 86px;
+}
+
+@mixin cursorStyle{
+  @media (min-width: 800px) {
+    --show-cursor: none;
+    cursor: none; 
+    ::selection {
+        background: rgb(255, 255, 0);
+        background-blend-mode: overlay;
+        color:#151718;
+      }
+    &:hover {
+      --show-cursor: block;
+    }
+    &::after {
+        --cursor-width: max( 5px, calc( 0 * .4) );
+        
+        display: var(--show-cursor);
+        content:"";
+        pointer-events:none;
+        
+        background:transparent;
+        border: 2px solid #98c0ef;
+        border-radius: calc( 20px / 2 );
+        translate: -50% -50%;
+        
+        position:absolute;
+        top: var(--mouse-y, 0);
+        left: var(--mouse-x, 0);
+        
+        width: 20px;
+        height: 40px;
+        
+        cursor:none;
+        transition: height 0.3s cubic-bezier(0.095, 1.090, 0.605, 1.235),
+                    width 0.3s cubic-bezier(0.095, 1.090, 0.605, 1.235);
+        
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        
+      }
+}}
