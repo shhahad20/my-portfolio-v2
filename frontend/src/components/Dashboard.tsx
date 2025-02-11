@@ -1,19 +1,38 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import "../styles/dashboard.scss";
+import { AppDispatch, RootState } from "../redux/store";
+import {
+  fetchComponents,
+  fetchRecent,
+  fetchRepos,
+  fetchSocialMedia,
+} from "../redux/slices/itemsSlice";
 
 const transitionSettings = { duration: 0.5, ease: "easeOut" };
 
 const Dashboard = () => {
+  const { components, repositories, social_media, recent } = useSelector(
+    (state: RootState) => state.items
+  );
   const [isMobile, setIsMobile] = useState(false);
-  const [data, setData] = useState({ repositories: [], components: [], social_media: [] });
-  const [recentData, setRecentData] = useState({
-    repositories: [],
-    components: [],
-    social_media: [],
-  });
   const [selectedCategory, setSelectedCategory] = useState("recent");
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    console.log(`Fetching data for: ${selectedCategory}`);
+    if (selectedCategory == "recent") {
+      dispatch(fetchRecent());
+    } else if (selectedCategory == "components") {
+      dispatch(fetchComponents());
+    } else if (selectedCategory == "repositories") {
+      dispatch(fetchRepos());
+    } else if (selectedCategory == "social_media") {
+      dispatch(fetchSocialMedia());
+    }
+  }, [dispatch, selectedCategory]);
+
   // When pulseTrigger becomes true, the parent's animate prop will change to "pulse"
   useEffect(() => {
     const checkMobile = () => {
@@ -29,36 +48,10 @@ const Dashboard = () => {
   const asideInitialScale = isMobile ? 1.1 : 1.5;
   const mainInitialScale = isMobile ? 1.1 : 1.5;
   const cardInitialScale = isMobile ? 1.1 : 1.3;
-
-  // Fetch data when category changes
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const url = `http://localhost:3001/api/${selectedCategory}`;
-        const response = await axios.get(url);
-        console.log("Fetched Data:", response.data);
-  
-        // Ensure correct data assignment
-        if (selectedCategory === "recent") {
-          setRecentData({
-            repositories: response.data.repositories || [],
-            components: response.data.components || [],
-            social_media: response.data.social_media || [],
-          });
-        } else {
-          setData({
-            repositories: response.data.repositories || [],
-            components: response.data.components || [],
-            social_media: response.data.social_media || [],
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching data", error);
-      }
-    };
-
-    fetchData();
-  }, [selectedCategory]);
+  console.log("Components:", components);
+  console.log("Repositories:", repositories);
+  console.log("Social Media:", social_media);
+  console.log("Recent:", recent);
 
   return (
     <div className="dashboard">
@@ -108,8 +101,42 @@ const Dashboard = () => {
           viewport={{ once: false, amount: 0.3 }}
           transition={transitionSettings}
         >
-          {selectedCategory === "recent" &&
-            data.repositories?.map((repo, index) => (
+          {selectedCategory === "recent" && (
+            <>
+              {[
+                ...recent.repositories,
+                ...recent.components,
+                ...recent.social_media,
+              ].map((item, index) => (
+                <motion.div
+                  key={`item-${index}`}
+                  className="dashboard__card"
+                  initial={{ opacity: 0.5, y: 20, scale: cardInitialScale }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: false, amount: 0.3 }}
+                  transition={{
+                    ...transitionSettings,
+                    delay: 0.05 + index * 0.05,
+                  }}
+                >
+                  <div className="image-container"></div>
+                  <div className="dashboard__card-content">
+                    <p>
+                      {"name" in item
+                        ? item.name // If it's a repository
+                        : "title" in item
+                        ? item.title // If it's a component
+                        : item.content}{" "}
+                      {/* If it's social media */}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </>
+          )}
+
+          {selectedCategory === "repositories" &&
+            repositories?.map((repo, index) => (
               <motion.div
                 key={index}
                 className="dashboard__card"
@@ -121,32 +148,19 @@ const Dashboard = () => {
                   delay: 0.05 + index * 0.05,
                 }}
               >
-                <div className="image-container"></div>
+                <div className="image-container">
+                  <video
+                    src={repo.preview_url}
+                    className="live-preview"
+                    muted
+                    loop
+                    preload="none"
+                    onMouseEnter={(e) => e.currentTarget.play()}
+                    onMouseLeave={(e) => e.currentTarget.pause()}
+                  />
+                </div>
                 <div className="dashboard__card-content">
                   <p>{repo.name}</p>
-                  {/* <a href={repo.url} target="_blank">
-                    View Repo
-                  </a> */}
-                </div>
-              </motion.div>
-            ))}
-
-          {selectedCategory === "components" &&
-            data.components?.map((component, index) => (
-              <motion.div
-                key={index}
-                className="dashboard__card"
-                initial={{ opacity: 0.5, y: 20, scale: cardInitialScale }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{
-                  ...transitionSettings,
-                  delay: 0.05 + index * 0.05,
-                }}
-              >
-                <div className="image-container"></div>
-                <div className="dashboard__card-content">
-                  <p>{component.name}</p>
                   {/* <a href={component.url} target="_blank">
                     View Component
                   </a> */}
@@ -154,8 +168,8 @@ const Dashboard = () => {
               </motion.div>
             ))}
 
-          {selectedCategory === "social-media" &&
-            data.social_media?.map((social, index) => (
+          {selectedCategory === "components" &&
+            components?.map((component, index) => (
               <motion.div
                 key={index}
                 className="dashboard__card"
@@ -169,7 +183,30 @@ const Dashboard = () => {
               >
                 <div className="image-container"></div>
                 <div className="dashboard__card-content">
-                  <p>{social.title}</p>
+                  <p>{component.title}</p>
+                  {/* <a href={component.url} target="_blank">
+                    View Component
+                  </a> */}
+                </div>
+              </motion.div>
+            ))}
+
+          {selectedCategory === "social_media" &&
+            social_media.map((social, index) => (
+              <motion.div
+                key={index}
+                className="dashboard__card"
+                initial={{ opacity: 0.5, y: 20, scale: cardInitialScale }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: false, amount: 0.3 }}
+                transition={{
+                  ...transitionSettings,
+                  delay: 0.05 + index * 0.05,
+                }}
+              >
+                <div className="image-container"></div>
+                <div className="dashboard__card-content">
+                  <p>{social.content}</p>
                   {/* <a href={social.url} target="_blank">
                     Read More
                   </a> */}
