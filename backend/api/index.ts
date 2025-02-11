@@ -1,12 +1,30 @@
+import { config } from 'dotenv';
 import express, { Request, Response } from 'express';
+import cors from 'cors';
+import itemsRouter from "../src/routers/itemsRouter.js";
 
-const app = express();
-const port = process.env.PORT || 3001; // Use environment variables
+config()
+const app = express() 
+const PORT = 3001
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello from the backend!');
-});
+app.use('/public',express.static('public'))
 
-app.listen(port, () => {
-  console.log(`Server listening on port http://localhost:${port}`);
-});
+// app.use(cookieParser())
+
+// app.use(morgan('dev'))
+// app.use(cors({
+//   origin: 'http://localhost:5173',
+//   credentials: true,
+// }));
+app.use(cors());
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+
+app.use('/api', itemsRouter)
+
+
+// app.use(apiErrorHandler)
+
+app.listen(PORT, async () => {
+  console.log('Server running http://localhost:' + PORT)
+}) 
