@@ -107,31 +107,81 @@ const Dashboard = () => {
                 ...recent.repositories,
                 ...recent.components,
                 ...recent.social_media,
-              ].map((item, index) => (
-                <motion.div
-                  key={`item-${index}`}
-                  className="dashboard__card"
-                  initial={{ opacity: 0.5, y: 20, scale: cardInitialScale }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: false, amount: 0.3 }}
-                  transition={{
-                    ...transitionSettings,
-                    delay: 0.05 + index * 0.05,
-                  }}
-                >
-                  <div className="image-container"></div>
-                  <div className="dashboard__card-content">
-                    <p>
-                      {"name" in item
-                        ? item.name // If it's a repository
-                        : "title" in item
-                        ? item.title // If it's a component
-                        : item.content}{" "}
-                      {/* If it's social media */}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
+              ].map((item, index) => {
+                const previewUrl = item.preview_url || ""; // Ensure preview_url exists
+                const isVideo = previewUrl.endsWith(".mp4");
+                return (
+                  <motion.div
+                    key={`item-${index}`}
+                    className="dashboard__card"
+                    initial={{ opacity: 0.5, y: 20, scale: cardInitialScale }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: false, amount: 0.3 }}
+                    transition={{
+                      ...transitionSettings,
+                      delay: 0.05 + index * 0.05,
+                    }}
+                  >
+                    <div className="image-container">
+                      {isVideo ? (
+                        <video
+                          src={previewUrl}
+                          className="live-preview"
+                          muted
+                          loop
+                          preload="none"
+                          onMouseEnter={(e) => e.currentTarget.play()}
+                          onMouseLeave={(e) => e.currentTarget.pause()}
+                        />
+                      ) : previewUrl.includes("embed") ? (
+                        <iframe
+                          src={previewUrl}
+                          className="live-preview"
+                          frameBorder="0"
+                          allowFullScreen
+                          scrolling="no"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            border: "none",
+                            overflow: "hidden",
+                          }}
+                        />
+                      ) : /\.(jpg|jpeg|png|gif|webp)$/.test(previewUrl) ? (
+                        <img
+                          src={previewUrl}
+                          alt="Preview"
+                          className="live-preview"
+                        />
+                      ) : (
+                        <iframe
+                          src={previewUrl}
+                          className="live-preview"
+                          frameBorder="0"
+                          allowFullScreen
+                          scrolling="no"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            border: "none",
+                            overflow: "hidden",
+                          }}
+                        />
+                      )}
+                    </div>
+                    <div className="dashboard__card-content">
+                      <p>
+                        {"name" in item
+                          ? item.name // If it's a repository
+                          : "title" in item
+                          ? item.title // If it's a component
+                          : item.content}{" "}
+                        {/* If it's social media */}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </>
           )}
 
