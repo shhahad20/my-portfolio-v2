@@ -1,6 +1,10 @@
 @import "mixins";
 @import "variables";
 
+a{
+  text-decoration: none;
+  color: $primary-white-color;
+}
 .dashboard {
   text-align: center;
   padding: 20px;
