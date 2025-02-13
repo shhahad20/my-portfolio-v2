@@ -1,0 +1,43 @@
+.reveal-links {
+  display: -ms-grid;
+  display: grid;
+  place-items: center;
+  gap: 0.5rem;
+  padding-top: 2rem;
+}
+
+.reveal-links .flip-link {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 70px;
+  font-weight: 600;
+  color: #d8ecf8;
+  text-transform: uppercase;
+}
+
+.reveal-links .flip-link > div {
+  line-height: 0.75;
+}
+
+.reveal-links .flip-link .absolute-layer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.reveal-links .flip-link span {
+  display: inline-block;
+}
+
+.reveal-links .flip-link .flip-link .absolute-layer {
+  text-shadow: none;
+}
+
+.reveal-links .flip-link .flip-link:hover {
+  text-shadow: none;
+}
+/*# sourceMappingURL=animatedHeader.css.map */

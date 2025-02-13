@@ -1,0 +1,157 @@
+@import "mixins";
+@import "variables";
+
+a {
+  text-decoration: none;
+  color: $primary-white-color;
+}
+#experience {
+  //   border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: $primary_white_color;
+  padding: 0 2rem;
+  margin: 3rem 0;
+  min-height: 120vh;
+  .flip{
+    display: flex;
+    gap: 1rem;
+  }
+  .between-lines {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: rgba(186, 214, 247, 0.32);
+
+    .experience-header {
+      @include header-style(15px);
+    }
+  }
+  .between-lines:before {
+    @include betweenLines;
+  }
+  .between-lines:after {
+    @include betweenLines;
+    transform: rotate(180deg);
+  }
+  .second-header {
+    // max-width: 70px;
+    @include header-style(50px);
+    margin: 0;
+  }
+  .third-p {
+    width: 400px;
+    text-align: center;
+    color: $primary-white-blue-color;
+  }
+  .cards_container {
+    margin: 2rem 0;
+    width: 100%;
+    max-width: 1800px;
+
+    // display: grid;
+    // // grid-template-columns: repeat(2, 1fr);
+    // grid-template-columns: 1fr 1fr;
+    display: flex;
+    gap: 2rem;
+    .left-column, .right-column {
+        flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .right-column {
+        height: 100%;
+    }
+    .card {
+      border: map-get($borders, 3);
+      background-color: $second-bg-color;
+      border-radius: 16px;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 5px;
+      overflow: hidden;
+      h1 {
+        font-weight: 500;
+        font-size: 36px;
+        margin: 0;
+      }
+      .blue_content {
+        margin: 0;
+        display: flex;
+        gap: 20px;
+        font-family: "Space Mono", serif;
+        font-size: 18px;
+        color: $secondary-light-blue-color;
+      }
+      .description {
+        margin: 0;
+        line-height: 30px;
+        font-size: 18px;
+      }
+
+      .code-container {
+        position: relative;
+        background-color: $background-color;
+        border: map-get($borders, 3);
+        border-radius: 16px;
+        // padding: 10px;
+        padding-top: 30px;
+        overflow-x: auto;
+        .code-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.5rem;
+          padding: 0 20px;
+          .code-title {
+            color: $secondary-light-blue-color;
+            color: $primary_white_color;
+            font-weight: 400;
+            // font-family: "Source Code Pro", monospace;
+            font-size: 1rem;
+            margin: 0;
+          }
+          .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: "Space Mono", serif;
+            cursor: pointer;
+            background-color: #0e0e0e;
+            border: none;
+            color: $primary_white_color;
+            padding: 5px 15px;
+            border-radius: 4px;
+          }
+        }
+
+        // .code{
+        //     background-color: #0E0E0E;
+        //     margin-bottom: 0;
+        //     // padding-bottom: 10px;
+        //     // white-space: pre-wrap;
+        //     padding: 1rem;
+
+        // }
+      }
+      .img-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+        img {
+          width: 70%;
+        }
+      }
+    }
+  }
+}

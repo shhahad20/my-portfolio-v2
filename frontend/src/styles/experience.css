@@ -1,0 +1,234 @@
+a {
+  text-decoration: none;
+  color: #EFEEEC;
+}
+
+#experience {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: #EFEEEC;
+  padding: 0 2rem;
+  margin: 3rem 0;
+  min-height: 120vh;
+}
+
+#experience .flip {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 1rem;
+}
+
+#experience .between-lines {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgba(186, 214, 247, 0.32);
+}
+
+#experience .between-lines .experience-header {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 0 15px;
+  background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
+  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+  background-clip: text;
+  color: transparent;
+  display: block;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
+}
+
+#experience .between-lines:before {
+  content: "";
+  height: 1px;
+  background: -webkit-gradient(linear, left top, right top, from(rgba(216, 236, 248, 0)), to(rgba(184, 216, 254, 0.32)));
+  background: linear-gradient(90deg, rgba(216, 236, 248, 0), rgba(184, 216, 254, 0.32));
+  width: 86px;
+}
+
+#experience .between-lines:after {
+  content: "";
+  height: 1px;
+  background: -webkit-gradient(linear, left top, right top, from(rgba(216, 236, 248, 0)), to(rgba(184, 216, 254, 0.32)));
+  background: linear-gradient(90deg, rgba(216, 236, 248, 0), rgba(184, 216, 254, 0.32));
+  width: 86px;
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+#experience .second-header {
+  text-align: center;
+  font-size: 50px;
+  font-weight: 500;
+  padding: 0 15px;
+  background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
+  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+  background-clip: text;
+  color: transparent;
+  display: block;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
+  margin: 0;
+}
+
+#experience .third-p {
+  width: 400px;
+  text-align: center;
+  color: #d8ecf8;
+}
+
+#experience .cards_container {
+  margin: 2rem 0;
+  width: 100%;
+  max-width: 1800px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 2rem;
+}
+
+#experience .cards_container .left-column, #experience .cards_container .right-column {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 2rem;
+}
+
+#experience .cards_container .right-column {
+  height: 100%;
+}
+
+#experience .cards_container .card {
+  border: 1px solid #2C2C2C;
+  background-color: #0b0b0b;
+  border-radius: 16px;
+  padding: 3rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  gap: 5px;
+  overflow: hidden;
+}
+
+#experience .cards_container .card h1 {
+  font-weight: 500;
+  font-size: 36px;
+  margin: 0;
+}
+
+#experience .cards_container .card .blue_content {
+  margin: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 20px;
+  font-family: "Space Mono", serif;
+  font-size: 18px;
+  color: #98c0ef;
+}
+
+#experience .cards_container .card .description {
+  margin: 0;
+  line-height: 30px;
+  font-size: 18px;
+}
+
+#experience .cards_container .card .code-container {
+  position: relative;
+  background-color: #070707;
+  border: 1px solid #2C2C2C;
+  border-radius: 16px;
+  padding-top: 30px;
+  overflow-x: auto;
+}
+
+#experience .cards_container .card .code-container .code-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 0.5rem;
+  padding: 0 20px;
+}
+
+#experience .cards_container .card .code-container .code-header .code-title {
+  color: #98c0ef;
+  color: #EFEEEC;
+  font-weight: 400;
+  font-size: 1rem;
+  margin: 0;
+}
+
+#experience .cards_container .card .code-container .code-header .copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: "Space Mono", serif;
+  cursor: pointer;
+  background-color: #0e0e0e;
+  border: none;
+  color: #EFEEEC;
+  padding: 5px 15px;
+  border-radius: 4px;
+}
+
+#experience .cards_container .card .img-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 2rem;
+}
+
+#experience .cards_container .card .img-container img {
+  width: 70%;
+}
+/*# sourceMappingURL=experience.css.map */

@@ -19,6 +19,9 @@ const Dashboard = () => {
   );
   const [isMobile, setIsMobile] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("recent");
+  const [scrollY, setScrollY] = useState(window.scrollY);
+  const [isScrollingDown, setIsScrollingDown] = useState(true);
+
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -34,6 +37,17 @@ const Dashboard = () => {
     }
   }, [dispatch, selectedCategory]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setIsScrollingDown(currentScrollY > scrollY);
+      setScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrollY]);
+
   // When pulseTrigger becomes true, the parent's animate prop will change to "pulse"
   useEffect(() => {
     const checkMobile = () => {
@@ -46,13 +60,18 @@ const Dashboard = () => {
   }, []);
 
   // Conditional scale values: use lower scaling on mobile screens
-  const asideInitialScale = isMobile ? 1.1 : 1.5;
-  const mainInitialScale = isMobile ? 1.1 : 1.5;
-  const cardInitialScale = isMobile ? 1.1 : 1.3;
-  console.log("Components:", components);
-  console.log("Repositories:", repositories);
-  console.log("Social Media:", social_media);
-  console.log("Recent:", recent);
+  const cardVariants = {
+    hidden: { opacity: 0.5, y: 20, scale: isMobile ? 1.1 : 1.3 },
+    visible: { opacity: 1, y: 0, scale: 1 },
+  };
+
+  // const asideInitialScale = isMobile ? 1.1 : 1.5;
+  // const mainInitialScale = isMobile ? 1.1 : 1.5;
+  // const cardInitialScale = isMobile ? 1.1 : 1.3;
+  // console.log("Components:", components);
+  // console.log("Repositories:", repositories);
+  // console.log("Social Media:", social_media);
+  // console.log("Recent:", recent);
 
   return (
     <div className="dashboard">
@@ -65,7 +84,9 @@ const Dashboard = () => {
       <div className="dashboard__container">
         <motion.aside
           className="dashboard__sidebar"
-          initial={{ opacity: 0.5, y: 20, scale: asideInitialScale }}
+          initial="hidden"
+          animate={isScrollingDown ? "visible" : "hidden"}
+          variants={cardVariants}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: false, amount: 0.3 }}
           transition={transitionSettings}
@@ -97,10 +118,12 @@ const Dashboard = () => {
         </motion.aside>
         <motion.main
           className="dashboard__content"
-          initial={{ opacity: 0.5, y: 20, scale: mainInitialScale }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: false, amount: 0.3 }}
-          transition={transitionSettings}
+          initial="hidden"
+          animate={isScrollingDown ? "visible" : "hidden"}
+          variants={cardVariants}
+          transition={{
+            transitionSettings,
+          }}
         >
           {selectedCategory === "recent" && (
             <>
@@ -113,12 +136,134 @@ const Dashboard = () => {
                 const isVideo = previewUrl.endsWith(".mp4");
                 return (
                   <Link to={item.url} target="_blank">
+                    <motion.div
+                      key={`item-${index}`}
+                      className="dashboard__card"
+                      initial="hidden"
+                      animate={isScrollingDown ? "visible" : "hidden"}
+                      variants={cardVariants}
+                      transition={{
+                        ...transitionSettings,
+                        delay: 0.05 + index * 0.05,
+                      }}
+                    >
+                      <div className="image-container">
+                        {isVideo ? (
+                          <video
+                            src={previewUrl}
+                            className="live-preview"
+                            muted
+                            loop
+                            preload="none"
+                            onMouseEnter={(e) => e.currentTarget.play()}
+                            onMouseLeave={(e) => e.currentTarget.pause()}
+                          />
+                        ) : previewUrl.includes("embed") ? (
+                          <iframe
+                            src={previewUrl}
+                            className="live-preview"
+                            frameBorder="0"
+                            allowFullScreen
+                            scrolling="no"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              border: "none",
+                              overflow: "hidden",
+                            }}
+                          />
+                        ) : /\.(jpg|jpeg|png|gif|webp)$/.test(previewUrl) ? (
+                          <img
+                            src={previewUrl}
+                            alt="Preview"
+                            className="live-preview"
+                          />
+                        ) : (
+                          <iframe
+                            src={previewUrl}
+                            className="live-preview"
+                            frameBorder="0"
+                            allowFullScreen
+                            scrolling="no"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              border: "none",
+                              overflow: "hidden",
+                            }}
+                          />
+                        )}
+                      </div>
+                      <div className="dashboard__card-content">
+                        <p>
+                          {"name" in item
+                            ? item.name // If it's a repository
+                            : "title" in item
+                            ? item.title // If it's a component
+                            : item.content}{" "}
+                          {/* If it's social media */}
+                        </p>
+                      </div>
+                    </motion.div>
+                  </Link>
+                );
+              })}
+            </>
+          )}
+
+          {selectedCategory === "repositories" &&
+            repositories?.map((repo, index) => (
+              <Link to={repo.url} target="_blank">
+                <motion.div
+                  key={index}
+                  className="dashboard__card"
+                  initial="hidden"
+                  animate={isScrollingDown ? "visible" : "hidden"}
+                  variants={cardVariants}
+                  transition={{
+                    ...transitionSettings,
+                    delay: 0.05 + index * 0.05,
+                  }}
+                >
+                  <div className="image-container">
+                    <video
+                      src={repo.preview_url}
+                      className="live-preview"
+                      muted
+                      loop
+                      preload="none"
+                      onMouseEnter={(e) => e.currentTarget.play()}
+                      onMouseLeave={(e) => e.currentTarget.pause()}
+                    />
+                  </div>
+                  <div className="dashboard__card-content">
+                    <p>{repo.name}</p>
+                    {/* <a href={component.url} target="_blank">
+                    View Component
+                  </a> */}
+                  </div>
+                </motion.div>{" "}
+              </Link>
+            ))}
+
+          {selectedCategory === "components" &&
+            components?.map((component, index) => {
+              const previewUrl = component.preview_url || ""; // Ensure preview_url exists
+              const isVideo = previewUrl.endsWith(".mp4");
+              const isEmbed =
+                /(youtube\.com\/embed|vimeo\.com\/embed|dailymotion\.com\/embed|linkedin\.com\/embed|codepen\.io\/embed)/.test(
+                  previewUrl
+                );
+              const isImage = /\.(jpg|jpeg|png|gif|webp)$/.test(previewUrl);
+
+              return (
+                <Link to={component.url} target="_blank">
                   <motion.div
-                    key={`item-${index}`}
+                    key={index}
                     className="dashboard__card"
-                    initial={{ opacity: 0.5, y: 20, scale: cardInitialScale }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                    viewport={{ once: false, amount: 0.3 }}
+                    initial="hidden"
+                    animate={isScrollingDown ? "visible" : "hidden"}
+                    variants={cardVariants}
                     transition={{
                       ...transitionSettings,
                       delay: 0.05 + index * 0.05,
@@ -135,7 +280,7 @@ const Dashboard = () => {
                           onMouseEnter={(e) => e.currentTarget.play()}
                           onMouseLeave={(e) => e.currentTarget.pause()}
                         />
-                      ) : previewUrl.includes("embed") ? (
+                      ) : isEmbed ? (
                         <iframe
                           src={previewUrl}
                           className="live-preview"
@@ -149,7 +294,7 @@ const Dashboard = () => {
                             overflow: "hidden",
                           }}
                         />
-                      ) : /\.(jpg|jpeg|png|gif|webp)$/.test(previewUrl) ? (
+                      ) : isImage ? (
                         <img
                           src={previewUrl}
                           alt="Preview"
@@ -172,129 +317,10 @@ const Dashboard = () => {
                       )}
                     </div>
                     <div className="dashboard__card-content">
-                      <p>
-                        {"name" in item
-                          ? item.name // If it's a repository
-                          : "title" in item
-                          ? item.title // If it's a component
-                          : item.content}{" "}
-                        {/* If it's social media */}
-                      </p>
+                      <p>{component.title}</p>
                     </div>
-                  </motion.div></Link>
-                );
-              })}
-            </>
-          )}
-
-          {selectedCategory === "repositories" &&
-            repositories?.map((repo, index) => (
-              <Link to={repo.url} target="_blank">
-              <motion.div
-                key={index}
-                className="dashboard__card"
-                initial={{ opacity: 0.5, y: 20, scale: cardInitialScale }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{
-                  ...transitionSettings,
-                  delay: 0.05 + index * 0.05,
-                }}
-              >
-                <div className="image-container">
-                  <video
-                    src={repo.preview_url}
-                    className="live-preview"
-                    muted
-                    loop
-                    preload="none"
-                    onMouseEnter={(e) => e.currentTarget.play()}
-                    onMouseLeave={(e) => e.currentTarget.pause()}
-                  />
-                </div>
-                <div className="dashboard__card-content">
-                  <p>{repo.name}</p>
-                  {/* <a href={component.url} target="_blank">
-                    View Component
-                  </a> */}
-                </div>
-              </motion.div> </Link>
-            ))}
-
-          {selectedCategory === "components" &&
-            components?.map((component, index) => {
-              const previewUrl = component.preview_url || ""; // Ensure preview_url exists
-              const isVideo = previewUrl.endsWith(".mp4");
-              const isEmbed =
-                /(youtube\.com\/embed|vimeo\.com\/embed|dailymotion\.com\/embed|linkedin\.com\/embed|codepen\.io\/embed)/.test(
-                  previewUrl
-                );
-              const isImage = /\.(jpg|jpeg|png|gif|webp)$/.test(previewUrl);
-
-              return (
-                <Link to={component.url} target="_blank">
-                <motion.div
-                  key={index}
-                  className="dashboard__card"
-                  initial={{ opacity: 0.5, y: 20, scale: cardInitialScale }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: false, amount: 0.3 }}
-                  transition={{
-                    ...transitionSettings,
-                    delay: 0.05 + index * 0.05,
-                  }}
-                >
-                  <div className="image-container">
-                    {isVideo ? (
-                      <video
-                        src={previewUrl}
-                        className="live-preview"
-                        muted
-                        loop
-                        preload="none"
-                        onMouseEnter={(e) => e.currentTarget.play()}
-                        onMouseLeave={(e) => e.currentTarget.pause()}
-                      />
-                    ) : isEmbed ? (
-                      <iframe
-                        src={previewUrl}
-                        className="live-preview"
-                        frameBorder="0"
-                        allowFullScreen
-                        scrolling="no"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          border: "none",
-                          overflow: "hidden",
-                        }}
-                      />
-                    ) : isImage ? (
-                      <img
-                        src={previewUrl}
-                        alt="Preview"
-                        className="live-preview"
-                      />
-                    ) : (
-                      <iframe
-                        src={previewUrl}
-                        className="live-preview"
-                        frameBorder="0"
-                        allowFullScreen
-                        scrolling="no"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          border: "none",
-                          overflow: "hidden",
-                        }}
-                      />
-                    )}
-                  </div>
-                  <div className="dashboard__card-content">
-                    <p>{component.title}</p>
-                  </div>
-                </motion.div></Link>
+                  </motion.div>
+                </Link>
               );
             })}
 
@@ -310,68 +336,69 @@ const Dashboard = () => {
 
               return (
                 <Link to={social.url} target="_blank">
-                <motion.div
-                  key={index}
-                  className="dashboard__card"
-                  initial={{ opacity: 0.5, y: 20, scale: cardInitialScale }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: false, amount: 0.3 }}
-                  transition={{
-                    ...transitionSettings,
-                    delay: 0.05 + index * 0.05,
-                  }}
-                >
-                  <div className="image-container">
-                    {isVideo ? (
-                      <video
-                        src={previewUrl}
-                        className="live-preview"
-                        muted
-                        loop
-                        preload="none"
-                        onMouseEnter={(e) => e.currentTarget.play()}
-                        onMouseLeave={(e) => e.currentTarget.pause()}
-                      />
-                    ) : isEmbed ? (
-                      <iframe
-                        src={previewUrl}
-                        className="live-preview"
-                        frameBorder="0"
-                        allowFullScreen
-                        scrolling="no"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          border: "none",
-                          overflow: "hidden",
-                        }}
-                      />
-                    ) : isImage ? (
-                      <img
-                        src={previewUrl}
-                        alt="Preview"
-                        className="live-preview"
-                      />
-                    ) : (
-                      <iframe
-                        src={previewUrl}
-                        className="live-preview"
-                        frameBorder="0"
-                        allowFullScreen
-                        scrolling="no"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          border: "none",
-                          overflow: "hidden",
-                        }}
-                      />
-                    )}
-                  </div>
-                  <div className="dashboard__card-content">
-                    <p>{social.content}</p>
-                  </div>
-                </motion.div> </Link>
+                  <motion.div
+                    key={index}
+                    className="dashboard__card"
+                    initial="hidden"
+                    animate={isScrollingDown ? "visible" : "hidden"}
+                    variants={cardVariants}
+                    transition={{
+                      ...transitionSettings,
+                      delay: 0.05 + index * 0.05,
+                    }}
+                  >
+                    <div className="image-container">
+                      {isVideo ? (
+                        <video
+                          src={previewUrl}
+                          className="live-preview"
+                          muted
+                          loop
+                          preload="none"
+                          onMouseEnter={(e) => e.currentTarget.play()}
+                          onMouseLeave={(e) => e.currentTarget.pause()}
+                        />
+                      ) : isEmbed ? (
+                        <iframe
+                          src={previewUrl}
+                          className="live-preview"
+                          frameBorder="0"
+                          allowFullScreen
+                          scrolling="no"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            border: "none",
+                            overflow: "hidden",
+                          }}
+                        />
+                      ) : isImage ? (
+                        <img
+                          src={previewUrl}
+                          alt="Preview"
+                          className="live-preview"
+                        />
+                      ) : (
+                        <iframe
+                          src={previewUrl}
+                          className="live-preview"
+                          frameBorder="0"
+                          allowFullScreen
+                          scrolling="no"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            border: "none",
+                            overflow: "hidden",
+                          }}
+                        />
+                      )}
+                    </div>
+                    <div className="dashboard__card-content">
+                      <p>{social.content}</p>
+                    </div>
+                  </motion.div>{" "}
+                </Link>
               );
             })}
         </motion.main>

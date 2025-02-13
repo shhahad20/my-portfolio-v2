@@ -10,6 +10,18 @@
     -webkit-text-fill-color: transparent;
     text-shadow: 0 1px 5px rgba(174, 207, 242, .24);
 }
+@mixin header-style2() {
+  font-weight: 500;
+  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
+
+  // Animation-friendly properties
+  display: inline-block;
+  padding: 0 15px;
+}
 @mixin betweenLines{
     content: "";
     height: 1px;

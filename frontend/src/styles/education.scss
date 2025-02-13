@@ -1,0 +1,73 @@
+@import "mixins";
+@import "variables";
+
+#education {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20rem;
+  .between-lines {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: rgba(186, 214, 247, 0.32);
+
+    .education-header {
+      @include header-style(15px);
+    }
+  }
+  .between-lines:before {
+    @include betweenLines;
+  }
+  .between-lines:after {
+    @include betweenLines;
+    transform: rotate(180deg);
+  }
+  .second-header {
+    // max-width: 70px;
+    @include header-style(50px);
+    margin: 0;
+  }
+
+  .cards-wrapper {
+    position: relative;
+    width: 450px;
+    height: 250px;
+    margin: 0 auto;
+    perspective: 1000px; // Gives a 3D feel
+    border: 1px solid green;
+    .card {
+      position: absolute;
+      width: 100%;
+      height: 200px;
+      background: $background-color;
+      color: $primary-white-color;
+      border: map-get($borders, 3);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      /* Smooth any changes */
+      transition: transform 0.3s ease, z-index 0.3s ease;
+    }
+    /* Position the cards so one is slightly below the other */
+    .front {
+      top: 0;
+      left: 50px;
+      // z-index: 0;
+      border: 1px solid red;
+    }
+    .behind {
+      top: 150px;
+      left: -150px;
+      // z-index: 1;
+      border: 1px solid yellow;
+    }
+  }
+}
