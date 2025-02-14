@@ -8,28 +8,28 @@
     // background-color: #86efac; // bg-green-300
     // padding: 6rem 2rem; // py-24 px-8
     // color: black;
-  padding-top: 2rem;
+  // padding-top: 2rem;
     .flip-link {
       position: relative;
       display: block;
       overflow: hidden;
       white-space: nowrap;
-    //   font-size: 2.25rem;
-    font-size: 70px;
+      font-size: 2.25rem;
+    // font-size: 70px;
       font-weight: 600; 
       color: $primary-white-blue-color;
       text-transform: uppercase;
 
       // Responsive font sizes
-    //   @media (min-width: 640px) { // sm
-    //     font-size: 4.5rem; // sm:text-7xl
-    //   }
-    //   @media (min-width: 768px) { // md
-    //     font-size: 6rem; // md:text-8xl
-    //   }
-    //   @media (min-width: 1024px) { // lg
-    //     font-size: 8rem; // lg:text-9xl
-    //   }
+      @media (min-width: 640px) { // sm
+        font-size: 4.5rem; // sm:text-7xl
+      }
+      @media (min-width: 768px) { // md
+        font-size: 6rem; // md:text-8xl
+      }
+      @media (min-width: 1024px) { // lg
+        font-size: 8rem; // lg:text-9xl
+      }
   
       > div {
         line-height: 0.75;

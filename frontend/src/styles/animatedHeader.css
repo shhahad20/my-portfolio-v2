@@ -3,7 +3,6 @@
   display: grid;
   place-items: center;
   gap: 0.5rem;
-  padding-top: 2rem;
 }
 
 .reveal-links .flip-link {
@@ -11,10 +10,28 @@
   display: block;
   overflow: hidden;
   white-space: nowrap;
-  font-size: 70px;
+  font-size: 2.25rem;
   font-weight: 600;
   color: #d8ecf8;
   text-transform: uppercase;
+}
+
+@media (min-width: 640px) {
+  .reveal-links .flip-link {
+    font-size: 4.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .reveal-links .flip-link {
+    font-size: 6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .reveal-links .flip-link {
+    font-size: 8rem;
+  }
 }
 
 .reveal-links .flip-link > div {

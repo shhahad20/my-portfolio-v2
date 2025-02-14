@@ -14,62 +14,71 @@ a {
   color: $primary_white_color;
   padding: 0 2rem;
   margin: 3rem 0;
-  min-height: 120vh;
-  .flip{
+  // min-height: 120vh;
+  .header-content {
     display: flex;
-    gap: 1rem;
-  }
-  .between-lines {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-    color: rgba(186, 214, 247, 0.32);
+    align-items: center;
+    .flip {
+      display: flex;
+      gap: 1rem;
+    }
+    .between-lines {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: rgba(186, 214, 247, 0.32);
 
-    .experience-header {
-      @include header-style(15px);
+      .experience-header {
+        @include header-style(15px);
+      }
+    }
+    .between-lines:before {
+      @include betweenLines;
+    }
+    .between-lines:after {
+      @include betweenLines;
+      transform: rotate(180deg);
+    }
+    .second-header {
+      // max-width: 70px;
+      @include header-style(50px);
+      margin: 0;
+    }
+    .third-p {
+      width: 400px;
+      text-align: center;
+      color: $primary-white-blue-color;
     }
   }
-  .between-lines:before {
-    @include betweenLines;
-  }
-  .between-lines:after {
-    @include betweenLines;
-    transform: rotate(180deg);
-  }
-  .second-header {
-    // max-width: 70px;
-    @include header-style(50px);
-    margin: 0;
-  }
-  .third-p {
-    width: 400px;
-    text-align: center;
-    color: $primary-white-blue-color;
-  }
+
   .cards_container {
     margin: 2rem 0;
     width: 100%;
-    max-width: 1800px;
-
-    // display: grid;
-    // // grid-template-columns: repeat(2, 1fr);
-    // grid-template-columns: 1fr 1fr;
-    display: flex;
+    max-width: 1600px;
+    // display: flex;
+    max-height: 1000px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     gap: 2rem;
-    .left-column, .right-column {
-        flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-    .right-column {
-        height: 100%;
-    }
+    // border: 1px solid red;
+    // .left-column,
+    // .right-column {
+    //   flex: 1;
+    //   display: flex;
+    //   flex-direction: column;
+    //   gap: 2rem;
+    // }
+    // .right-column {
+    //   height: 100%;
+    // }
     .card {
       border: map-get($borders, 3);
       background-color: $second-bg-color;
@@ -77,9 +86,9 @@ a {
       padding: 3rem;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      // justify-content: flex-start;
       gap: 5px;
-      overflow: hidden;
+      // overflow: hidden;
       h1 {
         font-weight: 500;
         font-size: 36px;
@@ -150,6 +159,236 @@ a {
         margin-top: 2rem;
         img {
           width: 70%;
+        }
+      }
+    }
+    // Adjusting individual card sizes:
+    .card_1 {
+      // border: 1px solid green;
+      grid-column: 1 / span 2;
+      grid-row: 1 / span 2;
+    }
+    .card_2 {
+      // border: 1px solid yellow;
+      grid-column: 3 / span 2;
+      grid-row: 1 / span 3;
+    }
+    .card_3 {
+      // border: 1px solid pink;
+      grid-column: 1 / span 2;
+      grid-row: 3 / span 2;
+    }
+    .card_4 {
+      // border: 1px solid white;
+      grid-column: 3 / span 2;
+      grid-row: 4 / span 1;
+    }
+  }
+  // ===== Responsive Styles =====
+
+  // For screens 1024px and below
+  @media screen and (max-width: 1024px) {
+    padding: 0 1.5rem;
+
+    .header-content {
+      .third-p {
+        width: 90%;
+      }
+    }
+
+    .cards_container {
+      gap: 1rem;
+      // The flex-direction remains row for 2 columns
+      // .left-column,
+      // .right-column {
+      //   gap: 1rem;
+      // }
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      .card {
+        padding: 2rem;
+        h1 {
+          font-size: 1.75em;
+        }
+        .blue_content {
+          font-size: 0.875em;
+        }
+        .description {
+          font-size: 0.875em;
+          line-height: 28px;
+        }
+        .code-container {
+          .code-header {
+            padding: 0 15px;
+            .code-title {
+              font-size: 0.875em;
+            }
+            .copy-btn {
+              padding: 4px 10px;
+            }
+          }
+          .codeSnippet {
+            font-size: 0.7em;
+          }
+        }
+        .img-container {
+          img {
+            width: 80%;
+          }
+        }
+      }
+      .card_1 {
+        // border: 1px solid green;
+        grid-column: 1 / span 3;
+        grid-row: 1 / span 1;
+      }
+      .card_2 {
+        // border: 1px solid yellow;
+        grid-column: 4 / span 3;
+        grid-row: 1 / span 3;
+      }
+      .card_3 {
+        // border: 1px solid pink;
+        grid-column: 1 / span 3;
+        grid-row: 2 / span 3;
+      }
+      .card_4 {
+        // border: 1px solid white;
+        grid-column: 4 / span 3;
+        grid-row: 4 / span 1;
+      }
+    }
+  }
+
+  // For screens 768px and below
+  @media screen and (max-width: 768px) {
+    margin: 2rem 0;
+
+    .header-content {
+      .second-header {
+        @include header-style(40px);
+      }
+      .third-p {
+        width: 90%;
+        font-size: 14px;
+      }
+    }
+    .cards_container {
+      gap: 1rem;
+      // The flex-direction remains row for 2 columns
+      // .left-column,
+      // .right-column {
+      //   gap: 1rem;
+      // }
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      .card {
+        padding: 2rem;
+        h1 {
+          font-size: 1.75em;
+        }
+        .blue_content {
+          font-size: 0.875em;
+        }
+        .description {
+          font-size: 0.875em;
+          line-height: 28px;
+        }
+        .code-container {
+          .code-header {
+            padding: 0 15px;
+            .code-title {
+              font-size: 0.875em;
+            }
+            .copy-btn {
+              padding: 4px 10px;
+            }
+          }
+          .codeSnippet {
+            font-size: 0.7em;
+          }
+        }
+        .img-container {
+          img {
+            width: 80%;
+          }
+        }
+      }
+      .card_1 {
+        // border: 1px solid green;
+        grid-column: 1 / span 3;
+        grid-row: 4 / span 1;
+      }
+      .card_2 {
+        // border: 1px solid yellow;
+        grid-column: 1 / span 6;
+        grid-row: 3 / span 1;
+      }
+      .card_3 {
+        // border: 1px solid pink;
+        grid-column: 1 / span 6;
+        grid-row: 5 / span 1;
+      }
+      .card_4 {
+        // border: 1px solid white;
+        grid-column: 4 / span 3;
+        grid-row: 4 / span 1;
+      }
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    margin: 2rem 0;
+
+    .header-content {
+      .flip {
+        flex-direction: column;
+        margin: 0;
+        padding: 0;
+        margin: 1rem 0;
+      }
+      .third-p {
+        width: 90%;
+        font-size: 14px;
+      }
+    }
+    .cards_container {
+      display: grid;
+      grid-template-columns: 1fr; // Single column layout for mobile
+      grid-auto-rows: auto; // Let rows adjust to content
+      gap: 1rem;
+
+      .card {
+        padding: 1.5rem; // Reduced padding for smaller screens
+
+        h1 {
+          font-size: 1.5em; // Adjust header size for mobile
+        }
+        .blue_content {
+          font-size: 0.75em; // Smaller font for supporting text
+        }
+        .description {
+          font-size: 0.75em;
+          line-height: 22px; // Tighter line height on mobile
+        }
+        .code-container {
+          .code-header {
+            padding: 0 10px;
+            .code-title {
+              font-size: 0.75em;
+            }
+            .copy-btn {
+              padding: 3px 8px;
+            }
+          }
+          .codeSnippet {
+            font-size: 0.65em;
+          }
+        }
+        .img-container {
+          img {
+            width: 100%; // Make images full width on mobile
+          }
         }
       }
     }
