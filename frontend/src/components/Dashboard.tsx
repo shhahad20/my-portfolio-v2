@@ -10,6 +10,7 @@ import {
   fetchSocialMedia,
 } from "../redux/slices/itemsSlice";
 import { Link } from "react-router-dom";
+import FlipLink from "./AnimatedHeader ";
 
 const transitionSettings = { duration: 0.5, ease: "easeOut" };
 
@@ -60,10 +61,10 @@ const Dashboard = () => {
   }, []);
 
   // Conditional scale values: use lower scaling on mobile screens
-  const cardVariants = {
-    hidden: { opacity: 0.5, y: 20, scale: isMobile ? 1.1 : 1.3 },
-    visible: { opacity: 1, y: 0, scale: 1 },
-  };
+  // const cardVariants = {
+  //   hidden: { opacity: 0.5, y: 20, scale: isMobile ? 1.1 : 1.3 },
+  //   visible: { opacity: 1, y: 0, scale: 1 },
+  // };
 
   // const asideInitialScale = isMobile ? 1.1 : 1.5;
   // const mainInitialScale = isMobile ? 1.1 : 1.5;
@@ -75,22 +76,40 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <div className="header__container">
+      {/* <div className="header__container">
         <h1 className="dashboard__title">
           Code with Passion Build with Precision
         </h1>
-      </div>
-
-      <div className="dashboard__container">
-        <motion.aside
-          className="dashboard__sidebar"
-          initial="hidden"
-          animate={isScrollingDown ? "visible" : "hidden"}
-          variants={cardVariants}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: false, amount: 0.3 }}
-          transition={transitionSettings}
-        >
+      </div> */}
+      <motion.div
+        className="header-content"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        {/* <div className="between-lines">
+          <div>
+            <h1 className="experience-header">Work Experience</h1>
+          </div>
+        </div> */}
+        {/* <h1 className="second-header">Career Highlights</h1> */}
+        <div className="flip">
+          <div className="flip-1">
+          <FlipLink href="#">Code</FlipLink>
+          <FlipLink href="#">with</FlipLink>
+          </div>
+          <FlipLink href="#">Passion</FlipLink>
+        </div>
+      </motion.div>
+      <motion.div
+        className="dashboard__container"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <aside className="dashboard__sidebar">
           <div>
             <img
               className="logo-white"
@@ -115,16 +134,8 @@ const Dashboard = () => {
           </div>
 
           <div className="dashboard__user">Shahad Athawa</div>
-        </motion.aside>
-        <motion.main
-          className="dashboard__content"
-          initial="hidden"
-          animate={isScrollingDown ? "visible" : "hidden"}
-          variants={cardVariants}
-          transition={{
-            transitionSettings,
-          }}
-        >
+        </aside>
+        <main className="dashboard__content">
           {selectedCategory === "recent" && (
             <>
               {[
@@ -136,17 +147,7 @@ const Dashboard = () => {
                 const isVideo = previewUrl.endsWith(".mp4");
                 return (
                   <Link to={item.url} target="_blank">
-                    <motion.div
-                      key={`item-${index}`}
-                      className="dashboard__card"
-                      initial="hidden"
-                      animate={isScrollingDown ? "visible" : "hidden"}
-                      variants={cardVariants}
-                      transition={{
-                        ...transitionSettings,
-                        delay: 0.05 + index * 0.05,
-                      }}
-                    >
+                    <div key={`item-${index}`} className="dashboard__card">
                       <div className="image-container">
                         {isVideo ? (
                           <video
@@ -204,7 +205,7 @@ const Dashboard = () => {
                           {/* If it's social media */}
                         </p>
                       </div>
-                    </motion.div>
+                    </div>
                   </Link>
                 );
               })}
@@ -214,17 +215,7 @@ const Dashboard = () => {
           {selectedCategory === "repositories" &&
             repositories?.map((repo, index) => (
               <Link to={repo.url} target="_blank">
-                <motion.div
-                  key={index}
-                  className="dashboard__card"
-                  initial="hidden"
-                  animate={isScrollingDown ? "visible" : "hidden"}
-                  variants={cardVariants}
-                  transition={{
-                    ...transitionSettings,
-                    delay: 0.05 + index * 0.05,
-                  }}
-                >
+                <div key={index} className="dashboard__card">
                   <div className="image-container">
                     <video
                       src={repo.preview_url}
@@ -242,7 +233,7 @@ const Dashboard = () => {
                     View Component
                   </a> */}
                   </div>
-                </motion.div>{" "}
+                </div>{" "}
               </Link>
             ))}
 
@@ -258,17 +249,7 @@ const Dashboard = () => {
 
               return (
                 <Link to={component.url} target="_blank">
-                  <motion.div
-                    key={index}
-                    className="dashboard__card"
-                    initial="hidden"
-                    animate={isScrollingDown ? "visible" : "hidden"}
-                    variants={cardVariants}
-                    transition={{
-                      ...transitionSettings,
-                      delay: 0.05 + index * 0.05,
-                    }}
-                  >
+                  <div key={index} className="dashboard__card">
                     <div className="image-container">
                       {isVideo ? (
                         <video
@@ -319,7 +300,7 @@ const Dashboard = () => {
                     <div className="dashboard__card-content">
                       <p>{component.title}</p>
                     </div>
-                  </motion.div>
+                  </div>
                 </Link>
               );
             })}
@@ -336,17 +317,7 @@ const Dashboard = () => {
 
               return (
                 <Link to={social.url} target="_blank">
-                  <motion.div
-                    key={index}
-                    className="dashboard__card"
-                    initial="hidden"
-                    animate={isScrollingDown ? "visible" : "hidden"}
-                    variants={cardVariants}
-                    transition={{
-                      ...transitionSettings,
-                      delay: 0.05 + index * 0.05,
-                    }}
-                  >
+                  <div key={index} className="dashboard__card">
                     <div className="image-container">
                       {isVideo ? (
                         <video
@@ -397,12 +368,12 @@ const Dashboard = () => {
                     <div className="dashboard__card-content">
                       <p>{social.content}</p>
                     </div>
-                  </motion.div>{" "}
+                  </div>{" "}
                 </Link>
               );
             })}
-        </motion.main>
-      </div>
+        </main>
+      </motion.div>
     </div>
   );
 };

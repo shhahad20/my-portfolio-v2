@@ -1,0 +1,243 @@
+@import "mixins";
+@import "variables";
+
+#my-partners {
+  display: flex;
+  flex-direction: column;
+  align-items: center; // horizontally center child elements
+  justify-content: center;
+  padding: 4rem 0;
+  .header-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .flip {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+    }
+    .between-lines {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: rgba(186, 214, 247, 0.32);
+
+      .mypartners-header {
+        @include header-style(15px);
+      }
+    }
+    .between-lines:before {
+      @include betweenLines;
+    }
+    .between-lines:after {
+      @include betweenLines;
+      transform: rotate(180deg);
+    }
+    .second-header {
+      // max-width: 70px;
+      @include header-style(50px);
+      margin: 0;
+    }
+    .third-p {
+      width: 400px;
+      text-align: center;
+      color: $primary-white-blue-color;
+    }
+  }
+
+  .small-cards-container {
+    margin: 5rem 0;
+    .cards-grid {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      margin-top: 3rem;
+    }
+
+    .s-card {
+      width: 210px; /* Adjust to your preference */
+      height: 120px;
+      /* Center content inside card */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      background-color: $second-bg-color;
+      border: map-get($borders, 3);
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      padding: 1.5rem 2rem;
+      margin: 0 -2rem; /* Overlaps each card slightly */
+      transition: transform 0.3s ease, margin 0.3s ease;
+      font-size: 1rem;
+      color: #fff;
+      text-align: center;
+      min-width: 120px;
+      z-index: 1; /* Default stacking */
+
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+    }
+
+    /* 
+      Adjust angles and translation for each card so they fan out from the center.
+      The center card (s-card-1) is not rotated and has the highest z-index.
+    */
+    .s-card-4 {
+      // transform: translateX(-70%) rotate(-5deg);
+      // border: 1px solid red;
+      transform: translateX(-30%) translateY(-50%);
+    }
+    .s-card-2 {
+      // transform: translateX(-35%) rotate(-2deg);
+      transform: translateX(-15%) translateY(-20%);
+      // border: 1px solid green;
+    }
+    .s-card-1 {
+      transform: translateX(0) rotate(0deg) translateY(0);
+      // border: 1px solid yellow;
+      z-index: 3; /* Bring center card above the others */
+    }
+    .s-card-3 {
+      // transform: translateX(35%) rotate(2deg);
+      transform: translateX(15%) translateY(-20%);
+      // border: 1px solid pink;
+      z-index: 2; // Higher
+    }
+    .s-card-5 {
+      // transform: translateX(70%) rotate(5deg);
+      transform: translateX(30%) translateY(-50%);
+      // border: 1px solid purple;
+      z-index: 1;
+    }
+
+    /* Optional hover effect to bring a hovered card forward */
+    .s-card:hover {
+      z-index: 4;
+      transform: translateX(0) rotate(0deg) scale(1.05);
+      margin: 0; /* Remove overlap so it pops out */
+    }
+  }
+
+
+  @media screen and (max-width: 1024px){
+    .small-cards-container {
+      // margin: 5rem 0;
+      // .cards-grid {
+      //   display: flex;
+      //   justify-content: center;
+      //   align-items: center;
+      //   position: relative;
+      //   margin-top: 3rem;
+      // }
+  
+      .s-card {
+        width: 180px; /* Adjust to your preference */
+        height: 100px;
+      }
+      .s-card-4 {
+        transform: translateX(10%) translateY(-50%);
+      }
+      .s-card-2 {
+        transform: translateX(-10%) translateY(-20%);
+      }
+      .s-card-1 {
+        transform: translateX(0) rotate(0deg) translateY(0);
+      }
+      .s-card-3 {
+        transform: translateX(10%) translateY(-20%);
+      }
+      .s-card-5 {
+        transform: translateX(-10%) translateY(-50%);
+      }
+  }
+}
+  @media (max-width: 768px) {
+    // .cards-grid {
+    //   flex-direction: column;
+    //   margin-top: 2rem;
+    // }
+
+    // .s-card {
+    //   /* Reset transforms/overlaps so they stack */
+    //   margin: 1rem 0 !important;
+    //   transform: none !important;
+    //   z-index: 1;
+    // }
+
+    // .s-card:hover {
+    //   transform: scale(1.05) !important;
+    //   margin: 1rem 0 !important;
+    // }
+    height: 100vh;
+    .small-cards-container {
+      // margin: 5rem 0;
+      // .cards-grid {
+      //   display: flex;
+      //   justify-content: center;
+      //   align-items: center;
+      //   position: relative;
+      //   margin-top: 3rem;
+      // }
+  
+      .s-card {
+        width: 100px; /* Adjust to your preference */
+        height: 80px;
+      }
+      .s-card-4 {
+        transform: translateX(10%) translateY(-50%);
+      }
+      .s-card-2 {
+        transform: translateX(-10%) translateY(-20%);
+      }
+      .s-card-1 {
+        transform: translateX(0) rotate(0deg) translateY(0);
+      }
+      .s-card-3 {
+        transform: translateX(10%) translateY(-20%);
+      }
+      .s-card-5 {
+        transform: translateX(-10%) translateY(-50%);
+      }
+  }
+  }
+  @media (max-width: 480px){
+    height: 300vh;
+    .header-content {
+      .third-p {
+        width: 300px;
+      }
+    }
+    .small-cards-container{
+    margin: 0;
+    }
+    .cards-grid {
+      flex-direction: column;
+      margin-top: 2rem;
+    }
+
+    .s-card {
+      /* Reset transforms/overlaps so they stack */
+      margin: 1rem 0 !important;
+      transform: none !important;
+      z-index: 1;
+
+    }
+    
+    .s-card:hover {
+      transform: scale(1.05) !important;
+      margin: 1rem 0 !important;
+    }
+  }
+}
