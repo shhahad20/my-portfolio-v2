@@ -1,0 +1,259 @@
+li {
+  list-style: none;
+}
+
+#contact {
+  padding: 2rem 0;
+  text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+#contact .header-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 1rem;
+}
+
+#contact .header-content .flip {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  gap: 1rem;
+}
+
+#contact .header-content .between-lines {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgba(186, 214, 247, 0.32);
+}
+
+#contact .header-content .between-lines .contact-header {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 0 15px;
+  background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
+  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+  background-clip: text;
+  color: transparent;
+  display: block;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
+}
+
+#contact .header-content .between-lines:before {
+  content: "";
+  height: 1px;
+  background: -webkit-gradient(linear, left top, right top, from(rgba(216, 236, 248, 0)), to(rgba(184, 216, 254, 0.32)));
+  background: linear-gradient(90deg, rgba(216, 236, 248, 0), rgba(184, 216, 254, 0.32));
+  width: 86px;
+}
+
+#contact .header-content .between-lines:after {
+  content: "";
+  height: 1px;
+  background: -webkit-gradient(linear, left top, right top, from(rgba(216, 236, 248, 0)), to(rgba(184, 216, 254, 0.32)));
+  background: linear-gradient(90deg, rgba(216, 236, 248, 0), rgba(184, 216, 254, 0.32));
+  width: 86px;
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+#contact .conatct-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+#contact .conatct-container .email-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+#contact .conatct-container .email-container .email {
+  border: 1px solid #d8ecf8;
+  padding: 0 5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  -webkit-transition: background 0.3s;
+  transition: background 0.3s;
+}
+
+#contact .conatct-container .email-container .email h3 {
+  color: #EFEEEC;
+  font-family: "Space Mono", serif;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+#contact .conatct-container .email-container .email:hover {
+  background-color: #98c0ef;
+}
+
+#contact .conatct-container .email-container .email:hover h3 {
+  color: #070707;
+  font-weight: 500;
+}
+
+#contact .conatct-container .email-container .email .copied-message {
+  font-family: "Space Mono", serif;
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  background-color: #F17625;
+  color: #EFEEEC;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 1;
+  -webkit-transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
+}
+
+#contact .conatct-container .soical-media ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 1.5rem;
+  padding: 0;
+}
+
+/* Tablet styles */
+@media screen and (max-width: 768px) {
+  #contact {
+    padding: 1.5rem 0;
+  }
+  #contact .conatct-container {
+    margin: 2rem 0;
+  }
+  #contact .conatct-container .email-container .email {
+    padding: 0 3rem;
+  }
+  #contact .conatct-container .email-container .email h3 {
+    font-size: 14px;
+  }
+  #contact .conatct-container .soical-media ul {
+    gap: 1.5rem;
+  }
+  #contact .conatct-container .soical-media ul li img {
+    width: 24px;
+    height: auto;
+  }
+}
+
+/* Mobile styles */
+@media screen and (max-width: 480px) {
+  #contact {
+    padding: 1rem 0;
+  }
+  #contact .header-content .flip {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    gap: 0.5rem;
+  }
+  #contact .conatct-container {
+    margin: 1.5rem 0;
+  }
+  #contact .conatct-container .email-container .email {
+    padding: 0 2rem;
+  }
+  #contact .conatct-container .email-container .email h3 {
+    font-size: 12px;
+  }
+  #contact .conatct-container .soical-media ul {
+    gap: 0.75rem;
+  }
+  #contact .conatct-container .soical-media ul li img {
+    width: 20px;
+  }
+}
+
+footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+footer h3, footer p {
+  color: #818180;
+  font-weight: 400;
+  font-size: 14px;
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  footer h3 {
+    font-size: 12px;
+  }
+}
+/*# sourceMappingURL=contact.css.map */

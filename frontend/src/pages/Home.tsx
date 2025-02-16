@@ -1,9 +1,11 @@
 // import "../styles/home.scss";
 
 import About from "../components/About";
+import Contact from "../components/Contact";
 import Dashboard from "../components/Dashboard";
 // import Education from "../components/Education";
 import Experience from "../components/Experience";
+import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Info from "../components/Info";
 import MyPartners from "../components/MyPartners";
@@ -20,6 +22,8 @@ const Home: React.FC = () => {
       <MyPartners />
       <Testimonials/>
       <Info/>
+      <Contact/>
+      <Footer/>
     </>
   );
 };
