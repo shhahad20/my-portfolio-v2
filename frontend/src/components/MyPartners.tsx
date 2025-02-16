@@ -28,25 +28,40 @@ const MyPartners = () => {
         </p>
       </motion.div>
 
-      <div className="small-cards-container">
-  <div className="cards-grid">
-    {/* Left-most */}
-    <div className="s-card s-card-4"><img src="/codepen.svg" alt="CodePen" /></div>
+      <motion.div
+        className="small-cards-container"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <div className="cards-grid">
+          {/* Left-most */}
+          <div className="s-card s-card-4">
+            <img src="/codepen.svg" alt="CodePen" />
+          </div>
 
-    {/* Next left */}
-    <div className="s-card s-card-2"><img className="bard-img" src="/Bard2.svg" alt="Bard" /></div>
+          {/* Next left */}
+          <div className="s-card s-card-2">
+            <img className="bard-img" src="/Bard2.svg" alt="Bard" />
+          </div>
 
-    {/* Center */}
-    <div className="s-card s-card-1"><img src="/openai.svg" alt="OpenAI" /></div>
+          {/* Center */}
+          <div className="s-card s-card-1">
+            <img src="/openai.svg" alt="OpenAI" />
+          </div>
 
-    {/* Next right */}
-    <div className="s-card s-card-3"><img src="/deepseek.svg" alt="DeepSeek" /></div>
+          {/* Next right */}
+          <div className="s-card s-card-3">
+            <img src="/deepseek.svg" alt="DeepSeek" />
+          </div>
 
-    {/* Right-most */}
-    <div className="s-card s-card-5"><img src="/youtube.svg" alt="YouTube" /></div>
-  </div>
-</div>
-
+          {/* Right-most */}
+          <div className="s-card s-card-5">
+            <img src="/youtube.svg" alt="YouTube" />
+          </div>
+        </div>
+      </motion.div>
     </section>
   );
 };

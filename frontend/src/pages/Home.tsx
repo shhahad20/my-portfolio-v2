@@ -2,9 +2,10 @@
 
 import About from "../components/About";
 import Dashboard from "../components/Dashboard";
-import Education from "../components/Education";
+// import Education from "../components/Education";
 import Experience from "../components/Experience";
 import Hero from "../components/Hero";
+import Info from "../components/Info";
 import MyPartners from "../components/MyPartners";
 import Testimonials from "../components/Testimonials";
 
@@ -18,6 +19,7 @@ const Home: React.FC = () => {
       <Experience />
       <MyPartners />
       <Testimonials/>
+      <Info/>
     </>
   );
 };

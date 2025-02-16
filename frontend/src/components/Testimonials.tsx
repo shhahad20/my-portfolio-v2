@@ -138,7 +138,14 @@ const Testimonials = () => {
         </div>
         <p className="third-p">Connecting through shared experiences</p>
       </motion.div>
-      <div className="slider" ref={sliderRef}>
+      <motion.div
+        className="slider"
+        ref={sliderRef}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
         <motion.div
           className="slider-track"
           style={{ width: trackWidth }}
@@ -174,7 +181,7 @@ const Testimonials = () => {
             </div>
           ))}
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };

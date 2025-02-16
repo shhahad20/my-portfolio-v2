@@ -116,7 +116,7 @@ const Experience = () => {
               <h1>Technology Ambassador</h1>
               <div className="blue_content">
                 <p className="place">
-                  Ministry of Communication and Information Technology MCIT
+                  Ministry of Communication and Information Technology
                 </p>
                 <p className="date">2021 - 2023</p>
               </div>

@@ -99,6 +99,11 @@
           animation: fadeOut 2s forwards;
 }
 
+#about-paragraph p .span-color {
+  color: #98c0ef;
+  font-family: "Space Mono", serif;
+}
+
 #about-paragraph #keywords-container {
   display: -webkit-box;
   display: -ms-flexbox;
