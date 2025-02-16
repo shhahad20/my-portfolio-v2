@@ -6,6 +6,7 @@ import Education from "../components/Education";
 import Experience from "../components/Experience";
 import Hero from "../components/Hero";
 import MyPartners from "../components/MyPartners";
+import Testimonials from "../components/Testimonials";
 
 const Home: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const Home: React.FC = () => {
       {/* <Education/> */}
       <Experience />
       <MyPartners />
+      <Testimonials/>
     </>
   );
 };
