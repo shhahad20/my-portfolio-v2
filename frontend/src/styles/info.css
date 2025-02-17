@@ -11,6 +11,7 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  margin-bottom: 8rem;
 }
 
 #quick-grasp .header-content {
@@ -204,7 +205,6 @@
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
     gap: 1rem;
-    margin: 2rem 1rem;
   }
   #quick-grasp .info-card-container .info-card {
     width: 45%;
@@ -226,10 +226,14 @@
     gap: 2rem;
   }
   #quick-grasp .header-content .flip {
-    -webkit-box-orient: vertical;
+    -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    gap: 0.7rem;
+  }
+  #quick-grasp .header-content .flip .flip-top {
+    gap: 0.7rem;
   }
   #quick-grasp .info-card-container {
     -webkit-box-orient: vertical;

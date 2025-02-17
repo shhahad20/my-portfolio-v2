@@ -55,11 +55,11 @@ const Hero = () => {
           <h2 className="head-head">Growth Focused</h2>
           <p className="para">
             I once thought HTML was a programming language-turns out, it was
-            just the start of my journey into development.
+            just the start of my journey.
           </p>
-          <a href="#about-section" className="more-about-button">
+          {/* <a href="#about-section" className="more-about-button">
             More About
-          </a>
+          </a> */}
         </div>
       </div>
     </section>

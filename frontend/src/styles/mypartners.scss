@@ -7,6 +7,8 @@
   align-items: center; // horizontally center child elements
   justify-content: center;
   padding: 4rem 0;
+  margin-bottom: 6rem;
+
   .header-content {
     display: flex;
     flex-direction: column;
@@ -130,8 +132,7 @@
     }
   }
 
-
-  @media screen and (max-width: 1024px){
+  @media screen and (max-width: 1024px) {
     .small-cards-container {
       // margin: 5rem 0;
       // .cards-grid {
@@ -141,7 +142,7 @@
       //   position: relative;
       //   margin-top: 3rem;
       // }
-  
+
       .s-card {
         width: 180px; /* Adjust to your preference */
         height: 100px;
@@ -161,26 +162,10 @@
       .s-card-5 {
         transform: translateX(-10%) translateY(-50%);
       }
+    }
   }
-}
   @media (max-width: 768px) {
-    // .cards-grid {
-    //   flex-direction: column;
-    //   margin-top: 2rem;
-    // }
-
-    // .s-card {
-    //   /* Reset transforms/overlaps so they stack */
-    //   margin: 1rem 0 !important;
-    //   transform: none !important;
-    //   z-index: 1;
-    // }
-
-    // .s-card:hover {
-    //   transform: scale(1.05) !important;
-    //   margin: 1rem 0 !important;
-    // }
-    height: 100vh;
+    margin: 3rem 0;
     .small-cards-container {
       // margin: 5rem 0;
       // .cards-grid {
@@ -190,7 +175,7 @@
       //   position: relative;
       //   margin-top: 3rem;
       // }
-  
+
       .s-card {
         width: 100px; /* Adjust to your preference */
         height: 80px;
@@ -210,17 +195,17 @@
       .s-card-5 {
         transform: translateX(-10%) translateY(-50%);
       }
+    }
   }
-  }
-  @media (max-width: 480px){
-    height: 300vh;
+  @media (max-width: 480px) {
+    // height: 300vh;
     .header-content {
       .third-p {
         width: 300px;
       }
     }
-    .small-cards-container{
-    margin: 0;
+    .small-cards-container {
+      margin: 0;
     }
     .cards-grid {
       flex-direction: column;
@@ -232,9 +217,8 @@
       margin: 1rem 0 !important;
       transform: none !important;
       z-index: 1;
-
     }
-    
+
     .s-card:hover {
       transform: scale(1.05) !important;
       margin: 1rem 0 !important;

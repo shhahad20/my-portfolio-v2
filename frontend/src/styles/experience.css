@@ -19,7 +19,9 @@ a {
           align-items: center;
   color: #EFEEEC;
   padding: 0 2rem;
-  margin: 3rem 0;
+  margin: 3rem 0 0 0;
+  margin-bottom: 8rem;
+  height: 100%;
 }
 
 #experience .header-content {
@@ -123,7 +125,6 @@ a {
   margin: 2rem 0;
   width: 100%;
   max-width: 1600px;
-  max-height: 1000px;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (1fr)[4];
@@ -276,8 +277,9 @@ a {
     gap: 1rem;
     -ms-grid-columns: (1fr)[6];
         grid-template-columns: repeat(6, 1fr);
-    -ms-grid-rows: (1fr)[6];
-        grid-template-rows: repeat(6, 1fr);
+    -ms-grid-rows: auto;
+        grid-template-rows: auto;
+    max-width: 100%;
   }
   #experience .cards_container .card {
     padding: 2rem;
@@ -366,8 +368,9 @@ a {
     gap: 1rem;
     -ms-grid-columns: (1fr)[6];
         grid-template-columns: repeat(6, 1fr);
-    -ms-grid-rows: (1fr)[6];
-        grid-template-rows: repeat(6, 1fr);
+    -ms-grid-rows: auto;
+        grid-template-rows: auto;
+    max-width: 100%;
   }
   #experience .cards_container .card {
     padding: 2rem;

@@ -26,6 +26,7 @@
 
 #hero_heading_section #hero_heading #hello {
   font-weight: 200;
+  font-size: 1.8rem;
 }
 
 #hero_heading_section #hero_heading .name {
@@ -37,6 +38,7 @@
   height: 40px;
   /* Match the line height */
   text-align: left;
+  font-size: 1.2rem;
 }
 
 #hero_heading_section #hero_heading .name h1 {
@@ -138,16 +140,15 @@
     max-width: 370px;
   }
   #hero_heading_section #hero_heading #hello {
-    font-size: 25px;
+    font-size: 20px;
   }
   #hero_heading_section #hero_heading .name {
     padding-left: 5px;
-    height: 30px;
     text-align: left;
   }
   #hero_heading_section #hero_heading .name h1 {
     width: 100%;
-    font-size: 25px;
+    font-size: 20px;
   }
   #hero_heading_section #hero_heading .brackets {
     padding: 0 13px;

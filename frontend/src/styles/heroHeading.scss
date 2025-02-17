@@ -23,6 +23,7 @@
     gap: 5px; // Add some spacing between elements (optional)
     #hello {
       font-weight: 200;
+      font-size: 1.8rem;
     }
     .name {
       padding-left: 5px;
@@ -32,6 +33,7 @@
       white-space: nowrap;
       height: 40px; /* Match the line height */
       text-align: left;
+      font-size: 1.2rem;
       // Remove inline-block
     //   display: flex;
     //   align-items: center; // Needed for correct vertical alignment of animated text
@@ -97,15 +99,15 @@
     #hero_heading {
       max-width: 370px;
       #hello {
-        font-size: 25px;
+        font-size: 20px;
       }
       .name {
         padding-left: 5px;
-        height: 30px;
+        // height: 30px;
         text-align: left;
         h1 {
           width: 100%;
-          font-size: 25px;
+          font-size: 20px;
         }
       }
       .brackets {

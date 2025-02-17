@@ -13,6 +13,7 @@
       -ms-flex-pack: center;
           justify-content: center;
   padding: 4rem 0;
+  margin-bottom: 6rem;
 }
 
 #my-partners .header-content {
@@ -250,7 +251,7 @@
 
 @media (max-width: 768px) {
   #my-partners {
-    height: 100vh;
+    margin: 3rem 0;
   }
   #my-partners .small-cards-container .s-card {
     width: 100px;
@@ -280,9 +281,6 @@
 }
 
 @media (max-width: 480px) {
-  #my-partners {
-    height: 300vh;
-  }
   #my-partners .header-content .third-p {
     width: 300px;
   }

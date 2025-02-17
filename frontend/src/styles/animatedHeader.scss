@@ -22,6 +22,9 @@
       text-transform: uppercase;
 
       // Responsive font sizes
+      @media (max-width: 480px) { // sm
+        font-size: 2.5rem; // sm:text-7xl
+      }
       @media (min-width: 640px) { // sm
         font-size: 4.5rem; // sm:text-7xl
       }

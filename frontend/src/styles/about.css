@@ -11,6 +11,7 @@
           align-items: center;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
+  margin-bottom: 8rem;
 }
 
 #about-paragraph {
@@ -206,7 +207,8 @@
     padding: 0;
   }
   #about-section #about-paragraph .second-header {
-    padding: 0;
+    padding: 1rem 0;
+    font-size: 2rem;
   }
   #about-section #about-paragraph p {
     color: #EFEEEC;
