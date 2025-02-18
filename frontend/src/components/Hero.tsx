@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import "../styles/hero.scss";
 import HeroHeading from "./HeroHeading";
+import ChatWidget from "./ChatWidget";
 
 const Hero = () => {
   useEffect(() => {
@@ -60,6 +61,7 @@ const Hero = () => {
           {/* <a href="#about-section" className="more-about-button">
             More About
           </a> */}
+          <ChatWidget/>
         </div>
       </div>
     </section>

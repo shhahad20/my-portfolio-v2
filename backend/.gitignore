@@ -4,3 +4,6 @@ node_modules
 note.txt
 src/config/supabaseClient.ts
 dist/src/config/supabaseClient.js
+
+src/config/systemPrompt.ts
+dist/src/config/systemPrompt.js
