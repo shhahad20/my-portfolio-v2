@@ -1,0 +1,256 @@
+.chat-modal-overlay {
+  position: fixed;
+  inset: 0;
+  /* top:0; right:0; bottom:0; left:0; */
+  background-color: rgba(4, 4, 4, 0.853);
+  /* Dark overlay behind the modal */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  z-index: 9999;
+}
+
+.chat-modal {
+  background-color: #0b0b0b;
+  color: #EFEEEC;
+  width: 600px;
+  max-width: 90%;
+  border: 1px solid #2C2C2C;
+  border-radius: 8px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  max-height: 80vh;
+  overflow: hidden;
+  /* So it won't exceed the screen */
+}
+
+/* Header area (top bar) */
+.chat-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #2C2C2C;
+  background-color: #202020;
+}
+
+.chat-title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+}
+
+.chat-title h2 {
+  font-size: 1rem;
+  font-weight: 500;
+  background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
+  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
+  display: inline-block;
+  padding: 0 15px;
+  font-weight: 500;
+}
+
+.chat-title img {
+  width: 20px;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: #818180;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #fff;
+}
+
+.chat-mood-container {
+  text-align: center;
+  padding: 16px 0;
+  background-color: #202020;
+}
+
+.chat-mood-container .chat-mood-img {
+  width: 150px;
+  height: auto;
+}
+
+/* Conversation area */
+.chat-messages {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  /* Scroll if messages exceed the area */
+  background-color: #202020;
+  /* 1) Make this a flex container so we can align messages left/right. */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.chat-messages .message {
+  /* 2) Inline-block so it only expands to the text/content width */
+  display: inline-block;
+  /* 3) Limit how wide each bubble can grow */
+  max-width: 80%;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  font-size: 1.1rem;
+  word-wrap: break-word;
+  /* Ensures long text wraps */
+  padding: 8px;
+  border-radius: 16px;
+}
+
+.chat-messages .message.assistant {
+  text-align: left;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+  background: #2C2C2C;
+  padding: 8px;
+  border-radius: 16px;
+}
+
+.chat-messages .message.user {
+  -ms-flex-item-align: end;
+      align-self: flex-end;
+  text-align: left;
+  background: #40414f;
+  background-color: #2C2C2C;
+  padding: 8px;
+  border-radius: 16px;
+}
+
+/* Input area */
+.chat-input {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-top: 1px solid #2C2C2C;
+  padding: 16px;
+  background-color: #202020;
+}
+
+.chat-input input {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  background: transparent;
+  border: none;
+  color: #EFEEEC;
+  font-size: 1.1rem;
+  padding: 8px;
+  outline: none;
+}
+
+.chat-input input::-webkit-input-placeholder {
+  color: #8e8ea0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
+  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
+  display: inline-block;
+  padding: 0 15px;
+}
+
+.chat-input input:-ms-input-placeholder {
+  color: #8e8ea0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
+  display: inline-block;
+  padding: 0 15px;
+}
+
+.chat-input input::-ms-input-placeholder {
+  color: #8e8ea0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
+  display: inline-block;
+  padding: 0 15px;
+}
+
+.chat-input input::placeholder {
+  color: #8e8ea0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
+  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
+  display: inline-block;
+  padding: 0 15px;
+}
+
+.chat-input button {
+  margin-left: 8px;
+  background-color: #2C2C2C;
+  border: none;
+  color: #fff;
+  color: #202020;
+  font-size: 1rem;
+  padding: 6px 16px;
+  border-radius: 15px;
+  cursor: pointer;
+  -webkit-transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease;
+}
+
+.chat-input button:hover {
+  background-color: #6f7284;
+}
+/*# sourceMappingURL=chatModal.css.map */

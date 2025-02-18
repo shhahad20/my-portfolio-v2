@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../styles/hero.scss";
 import HeroHeading from "./HeroHeading";
-import ChatWidget from "./ChatWidget";
+import ChatModal from "./ChatModal";
 
 const Hero = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     const headHeadElement = document.querySelector(".head-head");
 
@@ -31,6 +33,13 @@ const Hero = () => {
     };
   }, []);
 
+  // Open and close the modal
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <section id="hero">
       <div className="background">
@@ -58,12 +67,14 @@ const Hero = () => {
             I once thought HTML was a programming language-turns out, it was
             just the start of my journey.
           </p>
-          {/* <a href="#about-section" className="more-about-button">
-            More About
-          </a> */}
-          <ChatWidget/>
+          {/* Render the modal conditionally */}
+          <button onClick={openModal} className="more-about-button">
+            Ask Shahad's AI
+          </button>
         </div>
       </div>
+      {isModalOpen && <ChatModal closeModal={closeModal} />}
+
     </section>
   );
 };

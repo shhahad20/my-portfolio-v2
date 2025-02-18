@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import "../styles/about.scss";
+import ChatWidget from "./ChatWidget";
 
 interface Paragraphs {
   [key: string]: React.RefObject<HTMLDivElement>;
@@ -77,6 +78,7 @@ const About = () => {
 
   return (
     <div id="about-section">
+      <ChatWidget/>
       <div id="about-paragraph">
         <div className="between-lines">
           <div>
