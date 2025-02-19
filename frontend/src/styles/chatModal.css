@@ -1,9 +1,7 @@
 .chat-modal-overlay {
   position: fixed;
   inset: 0;
-  /* top:0; right:0; bottom:0; left:0; */
   background-color: rgba(4, 4, 4, 0.853);
-  /* Dark overlay behind the modal */
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -32,10 +30,8 @@
           flex-direction: column;
   max-height: 80vh;
   overflow: hidden;
-  /* So it won't exceed the screen */
 }
 
-/* Header area (top bar) */
 .chat-header {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -112,9 +108,7 @@
           flex: 1;
   padding: 16px;
   overflow-y: auto;
-  /* Scroll if messages exceed the area */
   background-color: #202020;
-  /* 1) Make this a flex container so we can align messages left/right. */
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -122,18 +116,21 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chat-messages::-webkit-scrollbar {
+  display: none;
 }
 
 .chat-messages .message {
-  /* 2) Inline-block so it only expands to the text/content width */
   display: inline-block;
-  /* 3) Limit how wide each bubble can grow */
   max-width: 80%;
   margin-bottom: 16px;
   line-height: 1.5;
   font-size: 1.1rem;
   word-wrap: break-word;
-  /* Ensures long text wraps */
   padding: 8px;
   border-radius: 16px;
 }

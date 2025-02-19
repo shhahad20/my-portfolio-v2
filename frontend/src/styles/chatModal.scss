@@ -3,9 +3,8 @@
 
 .chat-modal-overlay {
   position: fixed;
-  inset: 0; /* top:0; right:0; bottom:0; left:0; */
-  background-color: rgba(4, 4, 4, 0.853); /* Dark overlay behind the modal */
-  // background-color: $behind-text-bg;
+  inset: 0; 
+  background-color: rgba(4, 4, 4, 0.853); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,22 +12,18 @@
 }
 
 .chat-modal {
-  // background-color: #343541;
   background-color: $second-bg-color;
-  // color: #e3e3e3;
   color: $primary-white-color;
   width: 600px;
   max-width: 90%;
-  // border: 1px solid #565869;
   border: map-get($borders, 3);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   max-height: 80vh;
-  overflow: hidden; /* So it won't exceed the screen */
+  overflow: hidden; 
 }
 
-/* Header area (top bar) */
 .chat-header {
   display: flex;
   align-items: center;
@@ -46,11 +41,11 @@
   justify-content: left;
   align-items: center;
   width: 100%;
-  h2{
+  h2 {
     @include header-style2(1rem);
     font-weight: 500;
   }
-  img{
+  img {
     width: 20px;
   }
 }
@@ -66,35 +61,37 @@
   }
 }
 .chat-mood-container {
-    text-align: center;
-    padding: 16px 0;
-    background-color: $dark-gray-color;
-  
-    .chat-mood-img {
-      width: 150px;
-      height: auto;
-    }
+  text-align: center;
+  padding: 16px 0;
+  background-color: $dark-gray-color;
+
+  .chat-mood-img {
+    width: 150px;
+    height: auto;
   }
-  
+}
+
 /* Conversation area */
 .chat-messages {
   flex: 1;
   padding: 16px;
-  overflow-y: auto; /* Scroll if messages exceed the area */
-  // background-color: #343541;
+  overflow-y: auto; 
   background-color: $dark-gray-color;
-  /* 1) Make this a flex container so we can align messages left/right. */
   display: flex;
   flex-direction: column;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
   .message {
-    /* 2) Inline-block so it only expands to the text/content width */
     display: inline-block;
-    /* 3) Limit how wide each bubble can grow */
     max-width: 80%;
     margin-bottom: 16px;
     line-height: 1.5;
     font-size: 1.1rem;
-    word-wrap: break-word; /* Ensures long text wraps */
+    word-wrap: break-word; 
     padding: 8px;
     border-radius: 16px;
 
@@ -121,18 +118,14 @@
 .chat-input {
   display: flex;
   align-items: center;
-  //   border-top: 1px solid #565869;
   border-top: map-get($borders, 3);
-
   padding: 16px;
-  //   background-color: #40414f;
   background-color: $dark-gray-color;
 
   input {
     flex: 1;
     background: transparent;
     border: none;
-    // color: #e3e3e3;
     color: $primary-white-color;
     font-size: 1.1rem;
     padding: 8px;
@@ -146,20 +139,17 @@
 
   button {
     margin-left: 8px;
-    // background-color: #565869;
     background-color: $behind-text-bg;
     border: none;
     color: #fff;
     color: $dark-gray-color;
     font-size: 1rem;
-    // padding: 8px 10px;
     padding: 6px 16px;
     border-radius: 15px;
     cursor: pointer;
     transition: background-color 0.2s ease;
     &:hover {
       background-color: #6f7284;
-      //   background-color: $secondary-light-blue-color;
     }
   }
 }

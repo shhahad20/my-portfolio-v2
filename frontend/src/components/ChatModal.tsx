@@ -23,7 +23,8 @@ const ChatModal = ({ closeModal }) => {
     greeting: "/hi-me.webp",
     thinking: "/thinking-me.webp",
     answering: "/work-me.webp",
-    idle: "/sleep-me.webp",
+    idle: "/work-me.webp",
+    idk: "/idk-me.webp"
   };
 
   const handleSend = async () => {
@@ -49,14 +50,14 @@ const ChatModal = ({ closeModal }) => {
       setChatMood("answering");
       setTimeout(() => {
         setChatMood("idle");
-      }, 3000);
+      }, 5000);
     } catch (error) {
       console.error("Error fetching AI response", error);
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: "Sorry, something went wrong." },
       ]);
-      setChatMood("idle");
+      setChatMood("idk");
     } finally {
       setLoading(false);
     }

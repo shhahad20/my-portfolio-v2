@@ -120,3 +120,8 @@
     background: #006fcb;
   }
 }
+@media screen and (max-width: 480px){
+  .chat-widget{
+    width: 330px;
+  }
+ }

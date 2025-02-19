@@ -7,12 +7,9 @@ const genAI = new GoogleGenerativeAI(apiKey);
 export const aiChat = async (req, res, next) => {
     const { messages } = req.body;
     try {
-        // const systemPrompt =
-        // "You are an assistant who answers questions about Shahad. " +
-        // "Shahad earned her Bachelor's degree in Software Engineering from the University of Hail, " +
-        // "and she completed her Software Development Bootcamp at SDA Saudi Digital Academy.";    
-        // Combine system prompt and user message into one string prompt
-        const prompt = `${systemPrompt}\nUser: ${messages[0].content}`;
+        const lastMessage = messages[messages.length - 1];
+        const prompt = `${systemPrompt}\nUser: ${lastMessage.content}`;
+        // const prompt = `${systemPrompt}\nUser: ${messages[0].content}`;
         // Call generateContent with a string prompt
         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
         const response = await model.generateContent(prompt);

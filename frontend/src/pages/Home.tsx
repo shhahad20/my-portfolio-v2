@@ -6,11 +6,13 @@ import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Info from "../components/Info";
 import MyPartners from "../components/MyPartners";
+import Navbar from "../components/Navbar";
 import Testimonials from "../components/Testimonials";
 
 const Home: React.FC = () => {
   return (
     <>
+    <Navbar/>
       <Hero />
       <About />
       <Dashboard/>
