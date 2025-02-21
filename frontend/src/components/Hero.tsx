@@ -48,7 +48,7 @@ const Hero = () => {
           <div></div>
           <div></div>
         </div>
-        <div className="lines-background">
+        {/* <div className="lines-background">
           <div className="line"></div>
           <div className="line"></div>
           <div className="line"></div>
@@ -59,7 +59,7 @@ const Hero = () => {
           <div className="line"></div>
           <div className="line"></div>
           <div className="line"></div>
-        </div>
+        </div> */}
         <div className="content">
           <HeroHeading />
           <h2 className="head-head">Growth Focused</h2>

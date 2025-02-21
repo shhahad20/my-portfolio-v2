@@ -5,22 +5,12 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  // padding: 50px 20px;
-  // color: white;
   color: #d8ecf8;
-
-  // height: 15vh;
-  // background-color: #F17625;
-  // margin-bottom: 5rem;
   #hero_heading {
     max-width: 800px;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
-    // text-align: center;
     display: flex;
-    align-items: center; // Vertically align items
-    gap: 5px; // Add some spacing between elements (optional)
+    align-items: center; 
+    gap: 5px; 
     #hello {
       font-weight: 200;
       font-size: 1.8rem;
@@ -31,32 +21,22 @@
       position: relative;
       overflow: hidden;
       white-space: nowrap;
-      height: 40px; /* Match the line height */
+      height: 40px; 
       text-align: left;
       font-size: 1.2rem;
-      // Remove inline-block
-    //   display: flex;
-    //   align-items: center; // Needed for correct vertical alignment of animated text
-    //   height: auto; // Let height adjust to content
-    //   overflow: hidden;
-    //   white-space: nowrap;
-    //   text-align: left;
-    //   padding: 0; 
       h1 {
         position: relative;
         width: 100%;
         margin: 0;
         animation: slideUp 12s infinite;
-        // color: white;
         color: #d8ecf8;
         font-weight: 500;
-        height: 40px; // Or whatever your .name height is
+        height: 40px; 
         line-height: 40px;
       }
     }
     .brackets {
       color: #f17625;
-      // color: #98c0ef;
       padding: 0 8px;
       animation: opacity 2s infinite;
     }

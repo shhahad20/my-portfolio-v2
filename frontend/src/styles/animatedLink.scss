@@ -1,0 +1,36 @@
+@import "variables";
+@import "mixins";
+.animated-link {
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+    
+    .text-wrapper {
+      position: relative;
+      overflow: hidden;
+      height: 1.2em; // adjust this to match your font-size
+    }
+    
+    .default-text,
+    .hover-text {
+      display: block;
+      transition: transform 0.1s ease;
+      height: 1.2em;
+    }
+    
+    .default-text {
+      color: $text-gray;
+    }
+    
+    .hover-text {
+      color: $primary-white-color;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    @media (max-width: 768px) {
+      .default-text {
+        color: $primary-white-color;
+      }
+    }
+  }

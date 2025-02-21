@@ -36,7 +36,6 @@
   overflow: hidden;
   white-space: nowrap;
   height: 40px;
-  /* Match the line height */
   text-align: left;
   font-size: 1.2rem;
 }

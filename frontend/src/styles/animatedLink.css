@@ -1,0 +1,39 @@
+.animated-link {
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.animated-link .text-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 1.2em;
+}
+
+.animated-link .default-text,
+.animated-link .hover-text {
+  display: block;
+  -webkit-transition: -webkit-transform 0.1s ease;
+  transition: -webkit-transform 0.1s ease;
+  transition: transform 0.1s ease;
+  transition: transform 0.1s ease, -webkit-transform 0.1s ease;
+  height: 1.2em;
+}
+
+.animated-link .default-text {
+  color: #818180;
+}
+
+.animated-link .hover-text {
+  color: #EFEEEC;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+@media (max-width: 768px) {
+  .animated-link .default-text {
+    color: #EFEEEC;
+  }
+}
+/*# sourceMappingURL=animatedLink.css.map */
