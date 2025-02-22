@@ -9,7 +9,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="logo">
-          <a href="/">SHAHAD ALTHARWA</a>
+          <a href="/"><img src="/logo-white.svg" alt="Logo" /></a>
         </div>
         {/* Two-line Hamburger Menu */}
         <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>

@@ -111,11 +111,11 @@ const Dashboard = () => {
       >
         <aside className="dashboard__sidebar">
           <div>
-            <img
+            {/* <img
               className="logo-white"
               src="/logo-white.svg"
               alt="Logo in white"
-            />
+            /> */}
             <ul>
               <li onClick={() => setSelectedCategory("recent")}>
                 <img src="/recently.svg" alt="Recently icon" /> Recently

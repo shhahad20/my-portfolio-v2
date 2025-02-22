@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import itemsRouter from "../src/routers/itemsRouter.js";
 import aiChatRouter from "../src/routers/aiChatRouter.js";
+import apiErrorHandler from '../src/middlewares/errorHandler.js';
 
 config()
 const app = express() 
@@ -24,7 +25,7 @@ app.use(express.json())
 app.use('/api', itemsRouter)
 app.use('/api', aiChatRouter)
 
-// app.use(apiErrorHandler)
+app.use(apiErrorHandler);
 
 app.listen(PORT, async () => {
   console.log('Server running http://localhost:' + PORT)

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { supabase } from "../config/supabaseClient.js";
+import ApiError from "../errors/ApiError.js";
 
 export const repositories = async (
   req: Request,
@@ -11,10 +12,9 @@ export const repositories = async (
       .from("repositories")
       .select("*")
       .order("created_at", { ascending: false });
-    if (error) throw error;
+      if (error) throw ApiError.internal("Error fetching repositories");
     res.json(data);
   } catch (error) {
-    res.status(500).json({ error: "Error fetching repositories" });
     next(error);
   }
 };
@@ -26,10 +26,9 @@ export const components = async (
   ) => {
     try {
         const { data, error } = await supabase.from('components').select('*').order('created_at', { ascending: false });
-        if (error) throw error;
+        if (error) throw ApiError.internal("Error fetching components");
         res.json(data);
       } catch (error) {
-        res.status(500).json({ error: 'Error fetching components' });
         next(error);
       }
   };
@@ -41,10 +40,9 @@ export const components = async (
   ) => {
     try {
         const { data, error } = await supabase.from('social_media').select('*').order('created_at', { ascending: false });
-        if (error) throw error;
+        if (error) throw ApiError.internal("Error fetching social media news");
         res.json(data);
       } catch (error) {
-        res.status(500).json({ error: 'Error fetching social media news' });
         next(error);
       }
   };
@@ -66,12 +64,11 @@ export const components = async (
       ]);
   
       if (repoError || componentError || socialError) {
-        throw new Error("Error fetching recent data");
+        // throw new Error("Error fetching recent data");
+        throw ApiError.internal("Error fetching recent data");
       }
-  
       res.json({ repositories, components, social_media });
     } catch (error) {
-      res.status(500).json({ error: "Error fetching recent items" });
       next(error);
     }
   };

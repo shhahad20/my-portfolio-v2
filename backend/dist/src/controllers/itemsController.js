@@ -1,4 +1,5 @@
 import { supabase } from "../config/supabaseClient.js";
+import ApiError from "../errors/ApiError.js";
 export const repositories = async (req, res, next) => {
     try {
         const { data, error } = await supabase
@@ -6,11 +7,10 @@ export const repositories = async (req, res, next) => {
             .select("*")
             .order("created_at", { ascending: false });
         if (error)
-            throw error;
+            throw ApiError.internal("Error fetching repositories");
         res.json(data);
     }
     catch (error) {
-        res.status(500).json({ error: "Error fetching repositories" });
         next(error);
     }
 };
@@ -18,11 +18,10 @@ export const components = async (req, res, next) => {
     try {
         const { data, error } = await supabase.from('components').select('*').order('created_at', { ascending: false });
         if (error)
-            throw error;
+            throw ApiError.internal("Error fetching components");
         res.json(data);
     }
     catch (error) {
-        res.status(500).json({ error: 'Error fetching components' });
         next(error);
     }
 };
@@ -30,11 +29,10 @@ export const socialMedia = async (req, res, next) => {
     try {
         const { data, error } = await supabase.from('social_media').select('*').order('created_at', { ascending: false });
         if (error)
-            throw error;
+            throw ApiError.internal("Error fetching social media news");
         res.json(data);
     }
     catch (error) {
-        res.status(500).json({ error: 'Error fetching social media news' });
         next(error);
     }
 };
@@ -46,12 +44,12 @@ export const recent = async (req, res, next) => {
             supabase.from("social_media").select("*").order("created_at", { ascending: false }).limit(9)
         ]);
         if (repoError || componentError || socialError) {
-            throw new Error("Error fetching recent data");
+            // throw new Error("Error fetching recent data");
+            throw ApiError.internal("Error fetching recent data");
         }
         res.json({ repositories, components, social_media });
     }
     catch (error) {
-        res.status(500).json({ error: "Error fetching recent items" });
         next(error);
     }
 };
