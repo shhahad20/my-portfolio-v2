@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import '../styles/animatedLink.scss';
 
-const AnimatedLink = ({ linkText, hoverText, href }) => {
+const AnimatedLink = ({ linkText, hoverText, href, ...props  }) => {
   const defaultTextVariants = {
     initial: { y: 0 },
     hover: { y: "-100%", transition: { duration: 0.3 } }
@@ -18,6 +18,7 @@ const AnimatedLink = ({ linkText, hoverText, href }) => {
       className="animated-link"
       whileHover="hover"
       initial="initial"
+      {...props}
     >
       <div className="text-wrapper">
         <motion.span className="default-text" variants={defaultTextVariants}>

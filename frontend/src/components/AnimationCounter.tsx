@@ -1,26 +1,30 @@
-import { animate, useMotionValue } from "framer-motion";
-import { useEffect, useState } from "react";
+import { animate, useMotionValue, useInView } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 
 const AnimatedCounter = ({ target, duration = 2, suffix = "" }) => {
-  // Create a motion value that starts at 0
+  // Create a ref to attach to the element you want to observe.
+  const ref = useRef(null);
+  // Check if the element is in view. 'once: true' ensures the animation only runs once.
+  const isInView = useInView(ref, { once: true });
+  // Create a motion value that starts at 0.
   const motionValue = useMotionValue(0);
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    // Animate the motion value from 0 to target over the specified duration
-    const controls = animate(motionValue, target, {
-      duration: duration,
-      onUpdate: (latest) => {
-        // Round the value and update local state
-        setCount(Math.round(latest));
-      },
-    });
+    if (isInView) {
+      // Animate the motion value from 0 to target over the specified duration.
+      const controls = animate(motionValue, target, {
+        duration: duration,
+        onUpdate: (latest) => {
+          setCount(Math.round(latest));
+        },
+      });
+      // Clean up the animation on component unmount.
+      return () => controls.stop();
+    }
+  }, [isInView, target, duration, motionValue]);
 
-    // Clean up the animation when the component unmounts
-    return () => controls.stop();
-  }, [target, duration, motionValue]);
-
-  return <span>{count}{suffix}</span>;
+  return <span ref={ref}>{count}{suffix}</span>;
 };
 
 export default AnimatedCounter;

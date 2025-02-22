@@ -84,6 +84,29 @@
   display: -ms-flexbox;
   display: flex;
   gap: 3rem;
+  position: relative;
+}
+
+.navbar .navbar-container .nav-links .coming-soon-message {
+  font-family: "Space Mono", serif;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  -webkit-transform: translate(-50%, 8px);
+          transform: translate(-50%, 8px);
+  background-color: #F17625;
+  color: #EFEEEC;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 1;
+  -webkit-transition: opacity 0.3s ease-in-out, -webkit-transform 0.3s ease;
+  transition: opacity 0.3s ease-in-out, -webkit-transform 0.3s ease;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease, -webkit-transform 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
 }
 
 .navbar .navbar-container .nav-links li a {

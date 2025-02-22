@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import "../styles/about.scss";
 import ChatWidget from "./ChatWidget";
 
@@ -77,8 +78,14 @@ const About = () => {
   }, []);
 
   return (
-    <div id="about-section">
-      <ChatWidget/>
+    <motion.div
+      id="about-section"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      viewport={{ once: true, amount: 0.2 }}
+    >
+      
       <div id="about-paragraph">
         <div className="between-lines">
           <div>
@@ -110,8 +117,12 @@ const About = () => {
           As a Software Engineer, I excel in software architecture, algorithm
           design, and problem-solving across multiple languages and frameworks.
           I'm dedicated to staying current with tech trends and optimizing code
-          for performance. I earned my<span className="span-color"> Bachelor of Software Engineering from the
-          University of Hail (2018 - 2023), majoring in Software Engineering.</span> 
+          for performance. I earned my
+          <span className="span-color">
+            {" "}
+            Bachelor of Software Engineering from the University of Hail (2018 -
+            2023), majoring in Software Engineering.
+          </span>
         </p>
         <p
           ref={paragraphs["Full-Stack"]}
@@ -121,13 +132,13 @@ const About = () => {
           skills—starting in front-end design with HTML, CSS, and JavaScript,
           then moving into robust backend development with Python. I've mastered
           database management, API integration, and debugging. A year ago, I
-          completed a{" "} <br />
+          completed a <br />
           <span className="span-color">
             MERN Software Development Bootcamp at Saudi Digital Academy x
-            Integrify (Sep 2023 - Dec 2023) 
-          </span> <br />
-          , which further ignited my passion for full-stack development and data
-          science.
+            Integrify (Sep 2023 - Dec 2023)
+          </span>{" "}
+          <br />, which further ignited my passion for full-stack development
+          and data science.
         </p>
 
         <p
@@ -151,7 +162,7 @@ const About = () => {
           impact.
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

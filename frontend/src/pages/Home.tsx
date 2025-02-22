@@ -1,4 +1,5 @@
 import About from "../components/About";
+import ChatWidget from "../components/ChatWidget";
 import Contact from "../components/Contact";
 import Dashboard from "../components/Dashboard";
 import Experience from "../components/Experience";
@@ -12,6 +13,7 @@ import Testimonials from "../components/Testimonials";
 const Home: React.FC = () => {
   return (
     <>
+    <ChatWidget />
     <Navbar/>
       <Hero />
       <About />

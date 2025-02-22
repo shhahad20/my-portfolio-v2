@@ -59,8 +59,26 @@
       list-style: none;
       display: flex;
       gap: 3rem;
-
+      position: relative;
+      .coming-soon-message {
+        font-family: "Space Mono", serif;
+        position: absolute;
+        top: 100%; // position below the li content
+        left: 50%;
+        transform: translate(-50%, 8px); // center horizontally, add 8px space
+        background-color: $orange-color;
+        color: $primary-white-color;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 1;
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease;
+        pointer-events: none; // so the message doesn't interfere with clicks
+        z-index: 10; // ensure it sits above other elements if needed
+      }
       li {
+      
         a {
           text-decoration: none;
           font-size: 1rem;
