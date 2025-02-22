@@ -7,11 +7,11 @@ const Navbar = () => {
   const [msg, setMsg] = useState(false);
 
   const showComingSoon = (e) => {
-    e.preventDefault(); // Prevent default navigation
+    e.preventDefault(); 
     setMsg(true);
     setTimeout(() => {
       setMsg(false);
-    }, 5000); // Hide message after 2 seconds
+    }, 5000); 
   };
 
   return (

@@ -61,16 +61,8 @@
 }
 
 .chat-title h2 {
+  color: #EFEEEC;
   font-size: 1rem;
-  font-weight: 500;
-  background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
-  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
-  display: inline-block;
-  padding: 0 15px;
   font-weight: 500;
 }
 
@@ -181,56 +173,18 @@
 
 .chat-input input::-webkit-input-placeholder {
   color: #8e8ea0;
-  font-size: 1.1rem;
-  font-weight: 500;
-  background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
-  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
-  display: inline-block;
-  padding: 0 15px;
 }
 
 .chat-input input:-ms-input-placeholder {
   color: #8e8ea0;
-  font-size: 1.1rem;
-  font-weight: 500;
-  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
-  display: inline-block;
-  padding: 0 15px;
 }
 
 .chat-input input::-ms-input-placeholder {
   color: #8e8ea0;
-  font-size: 1.1rem;
-  font-weight: 500;
-  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
-  display: inline-block;
-  padding: 0 15px;
 }
 
 .chat-input input::placeholder {
   color: #8e8ea0;
-  font-size: 1.1rem;
-  font-weight: 500;
-  background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
-  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
-  display: inline-block;
-  padding: 0 15px;
 }
 
 .chat-input button {

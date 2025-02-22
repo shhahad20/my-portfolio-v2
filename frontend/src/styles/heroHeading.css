@@ -54,9 +54,9 @@
 
 #hero_heading_section #hero_heading .brackets {
   color: #f17625;
+  color: #d8ecf8;
   padding: 0 8px;
-  -webkit-animation: opacity 2s infinite;
-          animation: opacity 2s infinite;
+  font-weight: 400;
 }
 
 @-webkit-keyframes opacity {

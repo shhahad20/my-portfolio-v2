@@ -28,7 +28,7 @@
     background: transparent;
     border: none;
     color: #ccc;
-    font-size: 1.5rem;
+    font-size: 1.5rem; 
     cursor: pointer;
     &:hover {
       color: #fff;
@@ -55,6 +55,8 @@
     .message {
       margin-bottom: 12px;
       line-height: 1.4;
+      font-size: 1rem;
+
       &.assistant {
         color: #f0f0f0;
         text-align: left;
@@ -107,9 +109,11 @@
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background: #0084ff;
-  background-color: $orange-color;
-
+  // background: #0084ff;
+  // background-color: $orange-color;
+  background-color: $dark-gray-color;
+  color: $primary-white-color;            /* White text */
+  border: map-get($borders, 3);
   color: #fff;
   padding: 12px 16px;
   border-radius: 24px;
@@ -117,7 +121,10 @@
   cursor: pointer;
   z-index: 998;
   &:hover {
-    background: #006fcb;
+    background: #0070cb29;
+    // background-color: #ff005926;
+    color: #006fcb;
+    
   }
 }
 @media screen and (max-width: 480px){

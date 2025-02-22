@@ -68,13 +68,15 @@ const Hero = () => {
             just the start of my journey.
           </p>
           {/* Render the modal conditionally */}
-          <button onClick={openModal} className="more-about-button">
-            Ask Shahad's AI
-          </button>
+          <div onClick={openModal} className="more-about-button">
+            <span className="badge">New</span>
+            <span className="button-text">Ask Shahad's AI</span>
+            {/* <span className="arrow">→</span> */}
+            <span className="arrow"><img src="/white-right-arrow.svg" alt="Arrow" /></span>
+          </div>
         </div>
       </div>
       {isModalOpen && <ChatModal closeModal={closeModal} />}
-
     </section>
   );
 };

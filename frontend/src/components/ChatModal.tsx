@@ -70,8 +70,8 @@ const ChatModal = ({ closeModal }) => {
         <div className="chat-header">
           <div className="chat-title">
             {" "}
-            <img src="logo-blue-light.svg" alt="AI Logo" width="20%" />
-            <h2>Shahad's AI</h2>
+            {/* <img src="logo-blue-light.svg" alt="AI Logo" width="20%" /> */}
+            <h2>Shahad's AI Assistant</h2>
           </div>
           <button className="close-btn" onClick={closeModal}>
             &times;

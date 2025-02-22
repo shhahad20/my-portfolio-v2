@@ -53,7 +53,7 @@
   justify-content: center;
   align-items: center;
   align-content: center;
-  margin: 100px auto 0 auto;
+  margin: 80px auto 0 auto;
 
   .head-head{
     @include header-style(75px);
@@ -74,17 +74,68 @@
     font-size: 18px;
     line-height: 1.8rem;
   }
-  .more-about-button{
-    margin: 10px 0 0 0;
-    @include header-style(18px);
-    padding: 10px 20px;
-    border: map-get($borders, 1);
-    border-radius: 30px;
+  .more-about-button {
+    display: inline-flex;
+    justify-content:space-between;
+    align-items: center;
+    // gap: 1rem;
+    // background-color: #1f1f1f; /* Dark background */
+    background-color: $dark-gray-color;
+    color: $primary-white-color;            /* White text */
+    border: map-get($borders, 3);
+    padding: 6px 16px;         /* Adjust spacing to taste */
+    border-radius: 24px;       /* Rounded edges */
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+
+    width: 100%;                    /* Take full width of parent on small screens */
+    max-width: 250px;              /* Don’t exceed 400px on larger screens */
+    margin: 0 auto; 
+  }
+  
+  .more-about-button:hover {
+    background-color: #333333; /* Slightly lighter on hover */
+  }
+  
+  .more-about-button .badge {
+    background-color: #ff005a; /* Pinkish badge color */
+    background-color:#98c1ef6e;
+    color: $secondary-light-blue-color;
+    background-color: #ff005926;
+    color: #ff005a;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    border-radius: 8px;
+    margin-right: 8px;
+  }
+  
+  .more-about-button .button-text {
+    font-size: 14px;
     font-weight: 500;
   }
-  .more-about-button:hover{
-    cursor: pointer;
+  
+  .more-about-button .arrow {
+    display: inline-flex;        
+    align-items: center;
+    justify-content: center;
+    width: 24px;                 
+    height: 24px;                
+    background-color: $behind-text-bg;   
+    color: $primary-white-color;            
+    border-radius: 50%;          
+    margin-left: 8px;            
+    font-size: 14px;
+    transition: transform 0.2s ease-in-out;
   }
+  .more-about-button:hover .arrow {
+    transform: translateX(4px);
+  }
+  
 }
 
 .lines-background, .lines-background-ver {
@@ -218,7 +269,7 @@
       max-width: 500px;
     }
     .more-about-button{
-      font-size: 18px;
+      font-size: 16px;
     }
   }
   .lines-background .line:nth-child(1) {
@@ -327,26 +378,18 @@
       padding: 0.5rem 0;
     }
     .more-about-button{
-      font-size: 14px;
+      font-size: 12px;
+      max-width: 220px;
+    }
+    .more-about-button .button-text {
+      font-size: 12px;
+      font-weight: 500;
     }
   }
   }
-  // @media (max-width: 320px){
-  //   .content{
-  //     .head-head{
-  //       font-size: 20px;
-  //     }
-  //     .para{
-  //       font-size: 14px;
-  //       max-width: 450px;
-  //     }
-  //     .more-about-button{
-  //       font-size: 14px;
-  //     }
-  //   }
-  //   }
 
-  @keyframes drop{
+
+@keyframes drop{
  0% {
     top: -50%;}
   100%{

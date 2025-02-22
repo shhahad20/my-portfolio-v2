@@ -42,7 +42,9 @@
   align-items: center;
   width: 100%;
   h2 {
-    @include header-style2(1rem);
+    // @include header-style2(1rem);
+    color: $primary-white-color;
+    font-size: 1rem;
     font-weight: 500;
   }
   img {
@@ -133,7 +135,7 @@
 
     &::placeholder {
       color: #8e8ea0;
-      @include header-style2(1.1rem);
+      // @include header-style2(1.1rem);
     }
   }
 

@@ -46,6 +46,10 @@
   text-decoration: none;
 }
 
+.navbar .navbar-container .logo a img {
+  width: 25px;
+}
+
 .navbar .navbar-container .hamburger {
   display: none;
   -webkit-box-orient: vertical;
