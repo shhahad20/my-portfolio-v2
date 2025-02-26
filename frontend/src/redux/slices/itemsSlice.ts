@@ -56,44 +56,62 @@ const initialState: itemsState = {
   // totalPages: 1,
   // currentPage: 1,
 };
-export const fetchRecent = createAsyncThunk("items/fetch-recent", async () => {
-  try {
-    const response = await axios.get(`${API_URL}/api/recent`);
-    return response.data;
-  } catch (error) {
-    console.log(error);
+export const fetchRecent = createAsyncThunk(
+  "items/fetch-recent",
+  async (_, thunkAPI) => {
+    try {
+      const response = await axios.get(`${API_URL}/api/recent`);
+      return response.data;
+    } catch (error: any) {
+      console.error(error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data || "Error fetching recent data"
+      );
+    }
   }
-});
+);
+
 export const fetchRepos = createAsyncThunk(
   "items/fetch-repositories",
-  async () => {
+  async (_, thunkAPI) => {
     try {
       const response = await axios.get(`${API_URL}/api/repositories`);
       return response.data;
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.error(error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data || "Failed to fetch repositories."
+      );
     }
   }
 );
+
 export const fetchSocialMedia = createAsyncThunk(
   "items/fetch-social-media",
-  async () => {
+  async (_, thunkAPI) => {
     try {
       const response = await axios.get(`${API_URL}/api/social_media`);
       return response.data;
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.error(error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data || "Failed to fetch social media."
+      );
     }
   }
 );
+
 export const fetchComponents = createAsyncThunk(
   "items/fetch-components",
-  async () => {
+  async (_, thunkAPI) => {
     try {
       const response = await axios.get(`${API_URL}/api/components`);
       return response.data;
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.error(error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data || "Failed to fetch components."
+      );
     }
   }
 );

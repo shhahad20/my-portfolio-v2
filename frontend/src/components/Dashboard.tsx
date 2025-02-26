@@ -15,11 +15,14 @@ import FlipLink from "./AnimatedHeader ";
 const transitionSettings = { duration: 0.5, ease: "easeOut" };
 
 const Dashboard = () => {
-  const { components, repositories, social_media, recent } = useSelector(
+  const { components, repositories, social_media, recent, error, loading } = useSelector(
     (state: RootState) => state.items
   );
   const [isMobile, setIsMobile] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("recent");
+    // Display a loading state if data is still fetching
+
+
   const [scrollY, setScrollY] = useState(window.scrollY);
   const [isScrollingDown, setIsScrollingDown] = useState(true);
 
@@ -60,20 +63,15 @@ const Dashboard = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Conditional scale values: use lower scaling on mobile screens
-  // const cardVariants = {
-  //   hidden: { opacity: 0.5, y: 20, scale: isMobile ? 1.1 : 1.3 },
-  //   visible: { opacity: 1, y: 0, scale: 1 },
-  // };
 
-  // const asideInitialScale = isMobile ? 1.1 : 1.5;
-  // const mainInitialScale = isMobile ? 1.1 : 1.5;
-  // const cardInitialScale = isMobile ? 1.1 : 1.3;
-  // console.log("Components:", components);
-  // console.log("Repositories:", repositories);
-  // console.log("Social Media:", social_media);
-  // console.log("Recent:", recent);
+  if (loading) {
+    return <div className="dashboard-loading">Loading...</div>;
+  }
 
+  // Display an error message if an error exists
+  if (error) {
+    return <div className="dashboard-error">Error: {error}</div>;
+  }
   return (
     <div className="dashboard">
       {/* <div className="header__container">
