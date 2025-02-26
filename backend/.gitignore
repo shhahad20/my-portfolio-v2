@@ -7,3 +7,4 @@ dist/src/config/supabaseClient.js
 
 src/config/systemPrompt.ts
 dist/src/config/systemPrompt.js
+.vercel
