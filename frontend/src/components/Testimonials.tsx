@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, PanInfo } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import FlipLink from "./AnimatedHeader ";
 
@@ -85,7 +85,8 @@ const Testimonials = () => {
   };
 
   // Handle the swipe offset on drag end
-  const handleDragEnd = (_: any, info: any) => {
+  const handleDragEnd = (    _event: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo) => {
     const offset = info.offset.x;
     if (offset < -50) {
       // Swiped left => next

@@ -1,7 +1,14 @@
-import { motion } from 'framer-motion';
+import { HTMLMotionProps, motion } from 'framer-motion';
 import '../styles/animatedLink.scss';
 
-const AnimatedLink = ({ linkText, hoverText, href, ...props  }) => {
+
+interface AnimatedLinkProps extends HTMLMotionProps<"a"> {
+  linkText: string;
+  hoverText: string;
+  href: string;
+}
+
+const AnimatedLink: React.FC<AnimatedLinkProps> =  ({ linkText, hoverText, href, ...props  }) => {
   const defaultTextVariants = {
     initial: { y: 0 },
     hover: { y: "-100%", transition: { duration: 0.3 } }

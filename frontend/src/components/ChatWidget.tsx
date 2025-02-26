@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import axios from "axios";
 import "../styles/chatWidget.scss"; // Make sure you have a matching SCSS/CSS file
 import { API_URL } from "../api/api";
+
+type ChatMood = "greeting" | "thinking" | "answering" | "idle" | "idk";
+
 
 const ChatWidget = () => {
   const [messages, setMessages] = useState([
@@ -17,14 +20,16 @@ const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Define a state for the chat mood which will determine the image shown
-  const [chatMood, setChatMood] = useState("greeting"); // "greeting", "thinking", "answering", "idle", etc.
+  // Mood images
+  const [chatMood, setChatMood] = useState<ChatMood>("greeting");
 
   // Map each mood to its corresponding image
-  const imageMapping = {
+  const imageMapping : Record<ChatMood, string> = {
     greeting: "/hi-me.webp",
     thinking: "/thinking-me.webp",
     answering: "/work-me.webp",
-    idle: "/sleep-me.webp",
+    idle: "/work-me.webp",
+    idk: "/idk-me.webp"
   };
 
   const handleSend = async () => {
@@ -72,7 +77,7 @@ const ChatWidget = () => {
 
   // Optional: if you want the chat to open automatically when the user types
   // you can handle it here:
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
     // If chat is closed and user starts typing, open it
     if (!isOpen && e.target.value.trim().length > 0) {
@@ -80,7 +85,7 @@ const ChatWidget = () => {
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSend();
     }

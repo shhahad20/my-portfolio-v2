@@ -1,18 +1,16 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "../styles/about.scss";
-import ChatWidget from "./ChatWidget";
 
 interface Paragraphs {
-  [key: string]: React.RefObject<HTMLDivElement>;
+  [key: string]: React.RefObject<HTMLDivElement | null>;
 }
-
 const About = () => {
   const paragraphs: Paragraphs = {
-    "Software Engineering": useRef<HTMLDivElement>(null),
-    "Full-Stack": useRef<HTMLDivElement>(null),
-    "Graphic Design": useRef<HTMLDivElement>(null),
-    "Teaching Assistant": useRef<HTMLDivElement>(null),
+    "Software Engineering": useRef<HTMLDivElement | null>(null),
+    "Full-Stack": useRef<HTMLDivElement | null>(null),
+    "Graphic Design": useRef<HTMLDivElement | null>(null),
+    "Teaching Assistant": useRef<HTMLDivElement | null>(null),
   };
 
   const [highlighted, setHighlighted] = useState<string | number>("");

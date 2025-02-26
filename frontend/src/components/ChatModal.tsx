@@ -3,7 +3,15 @@ import axios from "axios";
 import { API_URL } from "../api/api";
 import "../styles/chatModal.scss";
 
-const ChatModal = ({ closeModal }) => {
+// Define the types for the moods
+type ChatMood = "greeting" | "thinking" | "answering" | "idle" | "idk";
+
+// Define the props for ChatModal
+interface ChatModalProps {
+  closeModal: () => void;
+}
+
+const ChatModal : React.FC<ChatModalProps> = ({ closeModal }) => {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
@@ -16,10 +24,10 @@ const ChatModal = ({ closeModal }) => {
   const [loading, setLoading] = useState(false);
 
   // Mood images
-  const [chatMood, setChatMood] = useState("greeting");
+  const [chatMood, setChatMood] = useState<ChatMood>("greeting");
 
   // Map each mood to its corresponding image
-  const imageMapping = {
+  const imageMapping : Record<ChatMood, string> = {
     greeting: "/hi-me.webp",
     thinking: "/thinking-me.webp",
     answering: "/work-me.webp",
