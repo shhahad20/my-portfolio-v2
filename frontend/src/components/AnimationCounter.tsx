@@ -1,7 +1,13 @@
 import { animate, useMotionValue, useInView } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 
-const AnimatedCounter = ({ target, duration = 2, suffix = "" }) => {
+interface AnimatedCounterProps {
+  target: number;
+  duration?: number;
+  suffix?: string;
+}
+
+const AnimatedCounter : React.FC<AnimatedCounterProps> = ({ target, duration = 2, suffix = "" }) => {
   // Create a ref to attach to the element you want to observe.
   const ref = useRef(null);
   // Check if the element is in view. 'once: true' ensures the animation only runs once.

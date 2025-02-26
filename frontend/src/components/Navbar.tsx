@@ -6,7 +6,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [msg, setMsg] = useState(false);
 
-  const showComingSoon = (e) => {
+  const showComingSoon = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     e.preventDefault(); 
     setMsg(true);
     setTimeout(() => {
