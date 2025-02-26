@@ -60,7 +60,7 @@ export const fetchRecent = createAsyncThunk(
   "items/fetch-recent",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_URL}/api/recent`);
+      const response = await axios.get(`${API_URL}/recent`);
       return response.data;
     } catch (error: any) {
       console.error(error);
@@ -75,7 +75,7 @@ export const fetchRepos = createAsyncThunk(
   "items/fetch-repositories",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_URL}/api/repositories`);
+      const response = await axios.get(`${API_URL}/repositories`);
       return response.data;
     } catch (error: any) {
       console.error(error);
@@ -105,7 +105,7 @@ export const fetchComponents = createAsyncThunk(
   "items/fetch-components",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_URL}/api/components`);
+      const response = await axios.get(`${API_URL}/components`);
       return response.data;
     } catch (error: any) {
       console.error(error);

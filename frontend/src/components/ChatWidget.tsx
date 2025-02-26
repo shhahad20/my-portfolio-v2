@@ -47,7 +47,7 @@ const ChatWidget = () => {
 
     try {
       // Make your API call
-      const response = await axios.post(`${API_URL}/api/chat`, {
+      const response = await axios.post(`${API_URL}/chat`, {
         messages: updatedMessages,
       });
 

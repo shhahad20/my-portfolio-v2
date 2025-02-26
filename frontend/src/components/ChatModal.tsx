@@ -46,7 +46,7 @@ const ChatModal : React.FC<ChatModalProps> = ({ closeModal }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${API_URL}/api/chat`, {
+      const response = await axios.post(`${API_URL}/chat`, {
         messages: updatedMessages,
       });
       const assistantMessage = {
