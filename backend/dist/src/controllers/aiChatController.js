@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { systemPrompt } from "../config/systemPrompt.js";
 dotenv.config();
@@ -11,7 +11,7 @@ export const aiChat = async (req, res, next) => {
         const prompt = `${systemPrompt}\nUser: ${lastMessage.content}`;
         // const prompt = `${systemPrompt}\nUser: ${messages[0].content}`;
         // Call generateContent with a string prompt
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
         const response = await model.generateContent(prompt);
         // Assuming the response has a .response.text() method to get the generated text
         const reply = response.response.text();
@@ -20,6 +20,6 @@ export const aiChat = async (req, res, next) => {
     catch (error) {
         console.error("Error calling Google Gemini API:", error);
         res.status(500).json({ error: "Error fetching AI response" });
-        next(error);
+        // next(error);
     }
 };
