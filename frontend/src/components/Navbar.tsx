@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AnimatedLink from "./AnimatedLink";
 import "../styles/navbar.scss";
+// import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,6 +31,7 @@ const Navbar = () => {
         <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
           <li onClick={showComingSoon}>
             <AnimatedLink linkText="Updates" hoverText="Updates" href="/" />
+            {/* <Link to="/">Updates</Link> */}
           </li>
           <li onClick={showComingSoon}>
             <AnimatedLink linkText="Downloads" hoverText="Downloads" href="/" />

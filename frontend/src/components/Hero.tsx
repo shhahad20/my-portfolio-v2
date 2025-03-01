@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect,useState } from "react";
 import "../styles/hero.scss";
 import HeroHeading from "./HeroHeading";
 import ChatModal from "./ChatModal";
@@ -48,18 +48,6 @@ const Hero = () => {
           <div></div>
           <div></div>
         </div>
-        {/* <div className="lines-background">
-          <div className="line"></div>
-          <div className="line"></div>
-          <div className="line"></div>
-          <div className="line"></div>
-        </div>
-        <div className="lines-background-ver">
-          <div className="line"></div>
-          <div className="line"></div>
-          <div className="line"></div>
-          <div className="line"></div>
-        </div> */}
         <div className="content">
           <HeroHeading />
           <h2 className="head-head">Growth Focused</h2>
@@ -71,7 +59,6 @@ const Hero = () => {
           <div onClick={openModal} className="more-about-button">
             <span className="badge">New</span>
             <span className="button-text">Ask Shahad's AI</span>
-            {/* <span className="arrow">→</span> */}
             <span className="arrow"><img src="/white-right-arrow.svg" alt="Arrow" /></span>
           </div>
         </div>

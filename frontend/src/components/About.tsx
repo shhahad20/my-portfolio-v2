@@ -34,47 +34,6 @@ const About = () => {
     }
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
-    document.documentElement.style.setProperty("--mouse-x", `${e.pageX}px`);
-    document.documentElement.style.setProperty("--mouse-y", `${e.pageY}px`);
-    // Show/hide cursor based on device type
-    if (e.pageY < 768) {
-      if ("ontouchstart" in window) {
-        document.documentElement.style.setProperty("display", "none");
-      } else {
-        document.documentElement.style.setProperty("display", "block");
-      }
-    }
-  };
-
-  const handleMouseEnter = (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-    const fs = getComputedStyle(target).getPropertyValue("font-size");
-    const lh = getComputedStyle(target).getPropertyValue("line-height");
-    document.documentElement.style.setProperty(
-      "--cursor-height",
-      `calc( ${fs} + (${lh}/4) )`
-    );
-  };
-
-  useEffect(() => {
-    document.body.addEventListener("mousemove", handleMouseMove);
-    const highlightableElements = document.body.querySelectorAll(
-      ".highlightable > *"
-    ) as NodeListOf<HTMLElement>;
-
-    highlightableElements.forEach((el) => {
-      el.addEventListener("mouseenter", handleMouseEnter);
-    });
-
-    return () => {
-      document.body.removeEventListener("mousemove", handleMouseMove);
-      highlightableElements.forEach((el) => {
-        el.removeEventListener("mouseenter", handleMouseEnter);
-      });
-    };
-  }, []);
-
   return (
     <motion.div
       id="about-section"
