@@ -1,4 +1,5 @@
 import About from "../components/About";
+import Cards from "../components/Cards";
 import ChatWidget from "../components/ChatWidget";
 import Contact from "../components/Contact";
 import Dashboard from "../components/Dashboard";
@@ -17,6 +18,7 @@ const Home: React.FC = () => {
     <Navbar/>
       <Hero />
       <About />
+      <Cards/>
       <Dashboard/>
       <Experience />
       <MyPartners />

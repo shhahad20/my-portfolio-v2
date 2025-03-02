@@ -10,6 +10,18 @@
     -webkit-text-fill-color: transparent;
     text-shadow: 0 1px 5px rgba(174, 207, 242, .24);
 }
+@mixin header-style-yellow($fontSize, $light-color, $dark-color) {
+  text-align: left;
+  font-size: $fontSize;
+  font-weight: 500;
+  padding: 0 15px;
+  background:linear-gradient(0deg, $light-color, $dark-color);
+  background-clip: text;
+  color: transparent;
+  display: block;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 5px rgba(174, 207, 242, .24);
+}
 @mixin header-style2($fontSize) {
   font-size: $fontSize;
   font-weight: 500;
@@ -23,6 +35,7 @@
   display: inline-block;
   padding: 0 15px;
 }
+
 @mixin betweenLines{
     content: "";
     height: 1px;

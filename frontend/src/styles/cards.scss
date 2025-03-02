@@ -1,0 +1,174 @@
+@import "mixins";
+@import "variables";
+
+.cards-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+
+    .top-cards, .bottom-cards{
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+}
+
+.gradient-card {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    // transition: transform 0.3s ease;
+    // Dark gradient background from dark to slightly greenish
+    // background: linear-gradient(135deg, #111111 0%, #070707 100%);
+    background-color: #070707;
+    border: map-get($borders, 3);
+    // border: var(--card-border, map-get($borders, 3));
+    padding: 24px;
+
+    // &:hover {
+    //     // transform: translateY(-5px);
+        
+    //     .gradient-card__star {
+    //       animation: none; /* Cancel the twinkle animation */
+    //       transition: transform 2s ease; /* Make movement smooth */
+    //       transform: translate(var(--move-x, 10px), var(--move-y, -10px)); /* Use CSS variables for movement */
+    //     }
+    //   }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at top right,var(--card-bg,rgb(211, 211, 84)) , transparent 45%);
+      pointer-events: none;
+      filter: blur(95px);
+    }
+    &__grid {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(rgba(211, 211, 84, 0.1) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(211, 211, 84, 0.1) 1px, transparent 1px);
+        background-size: 80px 80px;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 20%;
+      }
+      &__stars {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        pointer-events: none;
+        will-change: transform; // Hardware acceleration hint
+      }
+      
+      &__star {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background-color: var(--star-color, white) ;
+        border-radius: 50%;
+        filter: blur(1px);
+        will-change: transform, opacity; // Optimize animations
+      }
+    
+    &__content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    //   padding: 24px ;
+    }
+    
+    &__header {
+      display: flex;
+      justify-content: space-between;
+
+    }
+    
+    &__recently {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: $primary-white-color;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+    
+    &__label {
+      display: inline-block;
+      background-color: var(--text-bg, #d3d35476);
+      border: var(--card-border, 1px solid #D3D354);
+      color: var(--header-color,#D3D354) ;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 15px;
+      border-radius: 50px;
+      margin-bottom: 12px;
+      align-self: flex-start;
+      border: var(--card-border, 1px solid #D3D354);
+    }
+    
+    &__title {
+      font-size: 48px;
+      font-weight: 600;
+    //   color: $primary-white-color;
+      @include header-style-yellow(48px,var(--light-color, #F9F9E2 ) , var(--card-bg,#D3D354) );
+      color: var(--header-color, #F9F9E2);
+      margin: 0;
+      line-height: 1.1;
+      padding: 0;
+
+    }
+  }
+  
+  @keyframes twinkle {
+    0%, 100% {
+      opacity: 0.2;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.2);
+    }
+  }
+  
+  // For responsive design
+  @media (max-width: 768px) {
+    .gradient-card {
+      &__title {
+        font-size: 36px;
+      }
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .gradient-card {
+      &__title {
+        font-size: 28px;
+      }
+      
+      &__content {
+        padding: 16px;
+      }
+    }
+  }
