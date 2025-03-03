@@ -17,53 +17,58 @@ const pinkishTheme = {
   lightColorHeader: "#F9BDC3",
 };
 const bluishTheme = {
-    backgroundColor: "#5489D6", // Light pink background
-    textBackground: "rgba(84, 137, 214, 0.4)",
-    borderColor: "1px solid #369EFF",
-    starColor: "rgba(84, 137, 214, 0.56)",
-    headerColor: "#369EFF",
-    lightColorHeader: "#D8ECF8",
-  };
+  backgroundColor: "#5489D6", // Light pink background
+  textBackground: "rgba(84, 137, 214, 0.4)",
+  borderColor: "1px solid #369EFF",
+  starColor: "rgba(84, 137, 214, 0.56)",
+  headerColor: "#369EFF",
+  lightColorHeader: "#D8ECF8",
+};
 
-  const metalTheme = {
-    backgroundColor: "#EFEEEC",
-    textBackground: "rgba(192,192,192, 0.4)",
-    borderColor: "1px solid #a9a9a9",
-    starColor: "rgba(255, 255, 255, 0.8)",
-    headerColor: "#d3d3d3",
-    lightColorHeader: "#f5f5f5",
-  };
+const metalTheme = {
+  backgroundColor: "#EFEEEC",
+  textBackground: "rgba(192,192,192, 0.4)",
+  borderColor: "1px solid #a9a9a9",
+  starColor: "rgba(255, 255, 255, 0.8)",
+  headerColor: "#d3d3d3",
+  lightColorHeader: "#f5f5f5",
+};
 const Cards = () => {
   return (
     <div className="cards-container">
       <div className="top-cards">
         <GradientCard
-          title="The Fourth Card"
-          label="Don't Miss It!"
-          onClick={() => console.log("Card clicked")}
-          theme={greenishTheme}
+          title="Components"
+          label="Explore our UI components library"
+          onClick={() => console.log("Components card clicked")}
+          theme={bluishTheme}
+          image="/compIcon.svg"
         />
         <GradientCard
-          title="The Fourth Card"
-          label="Don't Miss It!"
-          onClick={() => console.log("Card clicked")}
+          title="Repositories"
+          label="Discover our code repositories"
+          onClick={() => console.log("Repositories card clicked")}
           theme={pinkishTheme}
+          // image=""
         />
       </div>
       <div className="bottom-cards">
         <GradientCard
-          title="The Fourth Card"
-          label="Don't Miss It!"
-          onClick={() => console.log("Card clicked")}
-          theme={bluishTheme}
+          title="Social Media News"
+          label="Catch the Latest News"
+          onClick={() => console.log("Social Media News card clicked")}
+          theme={greenishTheme}
+          // image=""
         />
         <GradientCard
-          title="The Fourth Card"
-          label="Don't Miss It!"
-          onClick={() => console.log("Card clicked")}
+          title="Projects"
+          label="Discover Our Boldest Projects and Future Ventures"
+          onClick={() => console.log("Projects card clicked")}
           theme={metalTheme}
+          image="/projectImage.svg"
         />
       </div>
+
     </div>
   );
 };

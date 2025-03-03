@@ -18,10 +18,11 @@ interface Theme {
     label: string;
     onClick: () => void;
     theme?: Theme;
+    image?:string;
   }
 
   
-const GradientCard = ({ title, label, onClick,theme = {}  }:GradientCardProps) => {
+const GradientCard = ({ title, label, onClick,theme = {}, image  }:GradientCardProps) => {
     const [isHovered, setIsHovered] = useState(false);
 
     // const mergedTheme = {
@@ -109,6 +110,11 @@ const GradientCard = ({ title, label, onClick,theme = {}  }:GradientCardProps) =
           </div>
         )}
         <h2 className="gradient-card__title">{title}</h2>
+        {image && (
+            <div className="gradient-card__image">
+              <img src={image} alt={title} />
+            </div>
+          )}
         </div>
       </div>
     </motion.div>

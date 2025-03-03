@@ -2,7 +2,7 @@ import About from "../components/About";
 import Cards from "../components/Cards";
 import ChatWidget from "../components/ChatWidget";
 import Contact from "../components/Contact";
-import Dashboard from "../components/Dashboard";
+// import Dashboard from "../components/Dashboard";
 import Experience from "../components/Experience";
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
@@ -19,7 +19,7 @@ const Home: React.FC = () => {
       <Hero />
       <About />
       <Cards/>
-      <Dashboard/>
+      {/* <Dashboard/> */}
       <Experience />
       <MyPartners />
       <Testimonials/>
