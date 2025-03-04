@@ -1,5 +1,8 @@
 import GradientCard from "./Card";
+import { motion } from 'framer-motion';
+
 import "../styles/cards.scss";
+import FlipLink from "./AnimatedHeader ";
 
 const greenishTheme = {
   backgroundColor: "rgb(211, 211, 84)", // Original dark background
@@ -36,6 +39,25 @@ const metalTheme = {
 const Cards = () => {
   return (
     <div className="cards-container">
+      <motion.div
+        className="header-content"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <div className="between-lines">
+          <div>
+            <h1 className="section-header">Discover. Innovate. Inspire.</h1>
+          </div>
+        </div>
+        <div className="flip">
+          <FlipLink href="#">The</FlipLink>
+          <FlipLink href="#">Dashboard</FlipLink>
+
+        </div>
+      </motion.div>
+
       <div className="top-cards">
         <GradientCard
           title="Components"
@@ -62,7 +84,7 @@ const Cards = () => {
         />
         <GradientCard
           title="Projects"
-          label="Discover Our Boldest Projects and Future Ventures"
+          label="Boldest Projects and Future Ventures"
           onClick={() => console.log("Projects card clicked")}
           theme={metalTheme}
           image="/projectImage.svg"

@@ -60,7 +60,7 @@ const Contact = () => {
             </li>
             <li>
               <a href="https://www.behance.net/shhahad20" aria-label="Behance">
-                <img src="/behance.svg" alt="Behance" />
+                <img src="/behance.svg" alt="Behance" className="behance"/>
               </a>
             </li>
             <li>
@@ -68,7 +68,7 @@ const Contact = () => {
                 href="https://www.instagram.com/dev.shahad/"
                 aria-label="instagram"
               >
-                <img src="/instagram.svg" alt="instagram" />
+                <img src="/instagram.svg" alt="instagram" className="instagram"/>
               </a>
             </li>
             <li>

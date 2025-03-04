@@ -63,13 +63,13 @@ a {
   .cards_container {
     margin: 2rem 0;
     width: 100%;
-    max-width: 1600px;
+    max-width: 1320px;
     // display: flex;
     // max-height: 1000px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    gap: 2rem;
+    gap: 1.5rem;
     // border: 1px solid red;
     // .left-column,
     // .right-column {
@@ -118,6 +118,20 @@ a {
         // padding: 10px;
         padding-top: 30px;
         overflow-x: auto;
+        overflow-y: auto;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE 10+ */
+        .codeSnippet {
+          overflow-x: auto; /* Enable horizontal scrolling */
+          overflow-y: auto;
+          scrollbar-width: none; /* Firefox */
+          -ms-overflow-style: none; /* IE 10+ */
+        }
+        
+        .codeSnippet::-webkit-scrollbar {
+          display: none; /* Chrome, Safari, Opera */
+        }
+        
         .code-header {
           display: flex;
           justify-content: space-between;

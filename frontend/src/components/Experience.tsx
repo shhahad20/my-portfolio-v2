@@ -18,7 +18,27 @@ const Experience = () => {
         console.error("Error fetching data:", error);
       }
     };`;
+    const codeSnippetTwo = `
+    import { createClient } from '@supabase/supabase-js';
 
+    const supabaseUrl = 'https://your-project.supabase.co';
+    const supabaseKey = 'public-anon-key';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    async function getUsers() {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*');
+
+      if (error) {
+        console.error('Error fetching users:', error);
+      } else {
+        console.log('User data:', data);
+      }
+    }
+
+    getUsers();
+  `;
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -98,12 +118,24 @@ const Experience = () => {
                 className="codeSnippet"
                 customStyle={{
                   backgroundColor: "#0E0E0E",
-                  borderRadius: "5px",
                   padding: "3px",
                   margin: "0",
                 }}
               >
                 {codeSnippet}
+              </SyntaxHighlighter>
+              <SyntaxHighlighter
+                language="javascript"
+                style={atomDark}
+                className="codeSnippet"
+                customStyle={{
+                  backgroundColor: "#0E0E0E",
+                  padding: "3px",
+                  margin: "0",
+                  marginTop: "1rem",
+                }}
+              >
+                {codeSnippetTwo}
               </SyntaxHighlighter>
             </div>
           </div>
