@@ -6,6 +6,7 @@ import "./index.css";
 import App from "./App.tsx";
 import store from "./redux/store.ts";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Components from "./pages/Components.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -13,6 +14,7 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/components" element={<Components />} />
         </Routes>
       </BrowserRouter>
     </Provider>
