@@ -6,6 +6,7 @@ export interface Components {
   id: string;
   title: string;
   details: string;
+  label: string;
   url: string;
   preview_url: string;
   created_at: string;

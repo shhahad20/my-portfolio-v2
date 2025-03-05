@@ -65,6 +65,7 @@ const Cards = () => {
           onClick={() => console.log("Components card clicked")}
           theme={bluishTheme}
           image="/compIcon.svg"
+          link="/components"
         />
         <GradientCard
           title="Repositories"
@@ -72,6 +73,7 @@ const Cards = () => {
           onClick={() => console.log("Repositories card clicked")}
           theme={pinkishTheme}
           // image=""
+          link="/"
         />
       </div>
       <div className="bottom-cards">
@@ -81,6 +83,7 @@ const Cards = () => {
           onClick={() => console.log("Social Media News card clicked")}
           theme={greenishTheme}
           // image=""
+          link="/"
         />
         <GradientCard
           title="Projects"
@@ -88,6 +91,7 @@ const Cards = () => {
           onClick={() => console.log("Projects card clicked")}
           theme={metalTheme}
           image="/projectImage.svg"
+          link="/"
         />
       </div>
 

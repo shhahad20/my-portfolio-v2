@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 import '../styles/cards.scss';
+import { Link } from 'react-router-dom';
 
 interface Theme {
     backgroundColor?: string;
@@ -19,10 +20,11 @@ interface Theme {
     onClick: () => void;
     theme?: Theme;
     image?:string;
+    link:string;
   }
 
   
-const GradientCard = ({ title, label, onClick,theme = {}, image  }:GradientCardProps) => {
+const GradientCard = ({ title, label, onClick,theme = {}, image, link  }:GradientCardProps) => {
     const [isHovered, setIsHovered] = useState(false);
 
     // const mergedTheme = {
@@ -63,6 +65,7 @@ const GradientCard = ({ title, label, onClick,theme = {}, image  }:GradientCardP
         '--light-color': theme.lightColorHeader,
       } as React.CSSProperties}
     >
+      <Link to={link} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
         <div className="gradient-card__grid"></div>
         <div className="gradient-card__stars">
         {stars.map((star) => (
@@ -117,6 +120,7 @@ const GradientCard = ({ title, label, onClick,theme = {}, image  }:GradientCardP
           )}
         </div>
       </div>
+      </Link>
     </motion.div>
   );
 };
