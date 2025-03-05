@@ -209,15 +209,20 @@ li {
     align-items: center;
     flex-direction: column;
     // margin-top: 3rem;
-    margin-bottom: 1rem;
+    // margin-bottom: 1rem;
+    // margin: 1rem auto 1rem auto;
+    // margin-bottom: 1rem;
     h3, p{
       color: $text-gray;
       font-weight: 400;
       font-size: 14px;
       margin: 0;
     }
+    p{
+      margin-bottom: 1rem;
+    }
     @media(max-width:480px){
-            h3{
+            h3,p{
               font-size: 12px;
             }
     }
