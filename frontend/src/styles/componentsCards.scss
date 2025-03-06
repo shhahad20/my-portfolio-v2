@@ -17,7 +17,7 @@
   }
 }
 
-.components-cards-container{
+.components-cards-container {
   display: flex;
   gap: 1.5rem;
   margin-top: 4rem;
@@ -49,6 +49,17 @@
       height: 100%;
       object-fit: cover;
     }
+    .loading-overlay {
+      position: absolute;
+      top: 10;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: "flex";
+      align-items: "center";
+      justify-content: "center";
+      z-index: 2;
+    }
   }
 
   // &::before {
@@ -63,7 +74,6 @@
   //   filter: blur(150px);
   // }
 
-
   &__category {
     display: flex;
     align-items: center;
@@ -76,35 +86,36 @@
       height: 14px;
     }
   }
-// &__bottom{
-//   border: 1px solid red;
-// }
+  // &__bottom{
+  //   border: 1px solid red;
+  // }
   &__content {
-    position: relative;
-    z-index: 2;
-    height: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2; /* Ensure it sits above the preview if needed */
+    padding: 8px; /* Optional: adjust spacing as desired */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    // border: 1px solid red;
-
+    justify-content: flex-end;
   }
 
   &__header {
     display: flex;
     justify-content: space-between;
   }
-&__bottom{
-  display: flex;
-  justify-content: space-between;
-  border-top: map-get($borders, 3);
-padding-top: 10px;
-}
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+    border-top: map-get($borders, 3);
+    padding-top: 10px;
+  }
   &__label {
     display: inline-block;
     background-color: var(--text-bg, #d3d35476);
-    border: var(--card-border, 1px solid #D3D354);
-    color: var(--header-color, #D3D354);
+    border: var(--card-border, 1px solid #d3d354);
+    color: var(--header-color, #d3d354);
     font-size: 10px;
     font-weight: 500;
     padding: 2px 15px;
@@ -127,7 +138,7 @@ padding-top: 10px;
   .components-page {
     min-height: 100%;
   }
-  
+
   .components-cards-container {
     flex-direction: row;
     justify-content: center;
@@ -154,7 +165,7 @@ padding-top: 10px;
     flex-direction: row;
     align-items: center;
   }
-  
+
   .component-card {
     width: 40%; // Full width on smaller devices
     height: 220px;
@@ -176,14 +187,13 @@ padding-top: 10px;
       @include header-style(36px);
       margin: 0;
     }
-    .components-cards-container{
+    .components-cards-container {
       margin-top: 0;
       gap: 0.5rem;
       flex-direction: column;
     }
-
   }
-  
+
   .component-card {
     width: 100%;
     // height: 240px;

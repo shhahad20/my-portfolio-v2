@@ -1,40 +1,17 @@
 import { supabase } from "../config/supabaseClient.js";
 import ApiError from "../errors/ApiError.js";
-export const repositories = async (req, res, next) => {
-    try {
-        const { data, error } = await supabase
-            .from("repositories")
-            .select("*")
-            .order("created_at", { ascending: false });
-        if (error)
-            throw ApiError.internal("Error fetching repositories");
-        res.json(data);
-    }
-    catch (error) {
-        next(error);
-    }
+import { fetchData } from "../services/fetchData.js";
+export const repositories = (req, res, next) => {
+    // For repositories, assume you want to allow search on "name" and "description"
+    fetchData("repositories", req, res, next, ["name", "description"]);
 };
-export const components = async (req, res, next) => {
-    try {
-        const { data, error } = await supabase.from('components').select('*').order('created_at', { ascending: false });
-        if (error)
-            throw ApiError.internal("Error fetching components");
-        res.json(data);
-    }
-    catch (error) {
-        next(error);
-    }
+export const components = (req, res, next) => {
+    // For components, allow search on "title" and "label"
+    fetchData("components", req, res, next, ["title", "label"]);
 };
-export const socialMedia = async (req, res, next) => {
-    try {
-        const { data, error } = await supabase.from('social_media').select('*').order('created_at', { ascending: false });
-        if (error)
-            throw ApiError.internal("Error fetching social media news");
-        res.json(data);
-    }
-    catch (error) {
-        next(error);
-    }
+export const socialMedia = (req, res, next) => {
+    // For social media, allow search on "platform" and "title"
+    fetchData("social_media", req, res, next, ["platform", "title"]);
 };
 export const recent = async (req, res, next) => {
     try {

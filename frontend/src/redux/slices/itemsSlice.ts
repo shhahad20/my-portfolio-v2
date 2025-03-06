@@ -104,9 +104,29 @@ export const fetchSocialMedia = createAsyncThunk(
 
 export const fetchComponents = createAsyncThunk(
   "items/fetch-components",
-  async (_, thunkAPI) => {
+  async (
+    {
+      search,
+      sortField,
+      sortOrder,
+      limit,
+    }: {
+      search?: string;
+      sortField?: string;
+      sortOrder?: string;
+      limit?: number;
+    },
+    thunkAPI
+  ) => {
     try {
-      const response = await axios.get(`${API_URL}/components`);
+      const params = new URLSearchParams();
+      if (search) params.append("search", search);
+      if (sortField) params.append("sortField", sortField);
+      if (sortOrder) params.append("sortOrder", sortOrder);
+      if (limit) params.append("limit", limit.toString());
+      const queryString = params.toString();
+      
+      const response = await axios.get(`${API_URL}/components${queryString ? "?" + queryString : ""}`);
       return response.data;
     } catch (error: any) {
       console.error(error);

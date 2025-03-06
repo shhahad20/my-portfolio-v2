@@ -73,7 +73,7 @@ const Cards = () => {
           onClick={() => console.log("Repositories card clicked")}
           theme={pinkishTheme}
           // image=""
-          link="/"
+          link="https://github.com/shhahad20?tab=repositories"
         />
       </div>
       <div className="bottom-cards">
@@ -83,7 +83,7 @@ const Cards = () => {
           onClick={() => console.log("Social Media News card clicked")}
           theme={greenishTheme}
           // image=""
-          link="/"
+          link="https://www.linkedin.com/in/shahadaltharwa/"
         />
         <GradientCard
           title="Projects"
