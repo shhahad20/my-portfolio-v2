@@ -6,39 +6,44 @@ import "../styles/testimonials.scss";
 
 const testimonials = [
   {
-    name: "Alice Johnson",
-    text: "Testimonial text from Alice. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    name: "Student",
+    text: "دكتوره ماندري وش نقول لكن الله يفتحها بوجهك ويجزاك خير ، وييسر لك كل ماتعسّر ويفرجها عليك بيوم العرض ، هذا الخبر الزين💖..",
     role: "Student - Java Course",
   },
   {
-    name: "Mark Smith",
-    text: "Testimonial text from Mark. Vivamus lacinia odio vitae vestibulum vestibulum.",
+    name: "Student",
+    text: "شكرا دكتوره الله يسخر لك جنود الأرض وملائكة السماء الله يدخل على قلبك اضعاف الفرحه، محاضرات معك مره خفيف ويكفي حنيتك علينا رغم نجي لك نهاية دوام تعبانين من المحاضرات ياللي ورا بعض ومانتفاعل معك حيل بالمحاضره مع ذاك ماقصرتي معنا الله يجعل والدينك للجنه البارده وسامحينا لو قصرنا بحقك ❤️❤️❤️❤️",
+    role: "Student - Java Course",
+  },
+  {
+    name: "فيصل",
+    text: "والله واو ولا غلطه",
     role: "Client - Graphic Design",
   },
   {
-    name: "Sophia Lee",
-    text: "Testimonial text from Sophia. Curabitur eleifend, libero eu varius fermentum.",
+    name: "نجلاء الحقباني",
+    text: "الله يعطيك العافية على الشغل الجميل اسرع مما توقعت ومتعاونة جدا وتردين بسرعه",
+    role: "Client - Graphic Design",
+  },
+  {
+    name: "Student",
+    text: "اذا بتدرسينها علميني ب اخذها عندك الترم الجاي افضل دكتوره 💛🥺",
+    role: "Student - Java Course",
+  },
+  {
+    name: "Ahmed",
+    text: "يعطيك العافية عمل جميل جداَ وبإذن الله ماراح يكون اخر تعاون بينا",
     role: "Entrepreneur",
   },
   {
-    name: "David Brown",
-    text: "Testimonial text from David. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    role: "Developer",
+    name: "شوق",
+    text: "انتي رائعة يا بنت ماشاء الله ربي يحفظك",
+    role: "Client - Graphic Design",
   },
   {
-    name: "Emma Watson",
-    text: "Testimonial text from Emma. Lorem ipsum dolor sit amet.",
-    role: "Designer",
-  },
-  {
-    name: "Michael Scott",
-    text: "Testimonial text from Michael. That's what she said!",
-    role: "Regional Manager",
-  },
-  {
-    name: "Pam Beesly",
-    text: "Testimonial text from Pam. I love art and design.",
-    role: "Receptionist",
+    name: "Student",
+    text: "ماقصرتي الحمدلله عندنا دكتورة مثلك حببتيني بالماده",
+    role: "Student - Java Course",
   },
 ];
 
