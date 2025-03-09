@@ -1,0 +1,148 @@
+// Add these styles to your existing SCSS file
+@import "mixins";
+@import "variables";
+.search-sort-filter {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 3rem;
+  &__search-container {
+    position: relative;
+    flex-grow: 1;
+    max-width: 400px;
+  }
+
+  &__input {
+    background-color: #070707;
+    background-color: $second-bg-color;
+
+    border: map-get($borders, 3);
+    border-radius: 8px;
+    color: $primary-white-color;
+    //   padding: 0.8rem 2.5rem 0.8rem 1rem;
+    padding: 10px;
+    width: 100%;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $text-gray;
+    }
+
+    &::placeholder {
+      color: rgba($primary-white-color, 0.6);
+    }
+  }
+  &__icons-container {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .search-sort-filter__icons{
+        position: relative;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 3px;
+        svg{
+            background-color: $background-color;
+            padding: 2px 4px;
+            border-radius: 3px;
+            margin: 0;
+        }
+        p{
+            font-size: 13px;
+            color: $text-gray;
+            font-weight: 500;
+            background-color: $background-color;
+            padding: 2px 4px;
+            border-radius: 3px;
+            margin: 0;
+
+        }
+    }
+  }
+  &__icon {
+    cursor: pointer;
+    transition: stroke 0.3s ease;
+    
+    &:hover {
+      stroke: lighten(#d3d354, 10%);
+    }
+  }
+
+
+  &__search-button {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #d3d354;
+    padding: 4px;
+
+    &:hover {
+      color: lighten($text-gray, 10%);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  select {
+    background-color: #070707;
+    border: map-get($borders, 3);
+    border-radius: 8px;
+    color: $primary-white-color;
+    padding: 10px 20px;
+    font-size: 14px;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    color: $text-gray;
+    &:focus {
+      outline: none;
+      border-color: $text-gray;
+    color: $primary-white-color;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    option{
+        border: none;
+        
+    }
+  }
+}
+
+// Responsive Design
+// @media screen and (max-width: 768px) {
+//   .search-sort-filter {
+//     flex-direction: row;
+//     align-items: stretch;
+
+//     &__search-container {
+//       max-width: none;
+//     }
+
+//     select {
+//       width: 100%;
+//     }
+//   }
+// }
+
+

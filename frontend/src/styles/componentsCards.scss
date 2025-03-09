@@ -21,29 +21,58 @@
   display: flex;
   gap: 1.5rem;
   margin-top: 4rem;
+  justify-content: center;
 }
-
+.error-msg{
+  background-color: #d3d35471;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #d3d354;
+  color: #d3d354;
+}
 /* Card styling */
 .component-card {
+  // background-color: #070707;
+  // border: map-get($borders, 3);
+  // position: relative;
+  // overflow: hidden;
+  // cursor: pointer;
+  // height: 180px;
+  // width: 20%;
+  // padding: 16px;
+  // border-radius: 16px;
+  // text-align: left;
+
   background-color: #070707;
-  border: map-get($borders, 3);
-  position: relative;
+  // border: map-get($borders, 3);
+  // border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
-  height: 180px;
-  width: 20%;
-  padding: 16px;
-  border-radius: 16px;
   text-align: left;
+  display: flex;
+  flex-direction: column; 
+  width: 25%;
+
+.component-preview{
+  border: map-get($borders, 3);
+  border-radius: 16px;
+  position: relative;
+}
   &__preview {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    // right: 0;
+    // bottom: 0;
+    // z-index: 0;
+    // overflow: hidden;
+
+    width: 100%;
+    height: 180px; // Set the height for the preview area
     overflow: hidden;
-    // border: 1px solid blue;
+    position: relative;
+    border-radius: 16px;
+
     .component-card__preview-media {
       width: 100%;
       height: 100%;
@@ -51,7 +80,7 @@
     }
     .loading-overlay {
       position: absolute;
-      top: 10;
+      top: 0;
       left: 0;
       right: 0;
       bottom: 0;
@@ -89,29 +118,49 @@
   // &__bottom{
   //   border: 1px solid red;
   // }
-  &__content {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 2; /* Ensure it sits above the preview if needed */
-    padding: 8px; /* Optional: adjust spacing as desired */
+  &__details {
+    padding: 8px;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    // flex-direction: column;
+    gap: 8px;
+    // background-color: #070707; // match card background or adjust as needed
+    // border: 1px solid red;
   }
 
-  &__header {
-    display: flex;
-    justify-content: space-between;
-  }
-  &__bottom {
-    display: flex;
-    justify-content: space-between;
-    border-top: map-get($borders, 3);
-    padding-top: 10px;
-  }
+  // &__content {
+  //   position: absolute;
+  //   bottom: 0;
+  //   left: 0;
+  //   right: 0;
+  //   z-index: 2; /* Ensure it sits above the preview if needed */
+  //   padding: 8px; /* Optional: adjust spacing as desired */
+  //   display: flex;
+  //   flex-direction: column;
+  //   justify-content: flex-end;
+  // }
+
+  // &__header {
+  //   display: flex;
+  //   justify-content: space-between;
+  // }
+  // &__bottom {
+  //   display: flex;
+  //   justify-content: space-between;
+  //   border-top: map-get($borders, 3);
+  //   padding-top: 10px;
+  // }
   &__label {
+    // display: inline-block;
+    // background-color: var(--text-bg, #d3d35476);
+    // border: var(--card-border, 1px solid #d3d354);
+    // color: var(--header-color, #d3d354);
+    // font-size: 10px;
+    // font-weight: 500;
+    // padding: 2px 15px;
+    // border-radius: 50px;
+    // margin-bottom: 12px;
+    // align-self: flex-start;
+
     display: inline-block;
     background-color: var(--text-bg, #d3d35476);
     border: var(--card-border, 1px solid #d3d354);
@@ -120,17 +169,21 @@
     font-weight: 500;
     padding: 2px 15px;
     border-radius: 50px;
-    margin-bottom: 12px;
-    align-self: flex-start;
+    margin: 0; // remove extra bottom margin if not needed
   }
 
   &__title {
+    // font-size: 16px;
+    // font-weight: 400;
+    // color: $primary-white-color;
+    // margin: 0;
+    // line-height: 1.1;
+    // padding: 0;
     font-size: 16px;
     font-weight: 400;
     color: $primary-white-color;
     margin: 0;
     line-height: 1.1;
-    padding: 0;
   }
 }
 
@@ -142,12 +195,14 @@
   .components-cards-container {
     flex-direction: row;
     justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
   }
 
   .component-card {
     width: 30%; // Increase width for fewer cards per row on medium screens
     height: 200px;
-    padding: 12px;
+    // padding: 12px;
   }
 
   .component-card__title {
@@ -164,12 +219,14 @@
   .components-cards-container {
     flex-direction: row;
     align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
   }
 
   .component-card {
     width: 40%; // Full width on smaller devices
     height: 220px;
-    padding: 16px;
+    // padding: 16px;
     margin-bottom: 1.5rem;
   }
 
@@ -197,7 +254,7 @@
   .component-card {
     width: 100%;
     // height: 240px;
-    padding: 12px;
+    // padding: 12px;
   }
 
   .component-card__title {

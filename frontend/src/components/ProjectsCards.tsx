@@ -2,16 +2,15 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
-import {  useEffect, useState } from "react";
-import { fetchComponents } from "../redux/slices/itemsSlice";
+import { useEffect, useState } from "react";
+import { fetchRepos } from "../redux/slices/itemsSlice";
 import LoadingSpinner from "./LoadingSpinner";
 import SearchSortFilter from "./SearchSortFilter";
 import "../styles/componentsCards.scss";
 
-const ComponentsCards = () => {
-
+const ProjectsCards = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { components, loading, error } = useSelector(
+  const { repositories, loading, error } = useSelector(
     (state: RootState) => state.items
   );
   const [loadedVideos, setLoadedVideos] = useState<{ [key: string]: boolean }>(
@@ -22,44 +21,42 @@ const ComponentsCards = () => {
   };
   // State for controlled parameters
   const [searchParams, setSearchParams] = useState({
-    sortField: 'created_at',
-    sortOrder: 'desc',
-    limit: 9
+    sortField: "created_at",
+    sortOrder: "desc",
+    limit: 9,
   });
 
   useEffect(() => {
-    dispatch(fetchComponents(searchParams));
+    dispatch(fetchRepos(searchParams));
   }, [dispatch, searchParams]);
 
   const handleSearchSubmit = (searchTerm: string) => {
-    setSearchParams(prev => ({ ...prev, search: searchTerm }));
+    setSearchParams((prev) => ({ ...prev, search: searchTerm }));
   };
 
   const handleSortChange = (sortField: string, sortOrder: string) => {
-    setSearchParams(prev => ({ ...prev, sortField, sortOrder }));
+    setSearchParams((prev) => ({ ...prev, sortField, sortOrder }));
   };
 
   const handleLimitChange = (limit: number) => {
-    setSearchParams(prev => ({ ...prev, limit }));
+    setSearchParams((prev) => ({ ...prev, limit }));
   };
 
-
   return (
-    
     <section className="components-page">
-      <h1 className="second-header">UI Gallery</h1>
+      <h1 className="second-header">Projects Gallery</h1>
       <SearchSortFilter
         onSearchSubmit={handleSearchSubmit}
         onSortChange={handleSortChange}
         onLimitChange={handleLimitChange}
         isLoading={loading}
       />
-       {loading && <p>Loading components...</p>}
+      {loading && <p>Loading projects...</p>}
       <div className="components-cards-container">
         {/* {loading && <p>Loading components...</p>} */}
         {error && <p className="error-msg">⚠ Error: {error}</p>}
-        {components.length > 0 &&
-          components.map((item) => (
+        {repositories.length > 0 &&
+          repositories.map((item) => (
             <motion.div
               key={item.id}
               className="component-card"
@@ -99,16 +96,17 @@ const ComponentsCards = () => {
 
               </motion.div>
               <div className="component-card__details">
-                  <h2 className="component-card__title">{item.title}</h2>
+                  <h2 className="component-card__title">{item.name}</h2>
                   {item.label && (
                     <div className="component-card__label">{item.label}</div>
                   )}
                 </div>
             </motion.div>
+            
           ))}
       </div>
     </section>
   );
 };
 
-export default ComponentsCards;
+export default ProjectsCards;

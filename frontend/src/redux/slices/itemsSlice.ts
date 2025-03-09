@@ -15,6 +15,7 @@ export interface Repositories {
   id: string;
   name: string;
   description: string;
+  label: string;
   url: string;
   preview_url: string;
   created_at: string;
@@ -74,9 +75,27 @@ export const fetchRecent = createAsyncThunk(
 
 export const fetchRepos = createAsyncThunk(
   "items/fetch-repositories",
-  async (_, thunkAPI) => {
+  async (    {
+    search,
+    sortField,
+    sortOrder,
+    limit,
+  }: {
+    search?: string;
+    sortField?: string;
+    sortOrder?: string;
+    limit?: number;
+  },
+  thunkAPI) => {
     try {
-      const response = await axios.get(`${API_URL}/repositories`);
+      const params = new URLSearchParams();
+      if (search) params.append("search", search);
+      if (sortField) params.append("sortField", sortField);
+      if (sortOrder) params.append("sortOrder", sortOrder);
+      if (limit) params.append("limit", limit.toString());
+      const queryString = params.toString();
+
+      const response = await axios.get(`${API_URL}/repositories${queryString ? "?" + queryString : ""}`);
       return response.data;
     } catch (error: any) {
       console.error(error);

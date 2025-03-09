@@ -91,7 +91,7 @@ const Cards = () => {
           onClick={() => console.log("Projects card clicked")}
           theme={metalTheme}
           image="/projectImage.svg"
-          link="/"
+          link="/projects"
         />
       </div>
 
