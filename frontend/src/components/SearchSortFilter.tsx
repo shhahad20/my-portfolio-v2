@@ -11,7 +11,7 @@ type SearchSortFilterProps = {
 
 const SearchSortFilter = ({
   onSearchSubmit,
-  onSortChange,
+  // onSortChange,
   // onLimitChange,
   isLoading,
 }: SearchSortFilterProps) => {
@@ -35,7 +35,7 @@ const SearchSortFilter = ({
   const handleSortFieldChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newField = e.target.value;
     setSortField(newField);
-    onSortChange(newField, sortOrder);
+    // onSortChange(newField, sortOrder);
   };
 
   // const handleSortOrderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
