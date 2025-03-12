@@ -7,7 +7,8 @@
   margin-bottom: 2rem;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
+  // flex-wrap: wrap; old
+  flex-wrap: nowrap;
   gap: 3rem;
   &__search-container {
     position: relative;
@@ -16,9 +17,8 @@
   }
 
   &__input {
-    background-color: #070707;
+    // background-color: #070707;
     background-color: $second-bg-color;
-
     border: map-get($borders, 3);
     border-radius: 8px;
     color: $primary-white-color;
@@ -128,7 +128,30 @@
     }
   }
 }
+// Responsive adjustments for smaller screens
+@media screen and (max-width: 480px) {
+  .search-sort-filter {
+    gap: 2rem; // Reduce gap on mobile
+    flex-wrap: nowrap; // Ensure row remains row
 
+    select {
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+    .search-sort-filter__search-container {
+      max-width: 100%;
+    }
+  
+    .search-sort-filter__input {
+      padding: 8px;
+      font-size: 12px;
+    }
+  }
+
+
+
+
+}
 // Responsive Design
 // @media screen and (max-width: 768px) {
 //   .search-sort-filter {

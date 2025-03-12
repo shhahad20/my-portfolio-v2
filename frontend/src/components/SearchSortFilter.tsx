@@ -1,5 +1,5 @@
-import React, { useState, KeyboardEvent } from "react";
-import LoadingSpinner from "./LoadingSpinner";
+import React, { useState,  useEffect, useRef } from "react";
+// import LoadingSpinner from "./LoadingSpinner";
 import "../styles/searchSort.scss";
 
 type SearchSortFilterProps = {
@@ -20,7 +20,30 @@ const SearchSortFilter = ({
   // const [sortOrder, setSortOrder] = useState('desc');
   // const [limit, setLimit] = useState(9);
 
-  const handleSearchKeyPress = (e: KeyboardEvent) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleShortcut = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "k" && (e.metaKey || e.shiftKey)) {
+        console.log(
+          `${e.metaKey ? "Command" : "Shift"}+K detected. inputRef:`,
+          inputRef.current
+        );
+        e.preventDefault();
+        // Use a short delay to ensure focus works as expected.
+        setTimeout(() => {
+          inputRef.current?.focus();
+          console.log("Active element:", document.activeElement);
+        }, 0);
+      }
+    };
+    window.addEventListener("keydown", handleShortcut);
+    return () => {
+      window.removeEventListener("keydown", handleShortcut);
+    };
+  }, []);
+
+  const handleSearchKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !isLoading) {
       triggerSearch();
     }
@@ -54,6 +77,7 @@ const SearchSortFilter = ({
     <div className="search-sort-filter">
       <div className="search-sort-filter__search-container">
         <input
+        ref={inputRef}
           type="text"
           className="search-sort-filter__input"
           placeholder="Search ..."
@@ -63,9 +87,9 @@ const SearchSortFilter = ({
           disabled={isLoading}
         />
         <div className="search-sort-filter__icons-container">
-          {isLoading ? (
+          {/* {isLoading ? (
             <LoadingSpinner size={20} color="#d3d354" />
-          ) : (
+          ) : ( */}
             <>
               {/* <svg
               className="search-sort-filter__icon"
@@ -100,7 +124,7 @@ const SearchSortFilter = ({
                 <p>K</p>
               </div>
             </>
-          )}
+          {/* )} */}
         </div>
       </div>
 
