@@ -146,11 +146,11 @@
     //   padding: 24px ;
     }
     
-    &__header {
-      display: flex;
-      justify-content: space-between;
+    // &__header {
+    //   display: flex;
+    //   justify-content: space-between;
 
-    }
+    // }
     
     &__recently {
       display: flex;
@@ -184,9 +184,12 @@
       font-weight: 600;
     //   color: $primary-white-color;
       @include header-style-yellow(48px,var(--light-color, #F9F9E2 ) , var(--card-bg,#D3D354) );
+      // -webkit-text-fill-color: var(--header-color, #F9F9E2);
       color: var(--header-color, #F9F9E2);
+      // color: white;
+      // outline: 1px solid red;
       margin: 0;
-      line-height: 1.1;
+      // line-height: 1.1;
       padding: 0;
 
     }
@@ -212,10 +215,11 @@
         height: 160px;
       }
       @media (max-width: 480px) {
-        top: 80px;
-        right: -80px;
-        width: 180px;
-        height: 160px;
+        // top: 80px;
+        // right: -80px;
+        // width: 180px;
+        // height: 160px;
+        display: none;
       }
     }
     
@@ -254,12 +258,27 @@
   
   @media (max-width: 480px) {
     .gradient-card {
+      &__content{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+
+      }
       &__title {
         font-size: 28px;
+        z-index: 3;
       }
-      
-      // &__content {
-      //   padding: 16px;
-      // }
+      &__image{
+        // z-index: 1;
+        display: none;
+      }
+      &__label {
+        font-size: 10px;
+        margin-bottom: 3px;
+      }
+      &__bottom {
+        margin-top: 6rem;
+      }
+
     }
   }
