@@ -170,9 +170,12 @@
 }
 }
 @media (max-width: 480px){
+  .spotlight{
+    height: 110vh;
+  }
   .spotlight > div {
     width: 20em; 
-    height: max(35em, 73vh);
+    height: max(35em, 67vh);
   }
   .content{
     .head-head{

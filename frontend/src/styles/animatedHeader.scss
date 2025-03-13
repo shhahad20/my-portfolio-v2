@@ -24,6 +24,10 @@
       // Responsive font sizes
       @media (max-width: 480px) { // sm
         font-size: 2.5rem; // sm:text-7xl
+        border: 1px solid red;
+        // @include header-style(2rem);
+        // margin: 0;
+        // text-transform:none
       }
       @media (min-width: 640px) { // sm
         font-size: 4.5rem; // sm:text-7xl
@@ -58,5 +62,10 @@
         text-shadow: none;
       }
       
+    }
+  }
+  @media (max-width: 480px) { // sm
+    .reveal-links{
+      gap: 0;
     }
   }

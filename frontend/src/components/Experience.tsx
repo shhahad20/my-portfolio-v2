@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 // import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
 import "../styles/experience.scss";
@@ -8,6 +8,17 @@ import FlipLink from "./AnimatedHeader ";
 import { motion } from "framer-motion";
 
 const Experience = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const codeSnippet = `
     const fetchData = async () => {
       try {
@@ -62,10 +73,14 @@ const Experience = () => {
           </div>
         </div>
         {/* <h1 className="second-header">Career Highlights</h1> */}
-        <div className="flip">
-          <FlipLink href="#">Career</FlipLink>
-          <FlipLink href="#">Highlights</FlipLink>
-        </div>
+        {isMobile ? (
+          <h2 className="mobile-header">Career Highlights</h2>
+        ) : (
+          <div className="flip">
+            <FlipLink href="#">Career</FlipLink>
+            <FlipLink href="#">Highlights</FlipLink>
+          </div>
+        )}
         <p className="third-p">
           "Success is the sum of small efforts, repeated day in and day out." –
           Robert Collier

@@ -20,6 +20,10 @@
         flex-direction: row;
         gap: 1rem;
       }
+      .mobile-header{
+        @include header-style(2rem);
+        margin: 0;
+      }
       .between-lines {
         position: relative;
         display: flex;
@@ -257,7 +261,24 @@
   }
   
   @media (max-width: 480px) {
+    .cards-container{
+      .header-content{
+        margin-bottom: 0;
+        gap: 0;
+      }
+    }
     .gradient-card {
+      &__grid {
+        // Make the squares smaller on small screens
+        background-size: 40px 40px;
+      }
+      &__star {
+        // Reduce the size of the stars and blur less
+        width: 2px;
+        height: 2px;
+        filter: blur(0.5px);
+      }
+      
       &__content{
         display: flex;
         flex-direction: column;

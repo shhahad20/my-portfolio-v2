@@ -19,6 +19,10 @@
       flex-direction: row;
       gap: 1rem;
     }
+    .mobile-header{
+      @include header-style(2rem);
+      margin: 0;
+    }
     .between-lines {
       position: relative;
       display: flex;
@@ -199,6 +203,7 @@
   }
   @media (max-width: 480px) {
     // height: 300vh;
+    padding: 0;
     .header-content {
       .third-p {
         width: 300px;
@@ -206,11 +211,12 @@
     }
     .small-cards-container {
       margin: 0;
+      .cards-grid {
+        flex-direction: column;
+        margin-top: 1.5rem;
+      }
     }
-    .cards-grid {
-      flex-direction: column;
-      margin-top: 2rem;
-    }
+
 
     .s-card {
       /* Reset transforms/overlaps so they stack */

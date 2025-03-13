@@ -54,10 +54,20 @@ const DEFAULT_CARD_WIDTH = 500; // The maximum card width for larger screens
 const Testimonials = () => {
   // currentIndex: which testimonial is currently centered
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   // Measure the container so we can position the cards properly
   const sliderRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // On mount and on window resize, update container width
   useEffect(() => {
@@ -129,7 +139,11 @@ const Testimonials = () => {
           </div>
         </div>
         {/* <h1 className="second-header">Career Highlights</h1> */}
-        <div className="flip">
+
+        {isMobile ? (
+          <h2 className="mobile-header">The Word, From Others</h2>
+        ) : (
+          <div className="flip">
           <div className="flip1">
             {" "}
             <FlipLink href="#">The</FlipLink>
@@ -142,6 +156,7 @@ const Testimonials = () => {
             <FlipLink href="#">Others</FlipLink>
           </div>
         </div>
+        )}
         <p className="third-p">Connecting through shared experiences</p>
       </motion.div>
       <motion.div

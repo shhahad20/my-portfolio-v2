@@ -2,8 +2,20 @@ import FlipLink from "./AnimatedHeader ";
 import { motion } from "framer-motion";
 import "../styles/info.scss";
 import AnimatedCounter from "./AnimationCounter";
+import { useEffect, useState } from "react";
 
 const Info = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <section id="quick-grasp">
       <motion.div
@@ -18,13 +30,18 @@ const Info = () => {
             <h1 className="info-header">A Quick Grasp of Key Information</h1>
           </div>
         </div>
-        <div className="flip">
-          <div className="flip-top">
-            <FlipLink href="#">The</FlipLink>
-            <FlipLink href="#">Big</FlipLink>
+
+        {isMobile ? (
+          <h2 className="mobile-header">The Big Picture</h2>
+        ) : (
+          <div className="flip">
+            <div className="flip-top">
+              <FlipLink href="#">The</FlipLink>
+              <FlipLink href="#">Big</FlipLink>
+            </div>
+            <FlipLink href="#">Picture</FlipLink>
           </div>
-          <FlipLink href="#">Picture</FlipLink>
-        </div>
+        )}
       </motion.div>
 
       <motion.div
@@ -44,20 +61,36 @@ const Info = () => {
                 <AnimatedCounter target={95} duration={2} suffix="+ Clients" />
               </span>
               <span>
-                <AnimatedCounter target={140} duration={2} suffix="+ Students" />
+                <AnimatedCounter
+                  target={140}
+                  duration={2}
+                  suffix="+ Students"
+                />
               </span>
             </h3>
           </div>
           <div className="info-card">
             <img src="/Folder.svg" alt="Folder" />
-            <h3><AnimatedCounter target={150} duration={2} suffix="+ Project & Designs" /></h3>
+            <h3>
+              <AnimatedCounter
+                target={150}
+                duration={2}
+                suffix="+ Project & Designs"
+              />
+            </h3>
           </div>
         </div>
 
         <div className="bottom">
           <div className="info-card">
             <img src="/git.svg" alt="Git" />
-            <h3><AnimatedCounter target={45} duration={2} suffix="+ GitHub Repositories" /></h3>
+            <h3>
+              <AnimatedCounter
+                target={45}
+                duration={2}
+                suffix="+ GitHub Repositories"
+              />
+            </h3>
           </div>
           <div className="info-card">
             <img src="/code.svg" alt="Code" />

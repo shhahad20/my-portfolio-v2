@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 
 import "../styles/cards.scss";
 import FlipLink from "./AnimatedHeader ";
+import { useEffect, useState } from "react";
 
 const greenishTheme = {
   backgroundColor: "rgb(211, 211, 84)", // Original dark background
@@ -37,6 +38,17 @@ const metalTheme = {
   lightColorHeader: "#f5f5f5",
 };
 const Cards = () => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth <= 768);
+      };
+  
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
   return (
     <div className="cards-container">
       <motion.div
@@ -51,11 +63,14 @@ const Cards = () => {
             <h1 className="section-header">Discover. Innovate. Inspire.</h1>
           </div>
         </div>
-        <div className="flip">
+        {isMobile ? (
+          <h2 className="mobile-header">The Dashboard</h2>
+        ) : (
+          <div className="flip">
           <FlipLink href="#">The</FlipLink>
           <FlipLink href="#">Dashboard</FlipLink>
-
-        </div>
+          </div>
+        )}
       </motion.div>
 
       <div className="top-cards">

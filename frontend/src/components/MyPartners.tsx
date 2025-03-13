@@ -2,8 +2,20 @@ import FlipLink from "./AnimatedHeader ";
 import { motion } from "framer-motion";
 
 import "../styles/mypartners.scss";
+import { useEffect, useState } from "react";
 
 const MyPartners = () => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth <= 768);
+      };
+  
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
   return (
     <section id="my-partners">
       <motion.div
@@ -19,10 +31,14 @@ const MyPartners = () => {
           </div>
         </div>
         {/* <h1 className="second-header">Career Highlights</h1> */}
-        <div className="flip">
+        {isMobile ? (
+          <h2 className="mobile-header">My Partners</h2>
+        ) : (
+          <div className="flip">
           <FlipLink href="#">My</FlipLink>
           <FlipLink href="#">Partners</FlipLink>
         </div>
+        )}
         <p className="third-p">
           AI Isn’t a Threat - It’s a Developer’s Best Friend!
         </p>

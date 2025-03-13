@@ -1,10 +1,11 @@
 import FlipLink from "./AnimatedHeader ";
 import { motion } from "framer-motion";
 import "../styles/contact.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Contact = () => {
   const [copied, setCopied] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const handleCopy = () => {
     navigator.clipboard.writeText("shahadaltharwa@gmail.com");
@@ -14,7 +15,15 @@ const Contact = () => {
       setCopied(false);
     }, 2000); // Hide message after 2 seconds
   };
-
+  
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth <= 768);
+      };
+  
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
   return (
     <section id="contact">
       <motion.div
@@ -29,10 +38,15 @@ const Contact = () => {
             <h1 className="contact-header">Contact</h1>
           </div>
         </div>
-        <div className="flip">
+
+        {isMobile ? (
+          <h2 className="mobile-header">Let's Connect</h2>
+        ) : (
+          <div className="flip">
           <FlipLink href="#">Let's</FlipLink>
           <FlipLink href="#">Connect</FlipLink>
         </div>
+        )}
       </motion.div>
 
       <motion.div

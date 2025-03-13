@@ -23,6 +23,10 @@ li {
       flex-direction: row;
       gap: 1rem;
     }
+    .mobile-header{
+      @include header-style(2rem);
+      margin: 0;
+    }
     .between-lines {
       position: relative;
       display: flex;
@@ -166,12 +170,14 @@ li {
         
         .flip {
           flex-direction: row;
-          gap: 0.5rem;
+          // gap: 0.5rem;
+          gap: 0;
+
         }
       }
       
       .conatct-container {
-        margin: 3rem 0 0 0;
+        margin: 1.5rem 0 0 0;
         flex-direction: column;
         justify-content: center;
         align-items: center;
