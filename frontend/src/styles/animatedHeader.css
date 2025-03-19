@@ -12,13 +12,14 @@
   white-space: nowrap;
   font-size: 3rem;
   font-weight: 600;
-  color: #d8ecf8;
+  color: #f5f5f5;
   text-transform: uppercase;
 }
 
 @media (max-width: 480px) {
   .reveal-links .flip-link {
     font-size: 2.5rem;
+    border: 1px solid red;
   }
 }
 
@@ -62,5 +63,11 @@
 
 .reveal-links .flip-link .flip-link:hover {
   text-shadow: none;
+}
+
+@media (max-width: 480px) {
+  .reveal-links {
+    gap: 0;
+  }
 }
 /*# sourceMappingURL=animatedHeader.css.map */

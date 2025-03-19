@@ -47,6 +47,21 @@ a {
   gap: 1rem;
 }
 
+#experience .header-content .mobile-header {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 500;
+  padding: 0 15px;
+  background: -webkit-gradient(linear, left bottom, left top, from(#f5f5f5), to(#deddda));
+  background: linear-gradient(0deg, #f5f5f5, #deddda);
+  background-clip: text;
+  color: transparent;
+  display: block;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
+  margin: 0;
+}
+
 #experience .header-content .between-lines {
   position: relative;
   display: -webkit-box;
@@ -73,8 +88,8 @@ a {
   font-size: 15px;
   font-weight: 500;
   padding: 0 15px;
-  background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
-  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+  background: -webkit-gradient(linear, left bottom, left top, from(#f5f5f5), to(#deddda));
+  background: linear-gradient(0deg, #f5f5f5, #deddda);
   background-clip: text;
   color: transparent;
   display: block;
@@ -105,8 +120,8 @@ a {
   font-size: 50px;
   font-weight: 500;
   padding: 0 15px;
-  background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
-  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+  background: -webkit-gradient(linear, left bottom, left top, from(#f5f5f5), to(#deddda));
+  background: linear-gradient(0deg, #f5f5f5, #deddda);
   background-clip: text;
   color: transparent;
   display: block;
@@ -118,20 +133,20 @@ a {
 #experience .header-content .third-p {
   width: 400px;
   text-align: center;
-  color: #d8ecf8;
+  color: #f5f5f5;
 }
 
 #experience .cards_container {
   margin: 2rem 0;
   width: 100%;
-  max-width: 1600px;
+  max-width: 1320px;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (1fr)[4];
       grid-template-columns: repeat(4, 1fr);
   -ms-grid-rows: (1fr)[4];
       grid-template-rows: repeat(4, 1fr);
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 #experience .cards_container .card {
@@ -163,7 +178,7 @@ a {
   gap: 20px;
   font-family: "Space Mono", serif;
   font-size: 18px;
-  color: #98c0ef;
+  color: #818180;
 }
 
 #experience .cards_container .card .description {
@@ -179,6 +194,26 @@ a {
   border-radius: 16px;
   padding-top: 30px;
   overflow-x: auto;
+  overflow-y: auto;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE 10+ */
+}
+
+#experience .cards_container .card .code-container .codeSnippet {
+  overflow-x: auto;
+  /* Enable horizontal scrolling */
+  overflow-y: auto;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE 10+ */
+}
+
+#experience .cards_container .card .code-container .codeSnippet::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 #experience .cards_container .card .code-container .code-header {
@@ -196,7 +231,7 @@ a {
 }
 
 #experience .cards_container .card .code-container .code-header .code-title {
-  color: #98c0ef;
+  color: #818180;
   color: #EFEEEC;
   font-weight: 400;
   font-size: 1rem;
@@ -352,8 +387,8 @@ a {
     font-size: 40px;
     font-weight: 500;
     padding: 0 15px;
-    background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
-    background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+    background: -webkit-gradient(linear, left bottom, left top, from(#f5f5f5), to(#deddda));
+    background: linear-gradient(0deg, #f5f5f5, #deddda);
     background-clip: text;
     color: transparent;
     display: block;
@@ -446,6 +481,7 @@ a {
     margin: 0;
     padding: 0;
     margin: 1rem 0;
+    gap: 0;
   }
   #experience .header-content .third-p {
     width: 88%;
@@ -458,13 +494,13 @@ a {
     padding: 1.5rem;
   }
   #experience .cards_container .card h1 {
-    font-size: 1.5em;
+    font-size: 1.5rem;
   }
   #experience .cards_container .card .blue_content {
     font-size: 0.75em;
   }
   #experience .cards_container .card .description {
-    font-size: 0.75em;
+    font-size: 0.85rem;
     line-height: 22px;
   }
   #experience .cards_container .card .code-container .code-header {

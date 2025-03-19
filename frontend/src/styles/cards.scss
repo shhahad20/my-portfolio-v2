@@ -184,10 +184,12 @@
     }
     
     &__title {
-      font-size: 48px;
+      // font-size: 48px;
+      font-size: 36px;
+
       font-weight: 600;
     //   color: $primary-white-color;
-      @include header-style-yellow(48px,var(--light-color, #F9F9E2 ) , var(--card-bg,#D3D354) );
+      @include header-style-yellow(36px,var(--light-color, #F9F9E2 ) , var(--card-bg,#D3D354) );
       // -webkit-text-fill-color: var(--header-color, #F9F9E2);
       color: var(--header-color, #F9F9E2);
       // color: white;

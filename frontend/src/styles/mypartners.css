@@ -12,8 +12,7 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  padding: 4rem 0;
-  margin-bottom: 6rem;
+  padding: 4rem 2rem;
 }
 
 #my-partners .header-content {
@@ -43,6 +42,21 @@
   gap: 1rem;
 }
 
+#my-partners .header-content .mobile-header {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 500;
+  padding: 0 15px;
+  background: -webkit-gradient(linear, left bottom, left top, from(#f5f5f5), to(#deddda));
+  background: linear-gradient(0deg, #f5f5f5, #deddda);
+  background-clip: text;
+  color: transparent;
+  display: block;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
+  margin: 0;
+}
+
 #my-partners .header-content .between-lines {
   position: relative;
   display: -webkit-box;
@@ -69,8 +83,8 @@
   font-size: 15px;
   font-weight: 500;
   padding: 0 15px;
-  background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
-  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+  background: -webkit-gradient(linear, left bottom, left top, from(#f5f5f5), to(#deddda));
+  background: linear-gradient(0deg, #f5f5f5, #deddda);
   background-clip: text;
   color: transparent;
   display: block;
@@ -101,8 +115,8 @@
   font-size: 50px;
   font-weight: 500;
   padding: 0 15px;
-  background: -webkit-gradient(linear, left bottom, left top, from(#d8ecf8), to(#98c0ef));
-  background: linear-gradient(0deg, #d8ecf8, #98c0ef);
+  background: -webkit-gradient(linear, left bottom, left top, from(#f5f5f5), to(#deddda));
+  background: linear-gradient(0deg, #f5f5f5, #deddda);
   background-clip: text;
   color: transparent;
   display: block;
@@ -114,7 +128,7 @@
 #my-partners .header-content .third-p {
   width: 400px;
   text-align: center;
-  color: #d8ecf8;
+  color: #f5f5f5;
 }
 
 #my-partners .small-cards-container {
@@ -221,7 +235,7 @@
   /* Remove overlap so it pops out */
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1400px) {
   #my-partners .small-cards-container .s-card {
     width: 180px;
     /* Adjust to your preference */
@@ -246,6 +260,34 @@
   #my-partners .small-cards-container .s-card-5 {
     -webkit-transform: translateX(-10%) translateY(-50%);
             transform: translateX(-10%) translateY(-50%);
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  #my-partners .small-cards-container .s-card {
+    width: 160px;
+    /* Adjust to your preference */
+    height: 90px;
+  }
+  #my-partners .small-cards-container .s-card-4 {
+    -webkit-transform: translateX(15%) translateY(-50%);
+            transform: translateX(15%) translateY(-50%);
+  }
+  #my-partners .small-cards-container .s-card-2 {
+    -webkit-transform: translateX(-5%) translateY(-20%);
+            transform: translateX(-5%) translateY(-20%);
+  }
+  #my-partners .small-cards-container .s-card-1 {
+    -webkit-transform: translateX(0) rotate(0deg) translateY(0);
+            transform: translateX(0) rotate(0deg) translateY(0);
+  }
+  #my-partners .small-cards-container .s-card-3 {
+    -webkit-transform: translateX(5%) translateY(-20%);
+            transform: translateX(5%) translateY(-20%);
+  }
+  #my-partners .small-cards-container .s-card-5 {
+    -webkit-transform: translateX(-15%) translateY(-50%);
+            transform: translateX(-15%) translateY(-50%);
   }
 }
 
@@ -281,18 +323,21 @@
 }
 
 @media (max-width: 480px) {
+  #my-partners {
+    padding: 0;
+  }
   #my-partners .header-content .third-p {
     width: 300px;
   }
   #my-partners .small-cards-container {
     margin: 0;
   }
-  #my-partners .cards-grid {
+  #my-partners .small-cards-container .cards-grid {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
         -ms-flex-direction: column;
             flex-direction: column;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
   #my-partners .s-card {
     /* Reset transforms/overlaps so they stack */

@@ -16,7 +16,7 @@ const ChatModal : React.FC<ChatModalProps> = ({ closeModal }) => {
     {
       role: "assistant",
       content:
-        "Hi there! Ask me about my education, experience, or anything else.",
+        "Hi there! Ask me about Shahad's education, experience, or anything else.",
     },
   ]);
   const [input, setInput] = useState("");

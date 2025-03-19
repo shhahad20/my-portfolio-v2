@@ -10,7 +10,7 @@ const ChatWidget = () => {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Hi there! Ask me about my education, experience, or anything else.",
+      content: "Hi there! Ask me about Shahad's education, experience, or anything else.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -140,7 +140,7 @@ const ChatWidget = () => {
         <div className="chat-input">
           <input
             type="text"
-            placeholder="Ask about my education..."
+            placeholder="Ask your question..."
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
