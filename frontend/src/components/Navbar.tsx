@@ -40,7 +40,7 @@ const Navbar = () => {
             <AnimatedLink
               linkText="CV"
               hoverText="CV"
-              href="/CV_Shahad_Altharwa_Software_Engineer2025.pdf"
+              href="/CV_Shahad_Altharwa_Software_Engineer2025v2.pdf"
               target="_blank"
               rel="noopener noreferrer"
             />
