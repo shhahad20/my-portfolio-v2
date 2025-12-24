@@ -1,5 +1,7 @@
-import  { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
+import ReactMarkdown, { Components } from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { API_URL } from "../api/api";
 import "../styles/chatModal.scss";
 
@@ -11,7 +13,7 @@ interface ChatModalProps {
   closeModal: () => void;
 }
 
-const ChatModal : React.FC<ChatModalProps> = ({ closeModal }) => {
+const ChatModal: React.FC<ChatModalProps> = ({ closeModal }) => {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
@@ -27,50 +29,41 @@ const ChatModal : React.FC<ChatModalProps> = ({ closeModal }) => {
   const [chatMood, setChatMood] = useState<ChatMood>("greeting");
 
   // Map each mood to its corresponding image
-  const imageMapping : Record<ChatMood, string> = {
+  const imageMapping: Record<ChatMood, string> = {
     greeting: "/hi-me.webp",
     thinking: "/thinking-me.webp",
     answering: "/work-me.webp",
     idle: "/work-me.webp",
-    idk: "/idk-me.webp"
+    idk: "/idk-me.webp",
   };
 
-     const formatMessage = (content: string) => {
-    // Split content into sections by line breaks
-    const sections = content.split('\n').filter(line => line.trim());
-    
-    return sections.map((section, sectionIndex) => {
-      // Check if this is a list item
-      const isListItem = section.trim().match(/^[-•*]\s/);
-      
-      // Parse bold text and regular text
-      const parts = section.split(/(\*\*.*?\*\*)/g);
-      const formattedParts = parts.map((part, index) => {
-        if (part.startsWith("**") && part.endsWith("**")) {
-          return (
-            <span key={index} className="font-semibold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded">
-              {part.slice(2, -2)}
-            </span>
-          );
-        }
-        return <span key={index}>{part}</span>;
-      });
-
-      if (isListItem) {
-        return (
-          <div key={sectionIndex} className="flex gap-2 ml-2 my-2">
-            <span className="text-purple-500 font-bold">•</span>
-            <span className="flex-1">{formattedParts}</span>
-          </div>
-        );
-      }
-
-      return (
-        <p key={sectionIndex} className="my-2 first:mt-0 last:mb-0">
-          {formattedParts}
-        </p>
+  // Custom markdown components with proper typing
+  const markdownComponents: Components = {
+    p: ({ children }) => <p className="message-paragraph">{children}</p>,
+    strong: ({ children }) => (
+      <strong className="message-bold">{children}</strong>
+    ),
+    ul: ({ children }) => <ul className="message-list">{children}</ul>,
+    ol: ({ children }) => <ol className="message-list-ordered">{children}</ol>,
+    li: ({ children }) => <li className="message-list-item">{children}</li>,
+    a: ({ children, href }) => (
+      <a
+        className="message-link"
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {children}
+      </a>
+    ),
+    code: ({ children, className }) => {
+      const isInline = !className;
+      return isInline ? (
+        <code className="message-code-inline">{children}</code>
+      ) : (
+        <code className="message-code-block">{children}</code>
       );
-    });
+    },
   };
 
   const handleSend = async () => {
@@ -134,7 +127,12 @@ const ChatModal : React.FC<ChatModalProps> = ({ closeModal }) => {
         <div className="chat-messages">
           {messages.map((msg, i) => (
             <div key={i} className={`message ${msg.role}`}>
-              {formatMessage(msg.content)}
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={markdownComponents}
+              >
+                {msg.content}
+              </ReactMarkdown>
             </div>
           ))}
           {loading && <div className="message assistant">Typing...</div>}
