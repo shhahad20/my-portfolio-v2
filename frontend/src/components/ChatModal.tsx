@@ -35,20 +35,41 @@ const ChatModal : React.FC<ChatModalProps> = ({ closeModal }) => {
     idk: "/idk-me.webp"
   };
 
-   const formatMessage = (content: string) => {
-    // Split by bold markers
-    const parts = content.split(/(\*\*.*?\*\*)/g);
+     const formatMessage = (content: string) => {
+    // Split content into sections by line breaks
+    const sections = content.split('\n').filter(line => line.trim());
     
-    return parts.map((part, index) => {
-      if (part.startsWith("**") && part.endsWith("**")) {
-        // Bold text
+    return sections.map((section, sectionIndex) => {
+      // Check if this is a list item
+      const isListItem = section.trim().match(/^[-•*]\s/);
+      
+      // Parse bold text and regular text
+      const parts = section.split(/(\*\*.*?\*\*)/g);
+      const formattedParts = parts.map((part, index) => {
+        if (part.startsWith("**") && part.endsWith("**")) {
+          return (
+            <span key={index} className="font-semibold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded">
+              {part.slice(2, -2)}
+            </span>
+          );
+        }
+        return <span key={index}>{part}</span>;
+      });
+
+      if (isListItem) {
         return (
-          <strong key={index} className="font-semibold text-blue-700">
-            {part.slice(2, -2)}
-          </strong>
+          <div key={sectionIndex} className="flex gap-2 ml-2 my-2">
+            <span className="text-purple-500 font-bold">•</span>
+            <span className="flex-1">{formattedParts}</span>
+          </div>
         );
       }
-      return <span key={index}>{part}</span>;
+
+      return (
+        <p key={sectionIndex} className="my-2 first:mt-0 last:mb-0">
+          {formattedParts}
+        </p>
+      );
     });
   };
 
