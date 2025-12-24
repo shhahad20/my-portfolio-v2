@@ -36,11 +36,11 @@ const Navbar = () => {
           <li onClick={showComingSoon}>
             <AnimatedLink linkText="Downloads" hoverText="Downloads" href="/" />
           </li>
-          <li>
+          <li> 
             <AnimatedLink
               linkText="CV"
               hoverText="CV"
-              href="/CV_Shahad_Altharwa_Software_Engineer2025v2.pdf"
+              href="/CV_ Shahad_Altharwa_Software_Engineer2025v2.pdf"
               target="_blank"
               rel="noopener noreferrer"
             />

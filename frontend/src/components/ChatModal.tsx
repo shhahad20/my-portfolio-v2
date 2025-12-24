@@ -35,6 +35,23 @@ const ChatModal : React.FC<ChatModalProps> = ({ closeModal }) => {
     idk: "/idk-me.webp"
   };
 
+   const formatMessage = (content: string) => {
+    // Split by bold markers
+    const parts = content.split(/(\*\*.*?\*\*)/g);
+    
+    return parts.map((part, index) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        // Bold text
+        return (
+          <strong key={index} className="font-semibold text-blue-700">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
+
   const handleSend = async () => {
     if (!input.trim()) return;
     const userMessage = { role: "user", content: input };
@@ -96,7 +113,7 @@ const ChatModal : React.FC<ChatModalProps> = ({ closeModal }) => {
         <div className="chat-messages">
           {messages.map((msg, i) => (
             <div key={i} className={`message ${msg.role}`}>
-              {msg.content}
+              {formatMessage(msg.content)}
             </div>
           ))}
           {loading && <div className="message assistant">Typing...</div>}
