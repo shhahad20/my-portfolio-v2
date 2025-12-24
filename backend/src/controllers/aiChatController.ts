@@ -23,7 +23,7 @@ export const aiChat = async (
     // const prompt = `${systemPrompt}\nUser: ${messages[0].content}`;
 
     // Call generateContent with a string prompt
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     const response = await model.generateContent(prompt);
 
     // Assuming the response has a .response.text() method to get the generated text
