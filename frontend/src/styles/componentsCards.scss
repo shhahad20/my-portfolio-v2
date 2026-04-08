@@ -18,57 +18,39 @@
 }
 
 .components-cards-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); // 3 cards per row on desktop
   gap: 1.5rem;
   margin-top: 4rem;
-  justify-content: center;
 }
-.error-msg{
+
+.error-msg {
   background-color: #d3d35471;
   padding: 10px 20px;
   border-radius: 8px;
   border: 1px solid #d3d354;
   color: #d3d354;
 }
+
 /* Card styling */
 .component-card {
-  // background-color: #070707;
-  // border: map-get($borders, 3);
-  // position: relative;
-  // overflow: hidden;
-  // cursor: pointer;
-  // height: 180px;
-  // width: 20%;
-  // padding: 16px;
-  // border-radius: 16px;
-  // text-align: left;
-
   background-color: #070707;
-  // border: map-get($borders, 3);
-  // border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
   text-align: left;
   display: flex;
-  flex-direction: column; 
-  width: 25%;
+  flex-direction: column;
+  width: 100%;
 
-.component-preview{
-  border: map-get($borders, 3);
-  border-radius: 16px;
-  position: relative;
-}
+  .component-preview {
+    border: map-get($borders, 3);
+    border-radius: 16px;
+    position: relative;
+  }
+
   &__preview {
-    // position: absolute;
-    // top: 0;
-    // left: 0;
-    // right: 0;
-    // bottom: 0;
-    // z-index: 0;
-    // overflow: hidden;
-
     width: 100%;
-    height: 180px; // Set the height for the preview area
+    height: 180px;
     overflow: hidden;
     position: relative;
     border-radius: 16px;
@@ -78,30 +60,19 @@
       height: 100%;
       object-fit: cover;
     }
+
     .loading-overlay {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      display: "flex";
-      align-items: "center";
-      justify-content: "center";
+      display: flex;
+      align-items: center;
+      justify-content: center;
       z-index: 2;
     }
   }
-
-  // &::before {
-  //   content: "";
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   right: 0;
-  //   bottom: 0;
-  //   background: radial-gradient(circle at top right, #d3d3d3, transparent 20%);
-  //   pointer-events: none;
-  //   filter: blur(150px);
-  // }
 
   &__category {
     display: flex;
@@ -115,53 +86,14 @@
       height: 14px;
     }
   }
-  // &__bottom{
-  //   border: 1px solid red;
-  // }
+
   &__details {
-    // padding: 8px;
     margin-top: 10px;
     display: flex;
-    // flex-direction: column;
     gap: 8px;
-    // background-color: #070707; // match card background or adjust as needed
-    // border: 1px solid red;
   }
 
-  // &__content {
-  //   position: absolute;
-  //   bottom: 0;
-  //   left: 0;
-  //   right: 0;
-  //   z-index: 2; /* Ensure it sits above the preview if needed */
-  //   padding: 8px; /* Optional: adjust spacing as desired */
-  //   display: flex;
-  //   flex-direction: column;
-  //   justify-content: flex-end;
-  // }
-
-  // &__header {
-  //   display: flex;
-  //   justify-content: space-between;
-  // }
-  // &__bottom {
-  //   display: flex;
-  //   justify-content: space-between;
-  //   border-top: map-get($borders, 3);
-  //   padding-top: 10px;
-  // }
   &__label {
-    // display: inline-block;
-    // background-color: var(--text-bg, #d3d35476);
-    // border: var(--card-border, 1px solid #d3d354);
-    // color: var(--header-color, #d3d354);
-    // font-size: 10px;
-    // font-weight: 500;
-    // padding: 2px 15px;
-    // border-radius: 50px;
-    // margin-bottom: 12px;
-    // align-self: flex-start;
-
     display: inline-block;
     background-color: var(--text-bg, #d3d35476);
     border: var(--card-border, 1px solid #d3d354);
@@ -170,16 +102,10 @@
     font-weight: 500;
     padding: 2px 15px;
     border-radius: 50px;
-    margin: 0; // remove extra bottom margin if not needed
+    margin: 0;
   }
 
   &__title {
-    // font-size: 16px;
-    // font-weight: 400;
-    // color: $primary-white-color;
-    // margin: 0;
-    // line-height: 1.1;
-    // padding: 0;
     font-size: 16px;
     font-weight: 400;
     color: $primary-white-color;
@@ -188,83 +114,92 @@
   }
 }
 
+// Tablet landscape (1024px and below) - 3 cards per row
 @media screen and (max-width: 1024px) {
   .components-page {
     min-height: 100%;
+    margin: 8rem auto 6rem auto;
   }
 
   .components-cards-container {
-    flex-direction: row;
-    justify-content: center;
+    grid-template-columns: repeat(3, 1fr); // Still 3 cards
     gap: 1rem;
-    margin: 1rem 0;
-
+    margin-top: 2rem;
   }
 
   .component-card {
-    width: 30%; // Increase width for fewer cards per row on medium screens
-    // height: 200px;
-    // padding: 12px;
-  }
+    &__preview {
+      height: 160px;
+    }
 
-  .component-card__title {
-    font-size: 14px;
-  }
+    &__title {
+      font-size: 14px;
+    }
 
-  .component-card__label {
-    font-size: 9px;
-    padding: 2px 10px;
+    &__label {
+      font-size: 9px;
+      padding: 2px 10px;
+    }
   }
 }
 
+// Tablet portrait (768px and below) - 2 cards per row
 @media screen and (max-width: 768px) {
+  .components-page {
+    margin: 6rem auto 4rem auto;
+  }
+
   .components-cards-container {
-    flex-direction: row;
-    align-items: center;
+    grid-template-columns: repeat(2, 1fr); // 2 cards per row
     gap: 1rem;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
   }
 
   .component-card {
-    width: 40%; // Full width on smaller devices
-    height: 220px;
-    // padding: 16px;
-    margin-bottom: 1.5rem;
-  }
+    &__preview {
+      height: 180px;
+    }
 
-  .component-card__title {
-    font-size: 16px;
+    &__title {
+      font-size: 15px;
+    }
+
+    &__label {
+      font-size: 9px;
+    }
   }
 }
 
+// Mobile (480px and below) - 1 card per row
 @media screen and (max-width: 480px) {
   .components-page {
-    padding: 0 2rem;
+    padding: 0 1.5rem;
     margin: 5rem auto 4rem auto;
 
     .second-header {
       @include header-style(36px);
       margin: 0;
     }
-    .components-cards-container {
-      margin-top: 0;
-      gap: 0.5rem;
-      flex-direction: column;
-    }
+  }
+
+  .components-cards-container {
+    grid-template-columns: 1fr; // 1 card per row
+    gap: 1rem;
+    margin-top: 1rem;
   }
 
   .component-card {
-    width: 100%;
-    // height: 240px;
-    // padding: 12px;
-  }
+    &__preview {
+      height: 200px;
+    }
 
-  .component-card__title {
-    font-size: 14px;
-  }
+    &__title {
+      font-size: 14px;
+    }
 
-  .component-card__label {
-    font-size: 8px;
-    padding: 2px 8px;
+    &__label {
+      font-size: 8px;
+      padding: 2px 8px;
+    }
   }
 }
