@@ -1,209 +1,7 @@
-// import { useEffect, useState } from "react";
-// import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-// // import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
-// import "../styles/experience.scss";
-// import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-// import { Link } from "react-router-dom";
-// import FlipLink from "./AnimatedHeader ";
-// import { motion } from "framer-motion";
-
-// const Experience = () => {
-//   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
-//   useEffect(() => {
-//     const handleResize = () => {
-//       setIsMobile(window.innerWidth <= 768);
-//     };
-
-//     window.addEventListener("resize", handleResize);
-//     return () => window.removeEventListener("resize", handleResize);
-//   }, []);
-
-//   const codeSnippet = `
-//     const fetchData = async () => {
-//       try {
-//         const response = await fetch("https://api.shahad.com/data");
-//         const data = await response.json();
-//         console.log(data);
-//       } catch (error) {
-//         console.error("Error fetching data:", error);
-//       }
-//     };`;
-//     const codeSnippetTwo = `
-//     import { createClient } from '@supabase/supabase-js';
-
-//     const supabaseUrl = 'https://your-project.supabase.co';
-//     const supabaseKey = 'public-anon-key';
-//     const supabase = createClient(supabaseUrl, supabaseKey);
-
-//     async function getUsers() {
-//       const { data, error } = await supabase
-//         .from('users')
-//         .select('*');
-
-//       if (error) {
-//         console.error('Error fetching users:', error);
-//       } else {
-//         console.log('User data:', data);
-//       }
-//     }
-
-//     getUsers();
-//   `;
-//   const [copied, setCopied] = useState(false);
-
-//   const handleCopy = () => {
-//     navigator.clipboard.writeText(codeSnippet);
-//     setCopied(true);
-//     setTimeout(() => setCopied(false), 1500); // Reset button text after 1.5s
-//   };
-
-//   return (
-//     <div id="experience">
-//       <motion.div
-//         className="header-content"
-//         initial={{ opacity: 0, y: 20 }}
-//         whileInView={{ opacity: 1, y: 0 }}
-//         transition={{ duration: 0.8, ease: "easeOut" }}
-//         viewport={{ once: true, amount: 0.2 }}
-//       >
-//         <div className="between-lines">
-//           <div>
-//             <h1 className="experience-header">Work Experience</h1>
-//           </div>
-//         </div>
-//         {/* <h1 className="second-header">Career Highlights</h1> */}
-//         {isMobile ? (
-//           <h2 className="mobile-header">Career Highlights</h2>
-//         ) : (
-//           <div className="flip">
-//             <FlipLink href="#">Career</FlipLink>
-//             <FlipLink href="#">Highlights</FlipLink>
-//           </div>
-//         )}
-//         <p className="third-p">
-//           "Success is the sum of small efforts, repeated day in and day out." –
-//           Robert Collier
-//         </p>
-//       </motion.div>
-//       <motion.div
-//         className="cards_container"
-//         initial={{ opacity: 0, y: 20 }}
-//         whileInView={{ opacity: 1, y: 0 }}
-//         transition={{ duration: 0.8, ease: "easeOut" }}
-//         viewport={{ once: true, amount: 0.2 }}
-//       >
-//         {/* <div className="left-column"> */}
-//           <div className="card card_1">
-//             <h1>Teaching Assistant</h1>
-//             <div className="blue_content">
-//               <p className="place">University of Hail</p>
-//               <p className="date">2024 - 2025</p>
-//             </div>
-//             <p className="description">
-//               Assisted the lead instructor in preparing course materials,
-//               including lecture labs, assignments, and exams. - Graded
-//               assignments and provided constructive feedback to students to help
-//               them improve their programming skills. - Mentored and guided a
-//               diverse group of over 180 students, both in class and during
-//               office hours.
-//             </p>
-//           </div>
-//           <div className="card card_2">
-//             <h1>Web Developer Freelance</h1>
-//             <div className="blue_content">
-//               <p className="place">Home sweet home</p>
-//               <p className="date">2025 - Present</p>
-//             </div>
-
-//             <p className="description">
-//               Worked with clients to develop websites and web applications.
-//             </p>
-//             <div className="code-container">
-//               <div className="code-header">
-//                 <h3 className="code-title">Fetch API Data</h3>
-//                 <button onClick={handleCopy} className="copy-btn">
-//                   {copied ? "Copied!" : "Copy"}
-//                 </button>
-//               </div>
-
-//               <SyntaxHighlighter
-//                 language="javascript"
-//                 style={atomDark}
-//                 className="codeSnippet"
-//                 customStyle={{
-//                   backgroundColor: "#0E0E0E",
-//                   padding: "3px",
-//                   margin: "0",
-//                 }}
-//               >
-//                 {codeSnippet}
-//               </SyntaxHighlighter>
-//               <SyntaxHighlighter
-//                 language="javascript"
-//                 style={atomDark}
-//                 className="codeSnippet"
-//                 customStyle={{
-//                   backgroundColor: "#0E0E0E",
-//                   padding: "3px",
-//                   margin: "0",
-//                   marginTop: "1rem",
-//                 }}
-//               >
-//                 {codeSnippetTwo}
-//               </SyntaxHighlighter>
-//             </div>
-//           </div>
-
-//         {/* </div> */}
-//         {/* <div className="right-column"> */}
-
-//             <div className="card card_3">
-//             <Link to="https://futureskills.mcit.gov.sa/ar/ambassadors-info#:~:text=%D8%B4%D9%87%D8%AF%20%D9%85%D8%AD%D9%85%D8%AF%D8%B9%D9%84%D9%89%20%D8%AD%D9%85%D8%AF%20%D8%A7%D9%84%D8%AB%D8%B1%D9%88%D9%8A">
-//               <h1>Technology Ambassador</h1>
-//               <div className="blue_content">
-//                 <p className="place">
-//                   Ministry of Communication and Information Technology
-//                 </p>
-//                 <p className="date">2021 - 2023</p>
-//               </div>
-
-//               <p className="description">
-//                 Designed responsive, user-friendly web interfaces using HTML,
-//                 CSS, and JavaScript, optimizing performance with lazy loading.
-//                 Ensured accessibility with semantic HTML and industry standards.
-//                 Explored blockchain technology beyond cryptocurrencies.
-//                 Completed a beginner-level Python course with Jupiter Notebooks.
-//               </p>
-//               <div className="img-container">
-//                 <img src="/MCIT_logo_light.png" alt="" />
-//               </div>
-//               </Link>
-//             </div>
-
-//           <div className="card card_4">
-//             <h1>Graphic Designer Freelance</h1>
-//             <div className="blue_content">
-//               <p className="place">Home sweet home</p>
-//               <p className="date">2018 - 2024</p>
-//             </div>
-
-//             <p className="description">
-//               Executed 250+ projects 95+ clients, including logos, magazines,
-//               brochures, and social media designs, using Photoshop and
-//               Illustrator.
-//             </p>
-//           </div>
-//         {/* </div> */}
-//       </motion.div>
-//     </div>
-//   );
-// };
-
-// export default Experience;
 import { useEffect, useRef, useState } from "react";
 import FlipLink from "./AnimatedHeader ";
 import { motion } from "framer-motion";
+import "../styles/experience.scss";
 const CARDS = [
   {
     id: 0,
@@ -345,133 +143,56 @@ function GlassCard({
     entranceOp *
     (index === 0 ? 1 : Math.max(entranceOp, Math.min(1, ep * 2.2)));
 
-  return (
-    <div
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
-      style={{
-        position: "absolute",
-        width: 280,
-        height: 310,
-        borderRadius: 20,
-        background: card.bg,
-        backdropFilter: "blur(32px) saturate(180%)",
-        WebkitBackdropFilter: "blur(32px) saturate(180%)",
-        border: "1px solid #2C2C2C",
-        boxShadow: isHovered
-          ? "0 36px 72px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(152, 192, 239, 0.2)"
-          : "0 14px 44px rgba(0,0,0,0.3), 0 2px 10px rgba(0,0,0,0.2), inset 0 1px 0 rgba(152, 192, 239, 0.1)",
-        transform: `
-          translateX(${finalX}px)
-          translateY(${finalY}px)
-          translateZ(${finalZ}px)
-          rotateY(${ry}deg)
-          scale(${finalSc})
-          `,
-        opacity: finalOp,
-        zIndex: isHovered ? 100 : total - index,
-        transition: "box-shadow 0.3s ease",
-        padding: "1.5rem 1.6rem",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        willChange: "transform, opacity",
-        userSelect: "none",
-        cursor: "default",
-      }}
-    >
-      <div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            marginBottom: "1rem",
-          }}
-        >
-          <span
-            style={{
-              fontSize: 9,
-              fontWeight: 500,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "rgba(239, 238, 236, 0.45)",
-            }}
-          >
-            {card.category}
-          </span>
-        </div>
-
-        <h2
-          style={{
-            fontSize: 19,
-            fontWeight: 600,
-            color: "#EFEEEC",
-            lineHeight: 1.22,
-            marginBottom: "0.28rem",
-            letterSpacing: "-0.015em",
-          }}
-        >
-          {card.title}
-        </h2>
-
-        <p
-          style={{
-            fontSize: 10.5,
-            color: "#98c0ef",
-            letterSpacing: "0.04em",
-            marginBottom: "0.9rem",
-          }}
-        >
-          {card.place}
-        </p>
-
-        <div
-          style={{
-            width: 24,
-            height: 1.5,
-            borderRadius: 2,
-            background: card.accent,
-            opacity: 0.6,
-            marginBottom: "0.9rem",
-          }}
-        />
-
-        <p
-          style={{
-            fontSize: 12.5,
-            lineHeight: 1.68,
-            color: "rgba(239, 238, 236, 0.7)",
-          }}
-        >
-          {card.desc}
-        </p>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          borderTop: "1px solid rgba(152, 192, 239, 0.1)",
-          paddingTop: "0.85rem",
-          marginTop: "0.5rem",
-        }}
-      >
-        <span
-          style={{
-            fontSize: 10,
-            fontWeight: 500,
-            color: "#818180",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-          }}
-        >
-          {card.tag}
+return (
+  <div
+    className="card"
+    onMouseEnter={onHover}
+    onMouseLeave={onLeave}
+    style={{
+      transform: `
+        translateX(${finalX}px)
+        translateY(${finalY}px)
+        translateZ(${finalZ}px)
+        rotateY(${ry}deg)
+        scale(${finalSc})
+      `,
+      opacity: finalOp,
+      zIndex: isHovered ? 100 : total - index,
+    }}
+  >
+    <div className="card__content">
+      
+      <div className="card__header">
+        <span className="card__category">
+          {card.category}
         </span>
       </div>
+
+      <h2 className="card__title">
+        {card.title}
+      </h2>
+
+      <p className="card__place">
+        {card.place}
+      </p>
+
+      <div
+        className="card__divider"
+        style={{ background: card.accent }}
+      />
+
+      <p className="card__description">
+        {card.desc}
+      </p>
     </div>
-  );
+
+    <div className="card__footer">
+      <span className="card__tag">
+        {card.tag}
+      </span>
+    </div>
+  </div>
+);
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
@@ -560,160 +281,19 @@ export default function ExperienceCards() {
 
   return (
     <>
-      <style>{`
-
-        .exp-hero {  display: flex; align-items: center; justify-content: center; background: #070707; }
-    .header-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      margin-top: 10rem;
-      gap: 1rem;
-      .flip {
-        display: flex;
-        flex-direction: row;
-        gap: 1rem;
-      }
-        .experience-header {
-            text-align: center;
-    font-size: 15px;
-    font-weight: 500;
-    padding: 0 15px;
-    background:linear-gradient(0deg, #f5f5f5, #deddda);
-    background-clip: text;
-    color: transparent;
-    display: block;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 1px 5px rgba(174, 207, 242, .24);
-      }
-      .mobile-header{
-    text-align: center;
-    font-size: 2m;
-    font-weight: 500;
-    padding: 0 15px;
-    background:linear-gradient(0deg, #f5f5f5, #deddda);
-    background-clip: text;
-    color: transparent;
-    display: block;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 1px 5px rgba(174, 207, 242, .24);
-        margin: 0;
-      }
-      .between-lines {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 20px;
-        color: rgba(186, 214, 247, 0.32);
-  
-        .section-header {
-          @include header-style(15px);
-        }
-      }
-      .between-lines:before {
-        content: "";
-    height: 1px;
-    background: linear-gradient(90deg, rgba(216, 236, 248, 0), rgba(184, 216, 254, .32));
-    width: 86px;
-      }
-      .between-lines:after {
-        content: "";
-    height: 1px;
-    background: linear-gradient(90deg, rgba(216, 236, 248, 0), rgba(184, 216, 254, .32));
-    width: 86px;
-        transform: rotate(180deg);
-      }
-    }
-    .third-p {
-      width: 400px;
-      text-align: center;
-      color: #f5f5f5;
-    }
-        .exp-after { min-height: 35vh; display: flex; align-items: center; justify-content: center; background: #070707; }
-        .scroll-cue {
-          display: flex; align-items: center; gap: 8px;
-           font-size: 10px;
-          letter-spacing: 0.2em; text-transform: uppercase;
-          color: rgba(152, 192, 239, 0.38);
-          animation: bob 2.2s ease-in-out infinite;
-        }
-        @keyframes bob {
-          0%,100% { transform: translateY(0); opacity: 0.38; }
-          50% { transform: translateY(5px); opacity: 0.6; }
-        }
-        .prog-line {
-          position: fixed; top: 0; left: 0; height: 2px;
-          background: linear-gradient(90deg, #98c0ef, #98c0ef, #F17625, #98c0ef);
-          z-index: 9999; pointer-events: none;
-        }
-
-      `}</style>
-
-      <div className="prog-line" style={{ width: `${scrollP * 100}%` }} />
-
-      {/* <div className="exp-hero">
-        <motion.div
-          className="header-content"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          <div className="between-lines">
-            <div>
-              <h1 className="experience-header">Work Experience</h1>
-            </div>
-          </div>
-          {isMobile ? (
-            <h2 className="mobile-header">Career Highlights</h2>
-          ) : (
-            <div className="flip">
-              <FlipLink href="#">Career</FlipLink>
-              <FlipLink href="#">Highlights</FlipLink>
-            </div>
-          )}
-          <p className="third-p">
-            "Success is the sum of small efforts, repeated day in and day out."
-            – Robert Collier
-          </p>
-        </motion.div>
-      </div> */}
+      <div className="progress-bar" style={{ width: `${scrollP * 100}%` }} />
 
       {/* ── Scroll container ── */}
       <div
+      className="experience-section"
         ref={containerRef}
-        style={{
-          height: "420vh",
-          border: "1px solid red",
-          position: "relative",
-          background: "#070707",
-        }}
       >
         <div
-          style={{
-            position: "sticky",
-            top: 0,
-            height: "100vh",
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+        className="experience-sticky"
         >
           {/* Ambient blobs */}
           <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              pointerEvents: "none",
-              overflow: "hidden",
-            }}
+          className="experience-bg"
           >
             {[
               // { w: 480, h: 480, top: "8%",  left: "18%", c: "rgba(152, 192, 239, 0.12)" },
@@ -722,7 +302,7 @@ export default function ExperienceCards() {
                 h: 380,
                 top: "52%",
                 left: "58%",
-                c: "rgba(241, 118, 37, 0.08)",
+                c: "rgba(241, 119, 37, 0.03)",
               },
               {
                 w: 320,
@@ -731,15 +311,16 @@ export default function ExperienceCards() {
                 left: "68%",
                 c: "rgba(152, 192, 239, 0.1)",
               },
-              {
-                w: 280,
-                h: 280,
-                top: "68%",
-                left: "8%",
-                c: "rgba(241, 118, 37, 0.09)",
-              },
+              // {
+              //   w: 280,
+              //   h: 280,
+              //   top: "68%",
+              //   left: "8%",
+              //   c: "rgba(241, 118, 37, 0.09)",
+              // },
             ].map((b, i) => (
               <div
+              className="experience-blob"
                 key={i}
                 style={{
                   position: "absolute",
@@ -756,56 +337,44 @@ export default function ExperienceCards() {
             ))}
           </div>
 
-<div className="exp-hero">
-        {/* <div style={{ textAlign: "center" }}> */}
-        <motion.div
-          className="header-content"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          <div className="between-lines">
-            <div>
-              <h1 className="experience-header">Work Experience</h1>
-            </div>
+          <div className="experience-hero">
+            <motion.div
+              className="experience-header"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              viewport={{ once: true, amount: 0.2 }}
+            >
+              <div className="experience-header__top">
+                <div>
+                  <h1 className="experience-header__title">Work Experience</h1>
+                </div>
+              </div>
+              {isMobile ? (
+                <h2 className="experience-header__subtitle">Career Highlights</h2>
+              ) : (
+                <div className="experience-header__flip">
+                  <FlipLink href="#">Career</FlipLink>
+                  <FlipLink href="#">Highlights</FlipLink>
+                </div>
+              )}
+              <p className="experience-header__quote">
+                "Success is the sum of small efforts, repeated day in and day
+                out." – Robert Collier
+              </p>
+            </motion.div>
           </div>
-          {isMobile ? (
-            <h2 className="mobile-header">Career Highlights</h2>
-          ) : (
-            <div className="flip">
-              <FlipLink href="#">Career</FlipLink>
-              <FlipLink href="#">Highlights</FlipLink>
-            </div>
-          )}
-          <p className="third-p">
-            "Success is the sum of small efforts, repeated day in and day out."
-            – Robert Collier
-          </p>
-        </motion.div>
-      </div>
 
           {/* 3D stage */}
           <div
+          className="experience-stage"
             style={{
-              position: "relative",
-              zIndex: 2,
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
               perspective: `${isMobile ? 800 : 1100 - ep * 350}px`,
               perspectiveOrigin: `50% ${55 - ep * 15}%`,
             }}
           >
             <div
-              style={{
-                position: "relative",
-                transformStyle: "preserve-3d",
-                width: 280,
-                height: 310,
-              }}
+            className="experience-cards"
             >
               {CARDS.map((card, i) => (
                 <GlassCard
@@ -822,101 +391,8 @@ export default function ExperienceCards() {
               ))}
             </div>
           </div>
-
-          {/* Spread label */}
-          {/* <div
-            style={{
-              position: "absolute",
-              bottom: "8%",
-              left: "50%",
-              transform: "translateX(-50%)",
-              opacity: spreadLabelOpacity,
-              pointerEvents: "none",
-              textAlign: "center",
-            }}
-          >
-            <p
-              style={{
-                fontFamily: "'Syne', sans-serif",
-                fontSize: 9,
-                letterSpacing: "0.22em",
-                color: "rgba(152, 192, 239, 0.35)",
-                textTransform: "uppercase",
-              }}
-            >
-              Hover each card to explore
-            </p>
-          </div> */}
-
-          {/* Sidebar category indicators */}
-          {/* <div
-            style={{
-              position: "absolute",
-              left: "4%",
-              top: "50%",
-              transform: "translateY(-50%)",
-              display: "flex",
-              flexDirection: "column",
-              gap: 12,
-              opacity: Math.min(1, enterP * 1.8),
-              pointerEvents: "none",
-            }}
-          >
-            {CARDS.map((card, i) => {
-              const visible = ep > i * 0.18;
-              return (
-                <div
-                  key={i}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 7,
-                    opacity: visible ? 1 : 0.18,
-                    transition: "opacity 0.45s ease",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: visible ? 18 : 5,
-                      height: 1.5,
-                      background: card.accent,
-                      borderRadius: 2,
-                      transition: "width 0.45s ease",
-                    }}
-                  />
-                  <span
-                    style={{
-                      fontFamily: "'Syne', sans-serif",
-                      fontSize: 8,
-                      letterSpacing: "0.16em",
-                      color: "rgba(239, 238, 236, 0.42)",
-                      textTransform: "uppercase",
-                      opacity: visible ? 1 : 0,
-                      transition: "opacity 0.45s ease",
-                    }}
-                  >
-                    {card.category}
-                  </span>
-                </div>
-              );
-            })}
-          </div> */}
         </div>
       </div>
-
-      {/* <div className="exp-after">
-        <p
-          style={{
-            fontFamily: "'Syne', sans-serif",
-            fontSize: 11,
-            letterSpacing: "0.18em",
-            color: "rgba(152, 192, 239, 0.25)",
-            textTransform: "uppercase",
-          }}
-        >
-          End of Experience
-        </p>
-      </div> */}
     </>
   );
 }
