@@ -293,7 +293,7 @@ function GlassCard({
   const entranceZ = -1800 * (1 - eEnter);
 
   const entranceY = -40 * (1 - eEnter);
-  const entranceScale = 0.3 + eEnter * 0.75; 
+  const entranceScale = 0.3 + eEnter * 0.75;
   const entranceOp = Math.min(1, rawEnter * 1.8);
 
   const entranceX = 80 * (1 - eEnter); // slide from side
@@ -312,10 +312,13 @@ function GlassCard({
   // const spreadRY = -8; // slightly flatter when spread
   const spreadRY = 0; // perfectly front-facing at full spread
 
-  
   const ry = baseRY + (spreadRY - baseRY) * ep;
   // ── Spread state
-  const spreadSpacing = 310;
+  // const spreadSpacing = 360;
+  const cardWidth = 280;
+  const gap = 80; // visible gap between cards
+  const spreadSpacing = cardWidth + gap;
+
   const centerOffset = ((total - 1) / 2) * spreadSpacing;
   const targetX = index * spreadSpacing - centerOffset;
 
@@ -333,9 +336,11 @@ function GlassCard({
   const finalY = y + entranceY + (isHovered ? -14 : 0);
   const finalZ = entranceZ + z;
 
-  const depthScale = 1 - index * 0.05;
-
+  // const depthScale = 1 - index * 0.05;
+  // const finalSc = entranceScale * sc * depthScale * (isHovered ? 1.04 : 1);
+  const depthScale = 1 - index * 0.05 * (1 - ep);
   const finalSc = entranceScale * sc * depthScale * (isHovered ? 1.04 : 1);
+
   const finalOp =
     entranceOp *
     (index === 0 ? 1 : Math.max(entranceOp, Math.min(1, ep * 2.2)));
@@ -675,7 +680,7 @@ export default function ExperienceCards() {
 
       <div className="prog-line" style={{ width: `${scrollP * 100}%` }} />
 
-      <div className="exp-hero" >
+      <div className="exp-hero">
         {/* <div style={{ textAlign: "center" }}> */}
         <motion.div
           className="header-content"
@@ -702,7 +707,6 @@ export default function ExperienceCards() {
             – Robert Collier
           </p>
         </motion.div>
-        
       </div>
 
       {/* ── Scroll container ── */}
@@ -814,7 +818,6 @@ export default function ExperienceCards() {
               ))}
             </div>
           </div>
-
 
           {/* Spread label */}
           {/* <div
