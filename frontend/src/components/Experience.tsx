@@ -207,43 +207,43 @@ import { motion } from "framer-motion";
 const CARDS = [
   {
     id: 0,
-    tag: "2024 – 2025",
-    category: "Education",
-    title: "Teaching Assistant",
-    place: "University of Hail",
-    desc: "Mentored 180+ students, prepared course materials, and provided constructive feedback on programming assignments.",
-    accent: "#98c0ef",
-    bg: "rgba(32, 32, 32, 0.6)",
-  },
-  {
-    id: 1,
     tag: "2025 – Present",
     category: "Development",
     title: "Web Developer",
     place: "Freelance · Remote",
     desc: "Building full-stack web applications and client-facing products using React, Supabase, and modern JS ecosystems.",
     accent: "#F17625",
-    bg: "rgba(32, 32, 32, 0.6)",
+    bg: "#0b0b0b",
+  },
+  {
+    id: 1,
+    tag: "2024 – 2025",
+    category: "Education",
+    title: "Teaching Assistant",
+    place: "University of Hail",
+    desc: "Mentored 180+ students, prepared course materials, and provided constructive feedback on programming assignments.",
+    accent: "#98c0ef",
+    bg: "#0b0b0b",
   },
   {
     id: 2,
-    tag: "2021 – 2023",
-    category: "Government",
-    title: "Technology Ambassador",
-    place: "MCIT · Saudi Arabia",
-    desc: "Designed responsive interfaces, explored blockchain technology, and completed Python & data science certifications.",
-    accent: "#98c0ef",
-    bg: "rgba(32, 32, 32, 0.6)",
-  },
-  {
-    id: 3,
     tag: "2018 – 2024",
     category: "Design",
     title: "Graphic Designer",
     place: "Freelance · Remote",
     desc: "Delivered 250+ projects across 95+ clients — logos, brand identities, magazines, and social media.",
     accent: "#F17625",
-    bg: "rgba(32, 32, 32, 0.6)",
+    bg: "#0b0b0b",
+  },
+  {
+    id: 3,
+    tag: "2021 – 2023",
+    category: "Government",
+    title: "Technology Ambassador",
+    place: "MCIT · Saudi Arabia",
+    desc: "Designed responsive interfaces, explored blockchain technology, and completed Python & data science certifications.",
+    accent: "#98c0ef",
+    bg: "#0b0b0b",
   },
 ];
 
@@ -357,7 +357,7 @@ function GlassCard({
         background: card.bg,
         backdropFilter: "blur(32px) saturate(180%)",
         WebkitBackdropFilter: "blur(32px) saturate(180%)",
-        border: "1px solid rgba(152, 192, 239, 0.2)",
+        border: "1px solid #2C2C2C",
         boxShadow: isHovered
           ? "0 36px 72px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(152, 192, 239, 0.2)"
           : "0 14px 44px rgba(0,0,0,0.3), 0 2px 10px rgba(0,0,0,0.2), inset 0 1px 0 rgba(152, 192, 239, 0.1)",
@@ -392,31 +392,20 @@ function GlassCard({
           <span
             style={{
               fontSize: 9,
-              // fontFamily: "'Syne', sans-serif",
-              fontWeight: 600,
-              letterSpacing: "0.22em",
+              fontWeight: 500,
+              letterSpacing: "0.1em",
               textTransform: "uppercase",
               color: "rgba(239, 238, 236, 0.45)",
             }}
           >
             {card.category}
           </span>
-          <div
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              background: card.accent,
-              opacity: 0.7,
-            }}
-          />
         </div>
 
         <h2
           style={{
-            // fontFamily: "'Syne', sans-serif",
             fontSize: 19,
-            fontWeight: 700,
+            fontWeight: 600,
             color: "#EFEEEC",
             lineHeight: 1.22,
             marginBottom: "0.28rem",
@@ -429,8 +418,7 @@ function GlassCard({
         <p
           style={{
             fontSize: 10.5,
-            // fontFamily: "'DM Sans', sans-serif",
-            color: "rgba(152, 192, 239, 0.6)",
+            color: "#98c0ef",
             letterSpacing: "0.04em",
             marginBottom: "0.9rem",
           }}
@@ -451,7 +439,6 @@ function GlassCard({
 
         <p
           style={{
-            // fontFamily: "'DM Sans', sans-serif",
             fontSize: 12.5,
             lineHeight: 1.68,
             color: "rgba(239, 238, 236, 0.7)",
@@ -473,25 +460,15 @@ function GlassCard({
       >
         <span
           style={{
-            // fontFamily: "'Syne', sans-serif",
-            fontSize: 9,
-            fontWeight: 600,
-            color: "rgba(239, 238, 236, 0.35)",
-            letterSpacing: "0.12em",
+            fontSize: 10,
+            fontWeight: 500,
+            color: "#818180",
+            letterSpacing: "0.1em",
             textTransform: "uppercase",
           }}
         >
           {card.tag}
         </span>
-        <div
-          style={{
-            width: 22,
-            height: 22,
-            borderRadius: "50%",
-            background: card.accent,
-            opacity: 0.2,
-          }}
-        />
       </div>
     </div>
   );
@@ -591,8 +568,8 @@ export default function ExperienceCards() {
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      margin-top: 10rem;
       gap: 1rem;
-      // margin-bottom: 2rem;
       .flip {
         display: flex;
         flex-direction: row;
@@ -660,7 +637,6 @@ export default function ExperienceCards() {
         .exp-after { min-height: 35vh; display: flex; align-items: center; justify-content: center; background: #070707; }
         .scroll-cue {
           display: flex; align-items: center; gap: 8px;
-          // font-family: 'Syne', sans-serif;
            font-size: 10px;
           letter-spacing: 0.2em; text-transform: uppercase;
           color: rgba(152, 192, 239, 0.38);
@@ -680,8 +656,7 @@ export default function ExperienceCards() {
 
       <div className="prog-line" style={{ width: `${scrollP * 100}%` }} />
 
-      <div className="exp-hero">
-        {/* <div style={{ textAlign: "center" }}> */}
+      {/* <div className="exp-hero">
         <motion.div
           className="header-content"
           initial={{ opacity: 0, y: 20 }}
@@ -707,7 +682,7 @@ export default function ExperienceCards() {
             – Robert Collier
           </p>
         </motion.div>
-      </div>
+      </div> */}
 
       {/* ── Scroll container ── */}
       <div
@@ -780,6 +755,35 @@ export default function ExperienceCards() {
               />
             ))}
           </div>
+
+<div className="exp-hero">
+        {/* <div style={{ textAlign: "center" }}> */}
+        <motion.div
+          className="header-content"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <div className="between-lines">
+            <div>
+              <h1 className="experience-header">Work Experience</h1>
+            </div>
+          </div>
+          {isMobile ? (
+            <h2 className="mobile-header">Career Highlights</h2>
+          ) : (
+            <div className="flip">
+              <FlipLink href="#">Career</FlipLink>
+              <FlipLink href="#">Highlights</FlipLink>
+            </div>
+          )}
+          <p className="third-p">
+            "Success is the sum of small efforts, repeated day in and day out."
+            – Robert Collier
+          </p>
+        </motion.div>
+      </div>
 
           {/* 3D stage */}
           <div
