@@ -157,7 +157,7 @@
 
 //         {/* </div> */}
 //         {/* <div className="right-column"> */}
-        
+
 //             <div className="card card_3">
 //             <Link to="https://futureskills.mcit.gov.sa/ar/ambassadors-info#:~:text=%D8%B4%D9%87%D8%AF%20%D9%85%D8%AD%D9%85%D8%AF%D8%B9%D9%84%D9%89%20%D8%AD%D9%85%D8%AF%20%D8%A7%D9%84%D8%AB%D8%B1%D9%88%D9%8A">
 //               <h1>Technology Ambassador</h1>
@@ -180,8 +180,7 @@
 //               </div>
 //               </Link>
 //             </div>
-          
-          
+
 //           <div className="card card_4">
 //             <h1>Graphic Designer Freelance</h1>
 //             <div className="blue_content">
@@ -258,7 +257,7 @@ function easeOutExpo(t: number): number {
 
 // ─── Single Card ─────────────────────────────────────────────────────────────
 interface GlassCardProps {
-  card: typeof CARDS[0];
+  card: (typeof CARDS)[0];
   scrollP: number;
   enterP: number;
   index: number;
@@ -268,49 +267,78 @@ interface GlassCardProps {
   onLeave: () => void;
 }
 
-function GlassCard({ card, scrollP, enterP, index, total, isHovered, onHover, onLeave }: GlassCardProps) {
+function GlassCard({
+  card,
+  scrollP,
+  enterP,
+  index,
+  total,
+  isHovered,
+  onHover,
+  onLeave,
+}: GlassCardProps) {
   const ep = easeInOutCubic(Math.max(0, Math.min(1, scrollP)));
 
   // Each card has a staggered entrance window
   // Card 0 enters first (enterP 0→0.55), card 3 enters last (enterP 0.45→1)
   const windowStart = index * 0.15;
-  const windowEnd   = windowStart + 0.65;
-  const rawEnter    = Math.max(0, Math.min(1, (enterP - windowStart) / (windowEnd - windowStart)));
-  const eEnter      = easeOutExpo(rawEnter);
+  const windowEnd = windowStart + 0.65;
+  const rawEnter = Math.max(
+    0,
+    Math.min(1, (enterP - windowStart) / (windowEnd - windowStart)),
+  );
+  const eEnter = easeOutExpo(rawEnter);
 
   // ── Entrance: from very deep Z, slightly above center, tiny scale
-  const entranceZ     = -2200 * (1 - eEnter);
-  const entranceY     = -40  * (1 - eEnter);
-  const entranceScale = 0.30 + eEnter * 0.75; // 0.25 -> 0.30
-  const entranceOp    = Math.min(1, rawEnter * 1.8);
+  const entranceZ = -1800 * (1 - eEnter);
+
+  const entranceY = -40 * (1 - eEnter);
+  const entranceScale = 0.3 + eEnter * 0.75; 
+  const entranceOp = Math.min(1, rawEnter * 1.8);
+
+  const entranceX = 80 * (1 - eEnter); // slide from side
+
+  const depthOffset = index * 60; // tighter stacking
+  const perspectiveShift = index * 60; // horizontal skew
+
+  const stackX = perspectiveShift;
+  const stackZ = -depthOffset;
 
   // ── Stack state
-  const stackZ  = (total - 1 - index) * -44;
-  const stackX  = index * 4;
-  const stackY  = index * 7;
-  const stackRY = index * -3;
+  const stackY = index * 7;
   const stackSc = 1 - index * 0.036;
+  const baseRY = -18; // main viewing angle
 
+  // const spreadRY = -8; // slightly flatter when spread
+  const spreadRY = 0; // perfectly front-facing at full spread
+
+  
+  const ry = baseRY + (spreadRY - baseRY) * ep;
   // ── Spread state
   const spreadSpacing = 310;
-  const centerOffset  = ((total - 1) / 2) * spreadSpacing;
-  const targetX  = index * spreadSpacing - centerOffset;
+  const centerOffset = ((total - 1) / 2) * spreadSpacing;
+  const targetX = index * spreadSpacing - centerOffset;
 
   // Interpolate stack → spread
-  const x  = stackX  + (targetX - stackX)  * ep;
-  const z  = stackZ  + (0 - stackZ) * ep;
-  const y  = stackY  + (0 - stackY) * ep;
-  const ry = stackRY + (0 - stackRY) * ep;
+  const x = stackX + (targetX - stackX) * ep;
+  const z = stackZ + (0 - stackZ) * ep;
+  const y = stackY + (0 - stackY) * ep;
+  // const ry = stackRY + (0 - stackRY) * ep;
   const sc = stackSc + (1 - stackSc) * ep;
 
   // ── Compose final transform
   // Before entry: deep Z. After entry: normal stack/spread position.
-  const finalX  = x;
-  const finalY  = y + entranceY + (isHovered ? -14 : 0);
-  const finalZ  = entranceZ + z;
-  const finalRY = ry;
-  const finalSc = entranceScale * sc * (isHovered ? 1.04 : 1);
-  const finalOp = entranceOp * (index === 0 ? 1 : Math.max(entranceOp, Math.min(1, ep * 2.2)));
+
+  const finalX = x + entranceX;
+  const finalY = y + entranceY + (isHovered ? -14 : 0);
+  const finalZ = entranceZ + z;
+
+  const depthScale = 1 - index * 0.05;
+
+  const finalSc = entranceScale * sc * depthScale * (isHovered ? 1.04 : 1);
+  const finalOp =
+    entranceOp *
+    (index === 0 ? 1 : Math.max(entranceOp, Math.min(1, ep * 2.2)));
 
   return (
     <div
@@ -328,7 +356,13 @@ function GlassCard({ card, scrollP, enterP, index, total, isHovered, onHover, on
         boxShadow: isHovered
           ? "0 36px 72px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(152, 192, 239, 0.2)"
           : "0 14px 44px rgba(0,0,0,0.3), 0 2px 10px rgba(0,0,0,0.2), inset 0 1px 0 rgba(152, 192, 239, 0.1)",
-        transform: `translateX(${finalX}px) translateY(${finalY}px) translateZ(${finalZ}px) rotateY(${finalRY}deg) scale(${finalSc})`,
+        transform: `
+          translateX(${finalX}px)
+          translateY(${finalY}px)
+          translateZ(${finalZ}px)
+          rotateY(${ry}deg)
+          scale(${finalSc})
+          `,
         opacity: finalOp,
         zIndex: isHovered ? 100 : total - index,
         transition: "box-shadow 0.3s ease",
@@ -342,66 +376,117 @@ function GlassCard({ card, scrollP, enterP, index, total, isHovered, onHover, on
       }}
     >
       <div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
-          <span style={{
-            fontSize: 9,
-            // fontFamily: "'Syne', sans-serif",
-            fontWeight: 600,
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            color: "rgba(239, 238, 236, 0.45)",
-          }}>{card.category}</span>
-          <div style={{ width: 8, height: 8, borderRadius: "50%", background: card.accent, opacity: 0.7 }} />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            marginBottom: "1rem",
+          }}
+        >
+          <span
+            style={{
+              fontSize: 9,
+              // fontFamily: "'Syne', sans-serif",
+              fontWeight: 600,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              color: "rgba(239, 238, 236, 0.45)",
+            }}
+          >
+            {card.category}
+          </span>
+          <div
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              background: card.accent,
+              opacity: 0.7,
+            }}
+          />
         </div>
 
-        <h2 style={{
-          fontFamily: "'Syne', sans-serif",
-          fontSize: 19,
-          fontWeight: 700,
-          color: "#EFEEEC",
-          lineHeight: 1.22,
-          marginBottom: "0.28rem",
-          letterSpacing: "-0.015em",
-        }}>{card.title}</h2>
+        <h2
+          style={{
+            // fontFamily: "'Syne', sans-serif",
+            fontSize: 19,
+            fontWeight: 700,
+            color: "#EFEEEC",
+            lineHeight: 1.22,
+            marginBottom: "0.28rem",
+            letterSpacing: "-0.015em",
+          }}
+        >
+          {card.title}
+        </h2>
 
-        <p style={{
-          fontSize: 10.5,
-          fontFamily: "'DM Sans', sans-serif",
-          color: "rgba(152, 192, 239, 0.6)",
-          letterSpacing: "0.04em",
-          marginBottom: "0.9rem",
-        }}>{card.place}</p>
+        <p
+          style={{
+            fontSize: 10.5,
+            // fontFamily: "'DM Sans', sans-serif",
+            color: "rgba(152, 192, 239, 0.6)",
+            letterSpacing: "0.04em",
+            marginBottom: "0.9rem",
+          }}
+        >
+          {card.place}
+        </p>
 
-        <div style={{
-          width: 24, height: 1.5, borderRadius: 2,
-          background: card.accent, opacity: 0.6, marginBottom: "0.9rem",
-        }} />
+        <div
+          style={{
+            width: 24,
+            height: 1.5,
+            borderRadius: 2,
+            background: card.accent,
+            opacity: 0.6,
+            marginBottom: "0.9rem",
+          }}
+        />
 
-        <p style={{
-          // fontFamily: "'DM Sans', sans-serif",
-          fontSize: 12.5,
-          lineHeight: 1.68,
-          color: "rgba(239, 238, 236, 0.7)",
-        }}>{card.desc}</p>
+        <p
+          style={{
+            // fontFamily: "'DM Sans', sans-serif",
+            fontSize: 12.5,
+            lineHeight: 1.68,
+            color: "rgba(239, 238, 236, 0.7)",
+          }}
+        >
+          {card.desc}
+        </p>
       </div>
 
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        borderTop: "1px solid rgba(152, 192, 239, 0.1)",
-        paddingTop: "0.85rem",
-        marginTop: "0.5rem",
-      }}>
-        <span style={{
-          // fontFamily: "'Syne', sans-serif",
-          fontSize: 9,
-          fontWeight: 600,
-          color: "rgba(239, 238, 236, 0.35)",
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-        }}>{card.tag}</span>
-        <div style={{ width: 22, height: 22, borderRadius: "50%", background: card.accent, opacity: 0.2 }} />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          borderTop: "1px solid rgba(152, 192, 239, 0.1)",
+          paddingTop: "0.85rem",
+          marginTop: "0.5rem",
+        }}
+      >
+        <span
+          style={{
+            // fontFamily: "'Syne', sans-serif",
+            fontSize: 9,
+            fontWeight: 600,
+            color: "rgba(239, 238, 236, 0.35)",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+          }}
+        >
+          {card.tag}
+        </span>
+        <div
+          style={{
+            width: 22,
+            height: 22,
+            borderRadius: "50%",
+            background: card.accent,
+            opacity: 0.2,
+          }}
+        />
       </div>
     </div>
   );
@@ -411,16 +496,16 @@ function GlassCard({ card, scrollP, enterP, index, total, isHovered, onHover, on
 export default function ExperienceCards() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollP, setScrollP] = useState(0);
-  const [enterP,  setEnterP]  = useState(0);
+  const [enterP, setEnterP] = useState(0);
   const [hasEntered, setHasEntered] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   const smoothScroll = useRef(0);
-  const smoothEnter  = useRef(0);
+  const smoothEnter = useRef(0);
   const targetScroll = useRef(0);
-  const targetEnter  = useRef(0);
-  const rafRef       = useRef<number | null>(null);
+  const targetEnter = useRef(0);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -448,7 +533,7 @@ export default function ExperienceCards() {
           requestAnimationFrame(tick);
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.12 },
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -459,7 +544,7 @@ export default function ExperienceCards() {
     const onScroll = () => {
       const el = containerRef.current;
       if (!el) return;
-      const rect  = el.getBoundingClientRect();
+      const rect = el.getBoundingClientRect();
       const total = el.offsetHeight - window.innerHeight;
       targetScroll.current = Math.max(0, Math.min(1, -rect.top / total));
     };
@@ -471,8 +556,10 @@ export default function ExperienceCards() {
   // ── Unified spring RAF
   useEffect(() => {
     const loop = () => {
-      smoothScroll.current += (targetScroll.current - smoothScroll.current) * 0.082;
-      smoothEnter.current  += (targetEnter.current  - smoothEnter.current)  * 0.072;
+      smoothScroll.current +=
+        (targetScroll.current - smoothScroll.current) * 0.082;
+      smoothEnter.current +=
+        (targetEnter.current - smoothEnter.current) * 0.072;
       setScrollP(smoothScroll.current);
       setEnterP(smoothEnter.current);
       rafRef.current = requestAnimationFrame(loop);
@@ -487,13 +574,84 @@ export default function ExperienceCards() {
 
   const ep = easeInOutCubic(Math.max(0, Math.min(1, scrollP)));
   const spreadLabelOpacity = Math.max(0, ep * 2.2 - 0.7);
-  const scrollHintOpacity  = Math.max(0, 1 - ep * 6) * Math.min(1, enterP * 2.5);
+  const scrollHintOpacity = Math.max(0, 1 - ep * 6) * Math.min(1, enterP * 2.5);
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Syne:wght@400;600;700&display=swap');
-        .exp-hero { min-height: 60vh; display: flex; align-items: center; justify-content: center; background: #070707; }
+
+        .exp-hero {  display: flex; align-items: center; justify-content: center; background: #070707; }
+    .header-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      // margin-bottom: 2rem;
+      .flip {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+      }
+        .experience-header {
+            text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 0 15px;
+    background:linear-gradient(0deg, #f5f5f5, #deddda);
+    background-clip: text;
+    color: transparent;
+    display: block;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 1px 5px rgba(174, 207, 242, .24);
+      }
+      .mobile-header{
+    text-align: center;
+    font-size: 2m;
+    font-weight: 500;
+    padding: 0 15px;
+    background:linear-gradient(0deg, #f5f5f5, #deddda);
+    background-clip: text;
+    color: transparent;
+    display: block;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 1px 5px rgba(174, 207, 242, .24);
+        margin: 0;
+      }
+      .between-lines {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        color: rgba(186, 214, 247, 0.32);
+  
+        .section-header {
+          @include header-style(15px);
+        }
+      }
+      .between-lines:before {
+        content: "";
+    height: 1px;
+    background: linear-gradient(90deg, rgba(216, 236, 248, 0), rgba(184, 216, 254, .32));
+    width: 86px;
+      }
+      .between-lines:after {
+        content: "";
+    height: 1px;
+    background: linear-gradient(90deg, rgba(216, 236, 248, 0), rgba(184, 216, 254, .32));
+    width: 86px;
+        transform: rotate(180deg);
+      }
+    }
+    .third-p {
+      width: 400px;
+      text-align: center;
+      color: #f5f5f5;
+    }
         .exp-after { min-height: 35vh; display: flex; align-items: center; justify-content: center; background: #070707; }
         .scroll-cue {
           display: flex; align-items: center; gap: 8px;
@@ -512,99 +670,135 @@ export default function ExperienceCards() {
           background: linear-gradient(90deg, #98c0ef, #98c0ef, #F17625, #98c0ef);
           z-index: 9999; pointer-events: none;
         }
+
       `}</style>
 
       <div className="prog-line" style={{ width: `${scrollP * 100}%` }} />
 
-      <div className="exp-hero">
-        <div style={{ textAlign: "center", padding: "2rem" }}>
-          <p style={{
-            // fontFamily: "'Syne', sans-serif", 
-            fontSize: 10,
-            letterSpacing: "0.28em", color: "rgba(152, 192, 239, 0.35)",
-            textTransform: "uppercase", marginBottom: "1rem",
-          }}>Shahad · Portfolio</p>
-          {/* <h1 style={{
-            fontFamily: "'Syne', sans-serif",
-            fontSize: isMobile ? 34 : 56,
-            fontWeight: 700, color: "#EFEEEC",
-            letterSpacing: "-0.03em", lineHeight: 1.08,
-          }}>Work Experience</h1> */}
-          <motion.div
-        className="header-content"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true, amount: 0.2 }}
-      >
-        <div className="between-lines">
-          <div>
-            <h1 className="experience-header">Work Experience</h1>
+      <div className="exp-hero" >
+        {/* <div style={{ textAlign: "center" }}> */}
+        <motion.div
+          className="header-content"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <div className="between-lines">
+            <div>
+              <h1 className="experience-header">Work Experience</h1>
+            </div>
           </div>
-        </div>
-        {/* <h1 className="second-header">Career Highlights</h1> */}
-        {isMobile ? (
-          <h2 className="mobile-header">Career Highlights</h2>
-        ) : (
-          <div className="flip">
-            <FlipLink href="#">Career</FlipLink>
-            <FlipLink href="#">Highlights</FlipLink>
-          </div>
-        )}
-        <p className="third-p">
-          "Success is the sum of small efforts, repeated day in and day out." –
-          Robert Collier
-        </p>
-      </motion.div>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 14, color: "rgba(239, 238, 236, 0.42)", marginTop: "0.9rem",
-          }}>Scroll to reveal</p>
-          <div style={{ marginTop: "2.2rem", color: "rgba(152, 192, 239, 0.5)" }} className="scroll-cue">
-            <span>↓</span> scroll
-          </div>
-        </div>
+          {isMobile ? (
+            <h2 className="mobile-header">Career Highlights</h2>
+          ) : (
+            <div className="flip">
+              <FlipLink href="#">Career</FlipLink>
+              <FlipLink href="#">Highlights</FlipLink>
+            </div>
+          )}
+          <p className="third-p">
+            "Success is the sum of small efforts, repeated day in and day out."
+            – Robert Collier
+          </p>
+        </motion.div>
+        
       </div>
 
       {/* ── Scroll container ── */}
-      <div ref={containerRef} style={{ height: "420vh", position: "relative", background: "#070707" }}>
-        <div style={{
-          position: "sticky", top: 0, height: "100vh",
-          overflow: "hidden", display: "flex",
-          flexDirection: "column", alignItems: "center", justifyContent: "center",
-        }}>
-
+      <div
+        ref={containerRef}
+        style={{
+          height: "420vh",
+          border: "1px solid red",
+          position: "relative",
+          background: "#070707",
+        }}
+      >
+        <div
+          style={{
+            position: "sticky",
+            top: 0,
+            height: "100vh",
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           {/* Ambient blobs */}
-          <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              pointerEvents: "none",
+              overflow: "hidden",
+            }}
+          >
             {[
               // { w: 480, h: 480, top: "8%",  left: "18%", c: "rgba(152, 192, 239, 0.12)" },
-              { w: 380, h: 380, top: "52%", left: "58%", c: "rgba(241, 118, 37, 0.08)" },
-              { w: 320, h: 320, top: "28%", left: "68%", c: "rgba(152, 192, 239, 0.1)" },
-              { w: 280, h: 280, top: "68%", left: "8%",  c: "rgba(241, 118, 37, 0.09)" },
+              {
+                w: 380,
+                h: 380,
+                top: "52%",
+                left: "58%",
+                c: "rgba(241, 118, 37, 0.08)",
+              },
+              {
+                w: 320,
+                h: 320,
+                top: "28%",
+                left: "68%",
+                c: "rgba(152, 192, 239, 0.1)",
+              },
+              {
+                w: 280,
+                h: 280,
+                top: "68%",
+                left: "8%",
+                c: "rgba(241, 118, 37, 0.09)",
+              },
             ].map((b, i) => (
-              <div key={i} style={{
-                position: "absolute",
-                width: b.w, height: b.h, borderRadius: "50%",
-                background: b.c, top: b.top, left: b.left,
-                filter: "blur(65px)",
-                transform: `translate(-50%,-50%) translateX(${ep * (i % 2 === 0 ? 28 : -28)}px)`,
-              }} />
+              <div
+                key={i}
+                style={{
+                  position: "absolute",
+                  width: b.w,
+                  height: b.h,
+                  borderRadius: "50%",
+                  background: b.c,
+                  top: b.top,
+                  left: b.left,
+                  filter: "blur(65px)",
+                  transform: `translate(-50%,-50%) translateX(${ep * (i % 2 === 0 ? 28 : -28)}px)`,
+                }}
+              />
             ))}
           </div>
 
           {/* 3D stage */}
-          <div style={{
-            position: "relative", zIndex: 2,
-            width: "100%", height: "100%",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            perspective: `${isMobile ? 800 : 1100 - ep * 350}px`,
-            perspectiveOrigin: `50% ${55 - ep * 15}%`,
-          }}>
-            <div style={{
+          <div
+            style={{
               position: "relative",
-              transformStyle: "preserve-3d",
-              width: 280, height: 310,
-            }}>
+              zIndex: 2,
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              perspective: `${isMobile ? 800 : 1100 - ep * 350}px`,
+              perspectiveOrigin: `50% ${55 - ep * 15}%`,
+            }}
+          >
+            <div
+              style={{
+                position: "relative",
+                transformStyle: "preserve-3d",
+                width: 280,
+                height: 310,
+              }}
+            >
               {CARDS.map((card, i) => (
                 <GlassCard
                   key={card.id}
@@ -621,75 +815,101 @@ export default function ExperienceCards() {
             </div>
           </div>
 
-          {/* Scroll hint */}
-          <div style={{
-            position: "absolute", bottom: "7%", right: "5%",
-            opacity: scrollHintOpacity,
-            display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
-            pointerEvents: "none",
-          }}>
-            <div style={{
-              width: 1, height: 44,
-              background: "linear-gradient(to bottom, transparent, rgba(152, 192, 239, 0.28))",
-            }} />
-            <span style={{
-              fontFamily: "'Syne', sans-serif", fontSize: 8,
-              letterSpacing: "0.22em", color: "rgba(152, 192, 239, 0.32)",
-              textTransform: "uppercase", writingMode: "vertical-rl",
-            }}>Scroll</span>
-          </div>
 
           {/* Spread label */}
-          <div style={{
-            position: "absolute", bottom: "8%", left: "50%",
-            transform: "translateX(-50%)",
-            opacity: spreadLabelOpacity, pointerEvents: "none", textAlign: "center",
-          }}>
-            <p style={{
-              fontFamily: "'Syne', sans-serif", fontSize: 9,
-              letterSpacing: "0.22em", color: "rgba(152, 192, 239, 0.35)", textTransform: "uppercase",
-            }}>Hover each card to explore</p>
-          </div>
+          {/* <div
+            style={{
+              position: "absolute",
+              bottom: "8%",
+              left: "50%",
+              transform: "translateX(-50%)",
+              opacity: spreadLabelOpacity,
+              pointerEvents: "none",
+              textAlign: "center",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 9,
+                letterSpacing: "0.22em",
+                color: "rgba(152, 192, 239, 0.35)",
+                textTransform: "uppercase",
+              }}
+            >
+              Hover each card to explore
+            </p>
+          </div> */}
 
           {/* Sidebar category indicators */}
-          <div style={{
-            position: "absolute", left: "4%", top: "50%",
-            transform: "translateY(-50%)",
-            display: "flex", flexDirection: "column", gap: 12,
-            opacity: Math.min(1, enterP * 1.8), pointerEvents: "none",
-          }}>
+          {/* <div
+            style={{
+              position: "absolute",
+              left: "4%",
+              top: "50%",
+              transform: "translateY(-50%)",
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
+              opacity: Math.min(1, enterP * 1.8),
+              pointerEvents: "none",
+            }}
+          >
             {CARDS.map((card, i) => {
               const visible = ep > i * 0.18;
               return (
-                <div key={i} style={{
-                  display: "flex", alignItems: "center", gap: 7,
-                  opacity: visible ? 1 : 0.18, transition: "opacity 0.45s ease",
-                }}>
-                  <div style={{
-                    width: visible ? 18 : 5, height: 1.5,
-                    background: card.accent, borderRadius: 2,
-                    transition: "width 0.45s ease",
-                  }} />
-                  <span style={{
-                    fontFamily: "'Syne', sans-serif", fontSize: 8,
-                    letterSpacing: "0.16em", color: "rgba(239, 238, 236, 0.42)",
-                    textTransform: "uppercase",
-                    opacity: visible ? 1 : 0, transition: "opacity 0.45s ease",
-                  }}>{card.category}</span>
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 7,
+                    opacity: visible ? 1 : 0.18,
+                    transition: "opacity 0.45s ease",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: visible ? 18 : 5,
+                      height: 1.5,
+                      background: card.accent,
+                      borderRadius: 2,
+                      transition: "width 0.45s ease",
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontFamily: "'Syne', sans-serif",
+                      fontSize: 8,
+                      letterSpacing: "0.16em",
+                      color: "rgba(239, 238, 236, 0.42)",
+                      textTransform: "uppercase",
+                      opacity: visible ? 1 : 0,
+                      transition: "opacity 0.45s ease",
+                    }}
+                  >
+                    {card.category}
+                  </span>
                 </div>
               );
             })}
-          </div>
-
+          </div> */}
         </div>
       </div>
 
-      <div className="exp-after">
-        <p style={{
-          fontFamily: "'Syne', sans-serif", fontSize: 11,
-          letterSpacing: "0.18em", color: "rgba(152, 192, 239, 0.25)", textTransform: "uppercase",
-        }}>End of Experience</p>
-      </div>
+      {/* <div className="exp-after">
+        <p
+          style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 11,
+            letterSpacing: "0.18em",
+            color: "rgba(152, 192, 239, 0.25)",
+            textTransform: "uppercase",
+          }}
+        >
+          End of Experience
+        </p>
+      </div> */}
     </>
   );
 }
