@@ -1,545 +1,483 @@
-// import GradientCard from "./Card";
-// import { motion } from 'framer-motion';
-
-// import "../styles/cards.scss";
-// import FlipLink from "./AnimatedHeader ";
-// import { useEffect, useState } from "react";
-
-// const greenishTheme = {
-//   backgroundColor: "rgb(211, 211, 84)", // Original dark background
-//   borderColor: "1px solid #D3D354",
-//   starColor: "rgba(211, 211, 84, 0.7)",
-//   headerColor: "#D3D354",
-// };
-
-// const pinkishTheme = {
-//   backgroundColor: "#D96570", // Light pink background
-//   textBackground: "rgba(217, 101, 113, 0.4)",
-//   borderColor: "1px solid #D96570",
-//   starColor: "rgba(255, 154, 205, 0.56)",
-//   headerColor: "#D96570",
-//   lightColorHeader: "#F9BDC3",
-// };
-// const bluishTheme = {
-//   backgroundColor: "#5489D6", // Light pink background
-//   textBackground: "rgba(84, 137, 214, 0.4)",
-//   borderColor: "1px solid #369EFF",
-//   starColor: "rgba(84, 137, 214, 0.56)",
-//   headerColor: "#369EFF",
-//   lightColorHeader: "#D8ECF8",
-// };
-
-// const metalTheme = {
-//   backgroundColor: "#EFEEEC",
-//   textBackground: "rgba(192,192,192, 0.4)",
-//   borderColor: "1px solid #a9a9a9",
-//   starColor: "rgba(255, 255, 255, 0.8)",
-//   headerColor: "#d3d3d3",
-//   lightColorHeader: "#f5f5f5",
-// };
-// const Cards = () => {
-//     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  
-//     useEffect(() => {
-//       const handleResize = () => {
-//         setIsMobile(window.innerWidth <= 768);
-//       };
-  
-//       window.addEventListener("resize", handleResize);
-//       return () => window.removeEventListener("resize", handleResize);
-//     }, []);
-
-//   return (
-//     <div className="cards-container">
-//       <motion.div
-//         className="header-content"
-//         initial={{ opacity: 0, y: 20 }}
-//         whileInView={{ opacity: 1, y: 0 }}
-//         transition={{ duration: 0.8, ease: "easeOut" }}
-//         viewport={{ once: true, amount: 0.2 }}
-//       >
-//         <div className="between-lines">
-//           <div>
-//             <h1 className="section-header">Discover. Innovate. Inspire.</h1>
-//           </div>
-//         </div>
-//         {isMobile ? (
-//           <h2 className="mobile-header">The Dashboard</h2>
-//         ) : (
-//           <div className="flip">
-//           <FlipLink href="#">The</FlipLink>
-//           <FlipLink href="#">Dashboard</FlipLink>
-//           </div>
-//         )}
-//       </motion.div>
-
-//       <div className="top-cards">
-//         <GradientCard
-//           title="Components"
-//           label="Explore our UI components library"
-//           onClick={() => console.log("Components card clicked")}
-//           theme={bluishTheme}
-//           image="/compIcon.svg"
-//           link="/components"
-//         />
-//         <GradientCard
-//           title="Repositories"
-//           label="Discover our code repositories"
-//           onClick={() => console.log("Repositories card clicked")}
-//           theme={pinkishTheme}
-//           // image=""
-//           link="https://github.com/shhahad20?tab=repositories"
-//         />
-//       </div>
-//       <div className="bottom-cards">
-//         <GradientCard
-//           title="Social Media News"
-//           label="Catch the Latest News"
-//           onClick={() => console.log("Social Media News card clicked")}
-//           theme={greenishTheme}
-//           // image=""
-//           link="https://www.linkedin.com/in/shahadaltharwa/"
-//         />
-//         <GradientCard
-//           title="Projects"
-//           label="Boldest Projects and Future Ventures"
-//           onClick={() => console.log("Projects card clicked")}
-//           theme={metalTheme}
-//           image="/projectImage.svg"
-//           link="/projects"
-//         />
-//       </div>
-
-//     </div>
-//   );
-// };
-
-// export default Cards;
-
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import FlipLink from "./AnimatedHeader ";
 import "../styles/cards.scss";
+// import FlipLink from "./AnimatedHeader ";
 
-interface FolderItem {
+// ─── Types ────────────────────────────────────────────────────────────────────
+interface CardItem {
+  num: string;
   title: string;
-  label: string;
+  desc: string;
   link: string;
-  color: string;
-  files: string[];
-  x: number;      // % from left
-  y: number;      // % from top
-  w: number;      // px width
-  rotate: number; // static tilt in deg — no animation
+  icon: React.ReactNode;
 }
 
-const FOLDERS: FolderItem[] = [
-  // {
-  //   title: "Components",
-  //   label: "Explore our UI components library",
-  //   link: "/components",
-  //   color: "#EFEEEC",
-  //   files: ["Button.tsx", "Modal.tsx", "Card.tsx", "Input.tsx"],
-  //   x: 20, y: 40, w: 120, rotate: -15,
-  // },
+// ─── Icon: Code Lab ───────────────────────────────────────────────────────────
+const CodeLabIcon = () => (
+  <svg
+    viewBox="0 0 52 52"
+    width="52"
+    height="52"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect
+      x="4"
+      y="10"
+      width="44"
+      height="32"
+      rx="3"
+      fill="none"
+      stroke="#EFEEEC"
+      strokeWidth="1.5"
+      opacity="0.15"
+    />
+    <line
+      x1="4"
+      y1="18"
+      x2="48"
+      y2="18"
+      stroke="#EFEEEC"
+      strokeWidth="1"
+      opacity="0.15"
+    />
+    <circle cx="11" cy="14" r="1.5" fill="#EFEEEC" opacity="0.3" />
+    <circle cx="17" cy="14" r="1.5" fill="#EFEEEC" opacity="0.3" />
+    <circle cx="23" cy="14" r="1.5" fill="#EFEEEC" opacity="0.3" />
+    {/* < brackets */}
+    <polyline
+      points="16,28 12,32 16,36"
+      fill="none"
+      stroke="#EFEEEC"
+      strokeWidth="1.5"
+      strokeLinejoin="round"
+      opacity="0.9"
+    />
+    {/* > brackets */}
+    <polyline
+      points="22,28 26,32 22,36"
+      fill="none"
+      stroke="#EFEEEC"
+      strokeWidth="1.5"
+      strokeLinejoin="round"
+      opacity="0.9"
+    />
+    {/* blinking cursor */}
+    <rect
+      x="30"
+      y="28"
+      width="6"
+      height="8"
+      fill="#EFEEEC"
+      className="cursor-blink"
+    />
+  </svg>
+);
+
+// ─── Icon: Branding (palette + brush) ────────────────────────────────────────
+const BrandingIcon = () => (
+  <svg
+    viewBox="0 0 52 52"
+    width="52"
+    height="52"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g className="palette-group">
+      {/* palette body */}
+      <ellipse
+        cx="27"
+        cy="27"
+        rx="16"
+        ry="13"
+        fill="none"
+        stroke="#EFEEEC"
+        strokeWidth="1.5"
+        opacity="0.25"
+      />
+      {/* thumb hole */}
+      <ellipse
+        cx="33"
+        cy="36"
+        rx="4"
+        ry="3"
+        fill="none"
+        stroke="#EFEEEC"
+        strokeWidth="1.5"
+        opacity="0.25"
+      />
+      {/* color dots */}
+      <circle cx="18" cy="24" r="2.2" fill="#EFEEEC" opacity="0.7" />
+      <circle cx="24" cy="19" r="2.2" fill="#EFEEEC" opacity="0.45" />
+      <circle cx="31" cy="19" r="2.2" fill="#EFEEEC" opacity="0.25" />
+      <circle cx="36" cy="24" r="2.2" fill="#EFEEEC" opacity="0.55" />
+    </g>
+    {/* paintbrush */}
+    <line
+      x1="10"
+      y1="10"
+      x2="22"
+      y2="22"
+      stroke="#EFEEEC"
+      strokeWidth="2"
+      strokeLinecap="round"
+      opacity="0.8"
+    />
+    <ellipse
+      cx="23.5"
+      cy="23.5"
+      rx="2.5"
+      ry="1.5"
+      transform="rotate(-45 23.5 23.5)"
+      fill="#EFEEEC"
+      opacity="0.9"
+    />
+    <circle cx="9.5" cy="9.5" r="1.5" fill="#EFEEEC" opacity="0.4" />
+    {/* animated brush stroke */}
+    <path
+      d="M 14 42 Q 26 38 36 43"
+      fill="none"
+      stroke="#EFEEEC"
+      strokeWidth="2"
+      strokeLinecap="round"
+      className="brush-stroke"
+      opacity="0.6"
+    />
+  </svg>
+);
+
+// ─── Icon: UI System ──────────────────────────────────────────────────────────
+const UISystemIcon = () => (
+  <svg
+    viewBox="0 0 52 52"
+    width="52"
+    height="52"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* connector lines */}
+    <line
+      x1="26"
+      y1="14"
+      x2="26"
+      y2="38"
+      stroke="#EFEEEC"
+      strokeWidth="1"
+      strokeLinecap="round"
+      opacity="0.12"
+    />
+    <line
+      x1="14"
+      y1="26"
+      x2="38"
+      y2="26"
+      stroke="#EFEEEC"
+      strokeWidth="1"
+      strokeLinecap="round"
+      opacity="0.12"
+    />
+    {/* 4 cells */}
+    <rect
+      x="8"
+      y="8"
+      width="16"
+      height="16"
+      rx="2"
+      fill="none"
+      stroke="#EFEEEC"
+      strokeWidth="1.5"
+      className="cell-1"
+    />
+    <rect
+      x="28"
+      y="8"
+      width="16"
+      height="16"
+      rx="2"
+      fill="none"
+      stroke="#EFEEEC"
+      strokeWidth="1.5"
+      className="cell-2"
+    />
+    <rect
+      x="8"
+      y="28"
+      width="16"
+      height="16"
+      rx="2"
+      fill="none"
+      stroke="#EFEEEC"
+      strokeWidth="1.5"
+      className="cell-3"
+    />
+    <rect
+      x="28"
+      y="28"
+      width="16"
+      height="16"
+      rx="2"
+      fill="none"
+      stroke="#EFEEEC"
+      strokeWidth="1.5"
+      className="cell-4"
+    />
+    {/* inner mini rects */}
+    <rect
+      x="11"
+      y="11"
+      width="10"
+      height="3"
+      rx="1"
+      fill="#EFEEEC"
+      opacity="0.15"
+    />
+    <rect
+      x="31"
+      y="11"
+      width="10"
+      height="3"
+      rx="1"
+      fill="#EFEEEC"
+      opacity="0.15"
+    />
+    <rect
+      x="11"
+      y="31"
+      width="10"
+      height="3"
+      rx="1"
+      fill="#EFEEEC"
+      opacity="0.15"
+    />
+    <rect
+      x="31"
+      y="31"
+      width="10"
+      height="3"
+      rx="1"
+      fill="#EFEEEC"
+      opacity="0.15"
+    />
+  </svg>
+);
+
+// ─── Card data ────────────────────────────────────────────────────────────────
+const CARDS: CardItem[] = [
   {
-    title: "Repositories",
-    label: "Discover our code repositories",
+    num: "01",
+    title: "Code Lab",
+    desc: "Experiments, repositories, and open-source work. Where ideas get compiled and shipped.",
     link: "https://github.com/shhahad20?tab=repositories",
-    color: "#EFEEEC",
-    files: ["cloud-app", "design-sys", "api-server", "cli-tool"],
-    x: 34, y: 20, w: 165, rotate: 7,
+    icon: <CodeLabIcon />,
   },
   {
-    title: "Projects",
-    label: "Boldest Projects and Future Ventures",
-    link: "/projects",
-    color: "#EFEEEC",
-    files: ["Portfolio v3", "SaaS MVP", "Open Source", "Experiments"],
-    x: 65, y: 25, w: 98, rotate: 11,
+    num: "02",
+    title: "Branding",
+    desc: "Graphic design, visual identity, and brand systems. Translating ideas into visual language.",
+    link: "/branding",
+    icon: <BrandingIcon />,
   },
   {
-    title: "Social Media",
-    label: "Catch the Latest News",
-    link: "https://www.linkedin.com/in/shahadaltharwa/",
-    color: "#EFEEEC",
-    files: ["LinkedIn", "Articles", "Updates", "Mentions"],
-    x: 30, y: 54, w: 112, rotate: 9,
-  },
-  {
-    title: "Components",
-    label: "Explore our UI components library",
+    num: "03",
+    title: "UI System",
+    desc: "Reusable components, design tokens, and scalable interfaces built for consistency.",
     link: "/components",
-    color: "#EFEEEC",
-    files: ["Button.tsx", "Modal.tsx", "Card.tsx", "Input.tsx"],
-    x: 50, y: 76, w: 140, rotate: -7,
-  },
-  {
-    title: "Repositories",
-    label: "Discover our code repositories",
-    link: "https://github.com/shhahad20?tab=repositories",
-    color: "#EFEEEC",
-    files: ["cloud-app", "design-sys", "api-server", "cli-tool"],
-    x: 67, y: 56, w: 135, rotate: 5,
-  },
-  {
-    title: "Projects",
-    label: "Boldest Projects and Future Ventures",
-    link: "/projects",
-    color: "#EFEEEC",
-    files: ["Portfolio v3", "SaaS MVP", "Open Source", "Experiments"],
-    x: 26, y: 72, w: 115, rotate: -11,
+    icon: <UISystemIcon />,
   },
 ];
 
-// ─── Folder SVG: exact shape from the reference image ───────────────────────
-// Small tab sits flush at top-left of a plain rectangle. Pure outline, no fill.
-const FolderSVG = ({ color, w }: { color: string; w: number }) => {
-  const bodyH = w * 0.74;
-  const tabW  = w * 0.30;
-  const tabH  = w * 0.09;
-  const r     = w * 0.06;   // corner radius
+// ─── Individual card ──────────────────────────────────────────────────────────
+const BusyCard = ({ card, index }: { card: CardItem; index: number }) => {
+  // const [hovered, setHovered] = useState(false);
+  const isExternal = card.link.startsWith("http");
 
   return (
-    <svg
-      viewBox={`0 0 ${w} ${bodyH + tabH}`}
-      width={w}
-      height={bodyH + tabH}
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ display: "block", overflow: "visible" }}
-    >
-      {/* Tab — small rounded-top rectangle, top-left */}
-      <path
-        d={`
-          M ${r} 0
-          L ${tabW - r} 0
-          Q ${tabW} 0 ${tabW} ${r}
-          L ${tabW} ${tabH}
-          L 0 ${tabH}
-          L 0 ${r}
-          Q 0 0 ${r} 0 Z
-        `}
-        fill="none"
-        stroke={color}
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      {/* Body — full width, merges with tab on top-left */}
-      <path
-        d={`
-          M 0 ${tabH}
-          L ${w - r} ${tabH}
-          Q ${w} ${tabH} ${w} ${tabH + r}
-          L ${w} ${bodyH + tabH - r}
-          Q ${w} ${bodyH + tabH} ${w - r} ${bodyH + tabH}
-          L ${r} ${bodyH + tabH}
-          Q 0 ${bodyH + tabH} 0 ${bodyH + tabH - r}
-          L 0 ${tabH} Z
-        `}
-        fill="none"
-        stroke={color}
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-};
-
-// ─── Individual folder — static tilt, hover zooms toward viewer ──────────────
-const Folder = ({
-  folder,
-  index,
-  onExpand,
-}: {
-  folder: FolderItem;
-  index: number;
-  onExpand: (i: number) => void;
-}) => {
-  const [hovered, setHovered] = useState(false);
-  const totalH = folder.w * 0.74 + folder.w * 0.09;
-
-  return (
-    <motion.div
-      style={{
-        position: "absolute",
-        left: `${folder.x}%`,
-        top: `${folder.y}%`,
-        width: folder.w,
-        height: totalH,
-        cursor: "pointer",
-        transformStyle: "preserve-3d",
-        rotate: folder.rotate, // static tilt, not animated
+    <motion.a
+      href={card.link}
+      target={isExternal ? "_blank" : "_self"}
+      rel={isExternal ? "noreferrer" : undefined}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.6,
+        delay: index * 0.1,
+        ease: [0.16, 1, 0.3, 1],
       }}
-      whileHover={{
-        scale: 1.25,
-        z: 130,
-        rotate: 0,
-        transition: { duration: 0.38, ease: [0.23, 1, 0.32, 1] },
-      }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-      onClick={() => onExpand(index)}
+      viewport={{ once: true, amount: 0.15 }}
+      // onHoverStart={() => setHovered(true)}
+      // onHoverEnd={() => setHovered(false)}
+      className="busy-card"
     >
-      {/* Glow behind folder on hover */}
-      <motion.div
-        style={{
-          position: "absolute",
-          inset: -18,
-          borderRadius: 10,
-          background: `radial-gradient(ellipse at center, ${folder.color}18 0%, transparent 70%)`,
-          pointerEvents: "none",
-        }}
-        animate={{ opacity: hovered ? 1 : 0 }}
-        transition={{ duration: 0.25 }}
-      />
+      {/* icon */}
+      <div style={{ width: 52, height: 52, marginBottom: 32 }}>{card.icon}</div>
 
-      <FolderSVG color={folder.color} w={folder.w} />
-
-      {/* Name label — fades in on hover */}
-      <motion.div
+      {/* number */}
+      <p
         style={{
-          position: "absolute",
-          bottom: -28,
-          left: "50%",
-          translateX: "-50%",
+          // fontFamily: "'Space Mono', monospace",
           fontSize: 10,
-          fontFamily: "'Syne', sans-serif",
-          fontWeight: 600,
-          letterSpacing: "0.22em",
-          textTransform: "uppercase",
-          whiteSpace: "nowrap",
-          color: folder.color,
-          pointerEvents: "none",
+          color: "#818180",
+          letterSpacing: "0.2em",
+          marginBottom: 12,
         }}
-        animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 5 }}
-        transition={{ duration: 0.2 }}
       >
-        {folder.title}
-      </motion.div>
-    </motion.div>
+        {card.num}
+      </p>
+
+      {/* title */}
+      <h3
+        style={{
+          fontSize: 22,
+          fontWeight: 500,
+          color: "#EFEEEC",
+          letterSpacing: "-0.02em",
+          marginBottom: 14,
+          lineHeight: 1.1,
+        }}
+      >
+        {card.title}
+      </h3>
+
+      {/* description */}
+      <p
+        style={{
+          fontSize: 12,
+          color: "#555",
+          lineHeight: 1.7,
+          letterSpacing: "0.02em",
+          flex: 1,
+          marginBottom: 32,
+          fontFamily: "'Syne', sans-serif",
+        }}
+      >
+        {card.desc}
+      </p>
+
+      {/* CTA */}
+      <div
+        className="cta"
+      >
+        View work{" "}
+        <span
+          style={{
+            display: "inline-block",
+            // transform: hovered ? "translateX(4px)" : "translateX(0)",
+            transition: "transform 0.3s ease",
+          }}
+        >
+          →
+        </span>
+      </div>
+
+      {/* bottom accent line */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 32,
+          right: 32,
+          height: 1,
+          // background: hovered ? "#EFEEEC" : "transparent",
+          transition: "background 0.3s",
+        }}
+      />
+    </motion.a>
   );
 };
 
-// ─── Full-page expanded view ─────────────────────────────────────────────────
-const ExpandedFolder = ({
-  folder,
-  onClose,
-}: {
-  folder: FolderItem;
-  onClose: () => void;
-}) => {
-  const isExternal = folder.link.startsWith("http");
-
-  return (
-    <motion.div
-      key="expanded"
-      initial={{ opacity: 0, scale: 0.05 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.05 }}
-      transition={{ duration: 0.52, ease: [0.16, 1, 0.3, 1] }}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 300,
-        background: "#080808",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily: "'Syne', sans-serif",
-      }}
-      onClick={onClose}
-    >
-      {/* Ghost folder watermark */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.045 }}
-        transition={{ delay: 0.1, duration: 0.5 }}
-        style={{ position: "absolute", pointerEvents: "none" }}
-      >
-        <FolderSVG color={folder.color} w={480} />
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.46 }}
-        style={{ textAlign: "center", position: "relative" }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div
-          style={{
-            fontSize: 11,
-            letterSpacing: "0.26em",
-            color: folder.color,
-            textTransform: "uppercase",
-            marginBottom: 14,
-          }}
-        >
-          {folder.label}
-        </div>
-
-        <h2
-          style={{
-            fontSize: "clamp(28px, 5.5vw, 76px)",
-            fontWeight: 800,
-            letterSpacing: "-0.03em",
-            color: "#fff",
-            lineHeight: 1,
-            marginBottom: 36,
-          }}
-        >
-          {folder.title}
-        </h2>
-
-        <div
-          style={{
-            display: "flex",
-            gap: 10,
-            flexWrap: "wrap",
-            justifyContent: "center",
-            marginBottom: 44,
-          }}
-        >
-          {folder.files.map((f) => (
-            <div
-              key={f}
-              style={{
-                padding: "8px 18px",
-                border: `1px solid ${folder.color}38`,
-                borderRadius: 3,
-                fontSize: 11,
-                letterSpacing: "0.1em",
-                color: `${folder.color}bb`,
-                background: `${folder.color}0b`,
-              }}
-            >
-              {f}
-            </div>
-          ))}
-        </div>
-
-        <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-          <a
-            href={folder.link}
-            target={isExternal ? "_blank" : "_self"}
-            rel={isExternal ? "noreferrer" : undefined}
-            style={{
-              padding: "12px 34px",
-              background: folder.color,
-              color: "#080808",
-              fontFamily: "'Syne', sans-serif",
-              fontWeight: 700,
-              fontSize: 11,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              textDecoration: "none",
-              borderRadius: 2,
-            }}
-          >
-            Open →
-          </a>
-          <button
-            onClick={onClose}
-            style={{
-              padding: "12px 34px",
-              border: "1px solid rgba(255,255,255,0.18)",
-              background: "transparent",
-              color: "rgba(255,255,255,0.5)",
-              fontFamily: "'Syne', sans-serif",
-              fontSize: 11,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-              borderRadius: 2,
-            }}
-          >
-            Close
-          </button>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-};
-
-// ─── Main export ─────────────────────────────────────────────────────────────
+// ─── Main export ──────────────────────────────────────────────────────────────
 const Cards = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1200,
+  );
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = expandedIndex !== null ? "hidden" : "";
-  }, [expandedIndex]);
+  const isMobile = windowWidth <= 560;
+  const isTablet = windowWidth <= 900;
+
+  const gridCols = isMobile ? "1fr" : isTablet ? "1fr 1fr" : "repeat(3, 1fr)";
+  const sectionPadding = isMobile
+    ? "40px 20px 56px"
+    : isTablet
+      ? "48px 32px 64px"
+      : "64px 48px 80px";
 
   return (
     <div
-      className="cards-container"
       style={{
-        position: "relative",
-        minHeight: "100vh",
-        background: "#080808",
-        perspective: "1000px",
-        overflow: "hidden",
+        padding: sectionPadding,
+        display: "flex",
+        justifyContent: "center",
       }}
     >
-      {/* ── Header (unchanged) ── */}
-      <motion.div
-        className="header-content"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true, amount: 0.2 }}
-        style={{ position: "relative", zIndex: 10 }}
-      >
+      <div style={{ width: "100%", maxWidth: 1200 }}>
+        {/* ── Header ── */}
+        {/* <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          viewport={{ once: true }}
+        >
+          <p
+            style={{
+              fontFamily: "'Space Mono', monospace",
+              fontSize: 10,
+              letterSpacing: "0.3em",
+              textTransform: "uppercase",
+              color: "#555",
+              marginBottom: 16,
+            }}
+          >
+            Areas of work
+          </p>
+          <h2
+            style={{
+              fontSize: "clamp(28px, 5vw, 64px)",
+              fontWeight: 800,
+              color: "#EFEEEC",
+              lineHeight: 1,
+              letterSpacing: "-0.03em",
+              marginBottom: 56,
+            }}
+          >
+            What keeps <span style={{ color: "#333" }}>me</span> busy
+          </h2>
+        </motion.div> */}
+
+        <motion.div
+          className="header-content"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.2 }}
+        >
         <div className="between-lines">
           <div>
-            <h1 className="section-header">Discover. Innovate. Inspire.</h1>
+            <h1 className="about-me-header">Areas of work</h1>
           </div>
         </div>
-        {isMobile ? (
-          <h2 className="mobile-header">The Dashboard</h2>
-        ) : (
-          <div className="flip">
-            <FlipLink href="#">The</FlipLink>
-            <FlipLink href="#">Dashboard</FlipLink>
-          </div>
-        )}
-      </motion.div>
+        <h1 className="second-header">
+          What Keeps Me Busy
+        </h1>
+        </motion.div>
 
-      {/* ── Scattered folders — static, no drift ── */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          transformStyle: "preserve-3d",
-          pointerEvents: expandedIndex !== null ? "none" : "all",
-        }}
-      >
-        {FOLDERS.map((folder, i) => (
-          <Folder
-            key={`${folder.title}-${i}`}
-            folder={folder}
-            index={i}
-            onExpand={setExpandedIndex}
-          />
-        ))}
+        {/* ── Cards grid ── */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: gridCols,
+            gap: 0,
+            // background: "#1c1c1c",
+            // border: "1px solid #1c1c1c",
+          }}
+        >
+          {CARDS.map((card, i) => (
+            <BusyCard key={card.title} card={card} index={i} />
+          ))}
+        </div>
       </div>
-
-      {/* ── Expanded overlay ── */}
-      <AnimatePresence>
-        {expandedIndex !== null && (
-          <ExpandedFolder
-            folder={FOLDERS[expandedIndex]}
-            onClose={() => setExpandedIndex(null)}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 };
