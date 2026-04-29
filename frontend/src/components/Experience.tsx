@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import FlipLink from "./AnimatedHeader ";
 import { motion } from "framer-motion";
 import "../styles/experience.scss";
+
 const CARDS = [
   {
     id: 0,
@@ -63,6 +64,7 @@ interface GlassCardProps {
   isHovered: boolean;
   onHover: () => void;
   onLeave: () => void;
+  isMobile: boolean;
 }
 
 function GlassCard({
@@ -74,11 +76,11 @@ function GlassCard({
   isHovered,
   onHover,
   onLeave,
+  isMobile,
 }: GlassCardProps) {
   const ep = easeInOutCubic(Math.max(0, Math.min(1, scrollP)));
 
-  // Each card has a staggered entrance window
-  // Card 0 enters first (enterP 0→0.55), card 3 enters last (enterP 0.45→1)
+  // Staggered entrance window per card
   const windowStart = index * 0.15;
   const windowEnd = windowStart + 0.65;
   const rawEnter = Math.max(
@@ -86,113 +88,130 @@ function GlassCard({
     Math.min(1, (enterP - windowStart) / (windowEnd - windowStart)),
   );
   const eEnter = easeOutExpo(rawEnter);
+  // ─── Single Card (mobile branch) ─────────────────────────────────────────────
+  if (isMobile) {
+  const cardHeight = 295;
+  const gap = 14;
 
-  // ── Entrance: from very deep Z, slightly above center, tiny scale
-  const entranceZ = -1800 * (1 - eEnter);
+  // Nearly stacked at the start
+  const stackedMargin = -(cardHeight - 24);
 
-  const entranceY = -40 * (1 - eEnter);
-  const entranceScale = 0.3 + eEnter * 0.75;
-  const entranceOp = Math.min(1, rawEnter * 1.8);
+  // Final state should be only a real visual gap
+  const spreadMargin = gap;
 
-  const entranceX = 80 * (1 - eEnter); // slide from side
-
-  const depthOffset = index * 60; // tighter stacking
-  const perspectiveShift = index * 60; // horizontal skew
-
-  const stackX = perspectiveShift;
-  const stackZ = -depthOffset;
-
-  // ── Stack state
-  const stackY = index * 7;
-  const stackSc = 1 - index * 0.036;
-  const baseRY = -18; // main viewing angle
-
-  // const spreadRY = -8; // slightly flatter when spread
-  const spreadRY = 0; // perfectly front-facing at full spread
-
-  const ry = baseRY + (spreadRY - baseRY) * ep;
-  // ── Spread state
-  // const spreadSpacing = 360;
-  const cardWidth = 280;
-  const gap = 80; // visible gap between cards
-  const spreadSpacing = cardWidth + gap;
-
-  const centerOffset = ((total - 1) / 2) * spreadSpacing;
-  const targetX = index * spreadSpacing - centerOffset;
-
-  // Interpolate stack → spread
-  const x = stackX + (targetX - stackX) * ep;
-  const z = stackZ + (0 - stackZ) * ep;
-  const y = stackY + (0 - stackY) * ep;
-  // const ry = stackRY + (0 - stackRY) * ep;
+  const stackSc = 1 - index * 0.025;
   const sc = stackSc + (1 - stackSc) * ep;
 
-  // ── Compose final transform
-  // Before entry: deep Z. After entry: normal stack/spread position.
+  const marginTop =
+    index === 0
+      ? 0
+      : stackedMargin + (spreadMargin - stackedMargin) * ep;
 
-  const finalX = x + entranceX;
-  const finalY = y + entranceY + (isHovered ? -14 : 0);
-  const finalZ = entranceZ + z;
+  const entranceY = 60 * (1 - eEnter);
+  const entranceOp = Math.min(1, rawEnter * 1.8);
 
-  // const depthScale = 1 - index * 0.05;
-  // const finalSc = entranceScale * sc * depthScale * (isHovered ? 1.04 : 1);
-  const depthScale = 1 - index * 0.05 * (1 - ep);
-  const finalSc = entranceScale * sc * depthScale * (isHovered ? 1.04 : 1);
-
+  const finalY = entranceY + (isHovered ? -10 : 0);
+  const finalSc = sc * eEnter * (isHovered ? 1.03 : 1);
   const finalOp =
     entranceOp *
     (index === 0 ? 1 : Math.max(entranceOp, Math.min(1, ep * 2.2)));
 
-return (
-  <div
-    className="card"
-    onMouseEnter={onHover}
-    onMouseLeave={onLeave}
-    style={{
-      transform: `
-        translateX(${finalX}px)
-        translateY(${finalY}px)
-        translateZ(${finalZ}px)
-        rotateY(${ry}deg)
-        scale(${finalSc})
-      `,
-      opacity: finalOp,
-      zIndex: isHovered ? 100 : total - index,
-    }}
-  >
-    <div className="card__content">
-      
-      <div className="card__header">
-        <span className="card__category">
-          {card.category}
-        </span>
+  return (
+    <div
+      className="card card--vertical"
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+      style={{
+        marginTop: index === 0 ? 0 : marginTop,
+        transform: `translateY(${finalY}px) scale(${finalSc})`,
+        opacity: finalOp,
+        zIndex: isHovered ? 100 : total - index,
+      }}
+    >
+      <CardInner card={card} />
+    </div>
+  );
+}
+
+  // ── HORIZONTAL 3D layout (desktop) ─────────────────────────────────────────
+  const entranceZ = -1800 * (1 - eEnter);
+  const entranceY = -40 * (1 - eEnter);
+  const entranceScale = 0.3 + eEnter * 0.75;
+  const entranceOp = Math.min(1, rawEnter * 1.8);
+  const entranceX = 80 * (1 - eEnter);
+
+  const depthOffset = index * 60;
+  const perspectiveShift = index * 60;
+  const stackX = perspectiveShift;
+  const stackZ = -depthOffset;
+  const stackY = index * 7;
+  const stackSc = 1 - index * 0.036;
+
+  const baseRY = -18;
+  const spreadRY = 0;
+  const ry = baseRY + (spreadRY - baseRY) * ep;
+
+  const cardWidth = 280;
+  const gap = 80;
+
+  const spreadSpacing = cardWidth + gap;
+  const centerOffset = ((total - 1) / 2) * spreadSpacing;
+  const targetX = index * spreadSpacing - centerOffset;
+
+  const x = stackX + (targetX - stackX) * ep;
+  const z = stackZ + (0 - stackZ) * ep;
+  const y = stackY + (0 - stackY) * ep;
+  const sc = stackSc + (1 - stackSc) * ep;
+
+  const finalX = x + entranceX;
+  const finalY = y + entranceY + (isHovered ? -14 : 0);
+  const finalZ = entranceZ + z;
+  const depthScale = 1 - index * 0.05 * (1 - ep);
+  const finalSc = entranceScale * sc * depthScale * (isHovered ? 1.04 : 1);
+  const finalOp =
+    entranceOp *
+    (index === 0 ? 1 : Math.max(entranceOp, Math.min(1, ep * 2.2)));
+
+  return (
+    <div
+      className="card"
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+      style={{
+        transform: `
+          translateX(${finalX}px)
+          translateY(${finalY}px)
+          translateZ(${finalZ}px)
+          rotateY(${ry}deg)
+          scale(${finalSc})
+        `,
+        opacity: finalOp,
+        zIndex: isHovered ? 100 : total - index,
+      }}
+    >
+      <CardInner card={card} />
+    </div>
+  );
+}
+
+// ─── Shared card inner markup ─────────────────────────────────────────────────
+function CardInner({ card }: { card: (typeof CARDS)[0] }) {
+  return (
+    <>
+      <div className="card__content">
+        <div className="card__header">
+          <span className="card__category">{card.category}</span>
+        </div>
+        <h2 className="card__title">{card.title}</h2>
+        <p className="card__place">{card.place}</p>
+        <div className="card__divider" style={{ background: card.accent }} />
+        <p className="card__description">{card.desc}</p>
       </div>
-
-      <h2 className="card__title">
-        {card.title}
-      </h2>
-
-      <p className="card__place">
-        {card.place}
-      </p>
-
-      <div
-        className="card__divider"
-        style={{ background: card.accent }}
-      />
-
-      <p className="card__description">
-        {card.desc}
-      </p>
-    </div>
-
-    <div className="card__footer">
-      <span className="card__tag">
-        {card.tag}
-      </span>
-    </div>
-  </div>
-);
+      <div className="card__footer">
+        <span className="card__tag">{card.tag}</span>
+      </div>
+    </>
+  );
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
@@ -211,13 +230,14 @@ export default function ExperienceCards() {
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
+    // Treat tablets (< 1024px) as "mobile" for vertical layout
+    const check = () => setIsMobile(window.innerWidth < 1024);
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // ── IntersectionObserver: triggers entrance when section enters viewport
+  // ── IntersectionObserver
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -225,7 +245,6 @@ export default function ExperienceCards() {
       ([entry]) => {
         if (entry.isIntersecting && !hasEntered) {
           setHasEntered(true);
-          // Drive targetEnter from 0→1 over ~1100ms
           const start = performance.now();
           const duration = 1100;
           const tick = (now: number) => {
@@ -269,34 +288,28 @@ export default function ExperienceCards() {
     };
     rafRef.current = requestAnimationFrame(loop);
     return () => {
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
-      }
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
   const ep = easeInOutCubic(Math.max(0, Math.min(1, scrollP)));
-  const spreadLabelOpacity = Math.max(0, ep * 2.2 - 0.7);
-  const scrollHintOpacity = Math.max(0, 1 - ep * 6) * Math.min(1, enterP * 2.5);
+
+  // Mobile: taller section to give vertical spread enough scroll room
+  const sectionHeight = isMobile ? "780vh" : "420vh";
 
   return (
     <>
       <div className="progress-bar" style={{ width: `${scrollP * 100}%` }} />
 
-      {/* ── Scroll container ── */}
       <div
-      className="experience-section"
+        className="experience-section"
         ref={containerRef}
+        style={{ height: sectionHeight }}
       >
-        <div
-        className="experience-sticky"
-        >
+        <div className="experience-sticky">
           {/* Ambient blobs */}
-          <div
-          className="experience-bg"
-          >
+          <div className="experience-bg">
             {[
-              // { w: 480, h: 480, top: "8%",  left: "18%", c: "rgba(152, 192, 239, 0.12)" },
               {
                 w: 380,
                 h: 380,
@@ -311,70 +324,63 @@ export default function ExperienceCards() {
                 left: "68%",
                 c: "rgba(152, 192, 239, 0.1)",
               },
-              // {
-              //   w: 280,
-              //   h: 280,
-              //   top: "68%",
-              //   left: "8%",
-              //   c: "rgba(241, 118, 37, 0.09)",
-              // },
             ].map((b, i) => (
               <div
-              className="experience-blob"
+                className="experience-blob"
                 key={i}
                 style={{
-                  position: "absolute",
                   width: b.w,
                   height: b.h,
-                  borderRadius: "50%",
                   background: b.c,
                   top: b.top,
                   left: b.left,
-                  filter: "blur(65px)",
                   transform: `translate(-50%,-50%) translateX(${ep * (i % 2 === 0 ? 28 : -28)}px)`,
                 }}
               />
             ))}
           </div>
 
-          <div className="experience-hero">
-            <motion.div
-              className="experience-header"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              viewport={{ once: true, amount: 0.2 }}
-            >
-              <div className="experience-header__top">
-                <div>
-                  <h1 className="experience-header__title">Work Experience</h1>
-                </div>
+          {/* ── Header ── */}
+          <motion.div
+            className="experience-header"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            <div className="experience-header__top">
+              <div>
+                <h1 className="experience-header__title">Work Experience</h1>
               </div>
-              {isMobile ? (
-                <h2 className="experience-header__subtitle">Career Highlights</h2>
-              ) : (
-                <div className="experience-header__flip">
-                  <FlipLink href="#">Career</FlipLink>
-                  <FlipLink href="#">Highlights</FlipLink>
-                </div>
-              )}
-              <p className="experience-header__quote">
-                "Success is the sum of small efforts, repeated day in and day
-                out." – Robert Collier
-              </p>
-            </motion.div>
-          </div>
+            </div>
+            {isMobile ? (
+              <h2 className="experience-header__subtitle">Career Highlights</h2>
+            ) : (
+              <div className="experience-header__flip">
+                <FlipLink href="#">Career</FlipLink>
+                <FlipLink href="#">Highlights</FlipLink>
+              </div>
+            )}
+            <p className="experience-header__quote">
+              "Success is the sum of small efforts, repeated day in and day
+              out." – Robert Collier
+            </p>
+          </motion.div>
 
-          {/* 3D stage */}
+          {/* ── 3D / Vertical stage ── */}
           <div
-          className="experience-stage"
-            style={{
-              perspective: `${isMobile ? 800 : 1100 - ep * 350}px`,
-              perspectiveOrigin: `50% ${55 - ep * 15}%`,
-            }}
+            className={`experience-stage ${isMobile ? "experience-stage--vertical" : ""}`}
+            style={
+              !isMobile
+                ? {
+                    perspective: `${1100 - ep * 350}px`,
+                    perspectiveOrigin: `50% ${55 - ep * 15}%`,
+                  }
+                : undefined
+            }
           >
             <div
-            className="experience-cards"
+              className={`experience-cards ${isMobile ? "experience-cards--vertical" : ""}`}
             >
               {CARDS.map((card, i) => (
                 <GlassCard
@@ -387,6 +393,7 @@ export default function ExperienceCards() {
                   isHovered={hoveredCard === i}
                   onHover={() => setHoveredCard(i)}
                   onLeave={() => setHoveredCard(null)}
+                  isMobile={isMobile}
                 />
               ))}
             </div>
