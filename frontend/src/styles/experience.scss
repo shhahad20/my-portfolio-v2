@@ -583,8 +583,7 @@
   position: relative;
   background: #070707;
 
-    // padding-bottom: 55vh;
-
+  // padding-bottom: 55vh;
 }
 
 /* Sticky container */
@@ -709,9 +708,9 @@
 
 /* ─── Responsive overrides ────────────────────────────────────────────────── */
 @media (max-width: 1490px) {
-    .experience-section {
-    padding-bottom: 13vh;
-}
+  .experience-section {
+    padding-bottom: 5vh;
+  }
   .experience-sticky {
     justify-content: flex-start;
     padding-top: 2rem;
@@ -729,17 +728,24 @@
     font-size: 0.82rem;
   }
 }
- @media (max-width: 768px) {
-    .experience-section {
-    padding-bottom: 60vh;
-
+@media (max-width: 1024px) {
+  .experience-section {
+    padding-bottom: 15vh;
+  }
+    .experience-header__subtitle {
+    @include header-style(2rem);
+    margin: 0;
+  }
 }
- }
+@media (max-width: 768px) {
+  .experience-section {
+    padding-bottom: 30vh;
+  }
+}
 @media (max-width: 480px) {
   .experience-section {
     padding-bottom: 55vh;
-
-}
+  }
   .experience-sticky {
     padding-top: 1.5rem;
     gap: 1rem;
@@ -747,7 +753,8 @@
   }
 
   .experience-header__subtitle {
-    font-size: 1.5rem;
+    @include header-style(2rem);
+    margin: 0;
   }
 
   .experience-stage--vertical {

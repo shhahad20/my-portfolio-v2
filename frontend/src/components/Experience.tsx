@@ -214,6 +214,20 @@ function CardInner({ card }: { card: (typeof CARDS)[0] }) {
   );
 }
 
+// ─── Reusable hook ────────────────────────────────────────────────────────────
+function useBreakpoint(maxWidth: number): boolean {
+  const [matches, setMatches] = useState(false); // safe SSR default
+
+  useEffect(() => {
+    const check = () => setMatches(window.innerWidth < maxWidth);
+    check(); // sync on mount
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, [maxWidth]);
+
+  return matches;
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function ExperienceCards() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -221,7 +235,12 @@ export default function ExperienceCards() {
   const [enterP, setEnterP] = useState(0);
   const [hasEntered, setHasEntered] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  // const [isMobile, setIsMobile] = useState(false);
+  //   const [isMobileHeader, setIsMobileHeader] = useState(window.innerWidth <= 768);
+
+   // Fully independent — different breakpoints, different concerns
+  const isMobile       = useBreakpoint(1490); // card layout: vertical vs 3D
+  const isMobileHeader = useBreakpoint(769);  // header: subtitle vs FlipLink
 
   const smoothScroll = useRef(0);
   const smoothEnter = useRef(0);
@@ -229,14 +248,15 @@ export default function ExperienceCards() {
   const targetEnter = useRef(0);
   const rafRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    // Treat tablets (< 1024px) as "mobile" for vertical layout
-    // const check = () => setIsMobile(window.innerWidth < 1024);
-    const check = () => setIsMobile(window.innerWidth < 1490);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
+    
+  // useEffect(() => {
+  //   // Treat tablets (< 1024px) as "mobile" for vertical layout
+  //   // const check = () => setIsMobile(window.innerWidth < 1024);
+  //   const check = () => setIsMobile(window.innerWidth < 1490);
+  //   check();
+  //   window.addEventListener("resize", check);
+  //   return () => window.removeEventListener("resize", check);
+  // }, []);
 
   // ── IntersectionObserver
   useEffect(() => {
@@ -354,14 +374,14 @@ export default function ExperienceCards() {
                 <h1 className="experience-header__title">Work Experience</h1>
               </div>
             </div>
-            {isMobile ? (
+            {isMobileHeader ? (
               <h2 className="experience-header__subtitle">Career Highlights</h2>
             ) : (
               <div className="experience-header__flip">
                 <FlipLink href="#">Career</FlipLink>
                 <FlipLink href="#">Highlights</FlipLink>
               </div>
-            )}
+             )} 
             <p className="experience-header__quote">
               "Success is the sum of small efforts, repeated day in and day
               out." – Robert Collier
