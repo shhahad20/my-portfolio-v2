@@ -37,7 +37,7 @@ const CARDS = [
   {
     id: 3,
     tag: "2021 – 2023",
-    category: "Government",
+    category: "Development",
     title: "Technology Ambassador",
     place: "MCIT · Saudi Arabia",
     desc: "Designed responsive interfaces, explored blockchain technology, and completed Python & data science certifications.",
@@ -231,7 +231,8 @@ export default function ExperienceCards() {
 
   useEffect(() => {
     // Treat tablets (< 1024px) as "mobile" for vertical layout
-    const check = () => setIsMobile(window.innerWidth < 1024);
+    // const check = () => setIsMobile(window.innerWidth < 1024);
+    const check = () => setIsMobile(window.innerWidth < 1490);
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
