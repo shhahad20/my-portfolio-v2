@@ -1,484 +1,293 @@
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  type MotionValue,
+} from "framer-motion";
+import { useRef } from "react";
 import "../styles/cards.scss";
-// import FlipLink from "./AnimatedHeader ";
+import FlipLink from "./AnimatedHeader ";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 interface CardItem {
   num: string;
   title: string;
   desc: string;
   link: string;
+  category: string;
+  accent: string;
   icon: React.ReactNode;
 }
 
-// ─── Icon: Code Lab ───────────────────────────────────────────────────────────
 const CodeLabIcon = () => (
-  <svg
-    viewBox="0 0 52 52"
-    width="52"
-    height="52"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect
-      x="4"
-      y="10"
-      width="44"
-      height="32"
-      rx="3"
-      fill="none"
-      stroke="#EFEEEC"
-      strokeWidth="1.5"
-      opacity="0.15"
-    />
-    <line
-      x1="4"
-      y1="18"
-      x2="48"
-      y2="18"
-      stroke="#EFEEEC"
-      strokeWidth="1"
-      opacity="0.15"
-    />
+  <svg viewBox="0 0 52 52" width="52" height="52" xmlns="http://www.w3.org/2000/svg">
+    <rect x="4" y="10" width="44" height="32" rx="3" fill="none" stroke="#EFEEEC" strokeWidth="1.5" opacity="0.15" />
+    <line x1="4" y1="18" x2="48" y2="18" stroke="#EFEEEC" strokeWidth="1" opacity="0.15" />
     <circle cx="11" cy="14" r="1.5" fill="#EFEEEC" opacity="0.3" />
     <circle cx="17" cy="14" r="1.5" fill="#EFEEEC" opacity="0.3" />
     <circle cx="23" cy="14" r="1.5" fill="#EFEEEC" opacity="0.3" />
-    {/* < brackets */}
-    <polyline
-      points="16,28 12,32 16,36"
-      fill="none"
-      stroke="#EFEEEC"
-      strokeWidth="1.5"
-      strokeLinejoin="round"
-      opacity="0.9"
-    />
-    {/* > brackets */}
-    <polyline
-      points="22,28 26,32 22,36"
-      fill="none"
-      stroke="#EFEEEC"
-      strokeWidth="1.5"
-      strokeLinejoin="round"
-      opacity="0.9"
-    />
-    {/* blinking cursor */}
-    <rect
-      x="30"
-      y="28"
-      width="6"
-      height="8"
-      fill="#EFEEEC"
-      className="cursor-blink"
-    />
+    <polyline points="16,28 12,32 16,36" fill="none" stroke="#EFEEEC" strokeWidth="1.5" strokeLinejoin="round" opacity="0.9" />
+    <polyline points="22,28 26,32 22,36" fill="none" stroke="#EFEEEC" strokeWidth="1.5" strokeLinejoin="round" opacity="0.9" />
+    <rect x="30" y="28" width="6" height="8" fill="#EFEEEC" opacity="0.85" />
   </svg>
 );
 
-// ─── Icon: Branding (palette + brush) ────────────────────────────────────────
 const BrandingIcon = () => (
-  <svg
-    viewBox="0 0 52 52"
-    width="52"
-    height="52"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <g className="palette-group">
-      {/* palette body */}
-      <ellipse
-        cx="27"
-        cy="27"
-        rx="16"
-        ry="13"
-        fill="none"
-        stroke="#EFEEEC"
-        strokeWidth="1.5"
-        opacity="0.25"
-      />
-      {/* thumb hole */}
-      <ellipse
-        cx="33"
-        cy="36"
-        rx="4"
-        ry="3"
-        fill="none"
-        stroke="#EFEEEC"
-        strokeWidth="1.5"
-        opacity="0.25"
-      />
-      {/* color dots */}
-      <circle cx="18" cy="24" r="2.2" fill="#EFEEEC" opacity="0.7" />
-      <circle cx="24" cy="19" r="2.2" fill="#EFEEEC" opacity="0.45" />
-      <circle cx="31" cy="19" r="2.2" fill="#EFEEEC" opacity="0.25" />
-      <circle cx="36" cy="24" r="2.2" fill="#EFEEEC" opacity="0.55" />
-    </g>
-    {/* paintbrush */}
-    <line
-      x1="10"
-      y1="10"
-      x2="22"
-      y2="22"
-      stroke="#EFEEEC"
-      strokeWidth="2"
-      strokeLinecap="round"
-      opacity="0.8"
-    />
-    <ellipse
-      cx="23.5"
-      cy="23.5"
-      rx="2.5"
-      ry="1.5"
-      transform="rotate(-45 23.5 23.5)"
-      fill="#EFEEEC"
-      opacity="0.9"
-    />
+  <svg viewBox="0 0 52 52" width="52" height="52" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="27" cy="27" rx="16" ry="13" fill="none" stroke="#EFEEEC" strokeWidth="1.5" opacity="0.25" />
+    <ellipse cx="33" cy="36" rx="4" ry="3" fill="none" stroke="#EFEEEC" strokeWidth="1.5" opacity="0.25" />
+    <circle cx="18" cy="24" r="2.2" fill="#EFEEEC" opacity="0.7" />
+    <circle cx="24" cy="19" r="2.2" fill="#EFEEEC" opacity="0.45" />
+    <circle cx="31" cy="19" r="2.2" fill="#EFEEEC" opacity="0.25" />
+    <circle cx="36" cy="24" r="2.2" fill="#EFEEEC" opacity="0.55" />
+    <line x1="10" y1="10" x2="22" y2="22" stroke="#EFEEEC" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
+    <ellipse cx="23.5" cy="23.5" rx="2.5" ry="1.5" transform="rotate(-45 23.5 23.5)" fill="#EFEEEC" opacity="0.9" />
     <circle cx="9.5" cy="9.5" r="1.5" fill="#EFEEEC" opacity="0.4" />
-    {/* animated brush stroke */}
-    <path
-      d="M 14 42 Q 26 38 36 43"
-      fill="none"
-      stroke="#EFEEEC"
-      strokeWidth="2"
-      strokeLinecap="round"
-      className="brush-stroke"
-      opacity="0.6"
-    />
+    <path d="M 14 42 Q 26 38 36 43" fill="none" stroke="#EFEEEC" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
   </svg>
 );
 
-// ─── Icon: UI System ──────────────────────────────────────────────────────────
 const UISystemIcon = () => (
-  <svg
-    viewBox="0 0 52 52"
-    width="52"
-    height="52"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    {/* connector lines */}
-    <line
-      x1="26"
-      y1="14"
-      x2="26"
-      y2="38"
-      stroke="#EFEEEC"
-      strokeWidth="1"
-      strokeLinecap="round"
-      opacity="0.12"
-    />
-    <line
-      x1="14"
-      y1="26"
-      x2="38"
-      y2="26"
-      stroke="#EFEEEC"
-      strokeWidth="1"
-      strokeLinecap="round"
-      opacity="0.12"
-    />
-    {/* 4 cells */}
-    <rect
-      x="8"
-      y="8"
-      width="16"
-      height="16"
-      rx="2"
-      fill="none"
-      stroke="#EFEEEC"
-      strokeWidth="1.5"
-      className="cell-1"
-    />
-    <rect
-      x="28"
-      y="8"
-      width="16"
-      height="16"
-      rx="2"
-      fill="none"
-      stroke="#EFEEEC"
-      strokeWidth="1.5"
-      className="cell-2"
-    />
-    <rect
-      x="8"
-      y="28"
-      width="16"
-      height="16"
-      rx="2"
-      fill="none"
-      stroke="#EFEEEC"
-      strokeWidth="1.5"
-      className="cell-3"
-    />
-    <rect
-      x="28"
-      y="28"
-      width="16"
-      height="16"
-      rx="2"
-      fill="none"
-      stroke="#EFEEEC"
-      strokeWidth="1.5"
-      className="cell-4"
-    />
-    {/* inner mini rects */}
-    <rect
-      x="11"
-      y="11"
-      width="10"
-      height="3"
-      rx="1"
-      fill="#EFEEEC"
-      opacity="0.15"
-    />
-    <rect
-      x="31"
-      y="11"
-      width="10"
-      height="3"
-      rx="1"
-      fill="#EFEEEC"
-      opacity="0.15"
-    />
-    <rect
-      x="11"
-      y="31"
-      width="10"
-      height="3"
-      rx="1"
-      fill="#EFEEEC"
-      opacity="0.15"
-    />
-    <rect
-      x="31"
-      y="31"
-      width="10"
-      height="3"
-      rx="1"
-      fill="#EFEEEC"
-      opacity="0.15"
-    />
+  <svg viewBox="0 0 52 52" width="52" height="52" xmlns="http://www.w3.org/2000/svg">
+    <line x1="26" y1="14" x2="26" y2="38" stroke="#EFEEEC" strokeWidth="1" strokeLinecap="round" opacity="0.12" />
+    <line x1="14" y1="26" x2="38" y2="26" stroke="#EFEEEC" strokeWidth="1" strokeLinecap="round" opacity="0.12" />
+    <rect x="8" y="8" width="16" height="16" rx="2" fill="none" stroke="#EFEEEC" strokeWidth="1.5" opacity="0.9" />
+    <rect x="28" y="8" width="16" height="16" rx="2" fill="none" stroke="#EFEEEC" strokeWidth="1.5" opacity="0.5" />
+    <rect x="8" y="28" width="16" height="16" rx="2" fill="none" stroke="#EFEEEC" strokeWidth="1.5" opacity="0.5" />
+    <rect x="28" y="28" width="16" height="16" rx="2" fill="none" stroke="#EFEEEC" strokeWidth="1.5" opacity="0.3" />
+    <rect x="11" y="11" width="10" height="3" rx="1" fill="#EFEEEC" opacity="0.15" />
+    <rect x="31" y="11" width="10" height="3" rx="1" fill="#EFEEEC" opacity="0.15" />
+    <rect x="11" y="31" width="10" height="3" rx="1" fill="#EFEEEC" opacity="0.15" />
+    <rect x="31" y="31" width="10" height="3" rx="1" fill="#EFEEEC" opacity="0.15" />
   </svg>
 );
 
-// ─── Card data ────────────────────────────────────────────────────────────────
 const CARDS: CardItem[] = [
   {
     num: "01",
+    category: "Development",
     title: "Code Lab",
     desc: "Experiments, repositories, and open-source work. Where ideas get compiled and shipped.",
     link: "https://github.com/shhahad20?tab=repositories",
+    accent: "#F17625",
     icon: <CodeLabIcon />,
   },
   {
     num: "02",
+    category: "Design",
     title: "Branding",
     desc: "Graphic design, visual identity, and brand systems. Translating ideas into visual language.",
     link: "https://www.behance.net/shhahad20",
+    accent: "#98c0ef",
     icon: <BrandingIcon />,
   },
   {
     num: "03",
+    category: "Engineering",
     title: "UI System",
     desc: "Reusable components, design tokens, and scalable interfaces built for consistency.",
     link: "/components",
+    accent: "#F17625",
     icon: <UISystemIcon />,
   },
 ];
 
-// ─── Individual card ──────────────────────────────────────────────────────────
-const BusyCard = ({ card, index }: { card: CardItem; index: number }) => {
-  // const [hovered, setHovered] = useState(false);
+type Direction = "left" | "right";
+
+const CardFace = ({ card }: { card: CardItem }) => (
+  <>
+    <span className="busy-card__category">{card.category}</span>
+    <div className="busy-card__icon">{card.icon}</div>
+    <p className="busy-card__num">{card.num}</p>
+    <h3 className="busy-card__title">{card.title}</h3>
+    <div className="busy-card__divider" style={{ background: card.accent }} />
+    <p className="busy-card__desc">{card.desc}</p>
+    <div className="busy-card__footer">
+      <span className="busy-card__cta">
+        View work <span className="busy-card__arrow">→</span>
+      </span>
+    </div>
+  </>
+);
+
+function useSpringValue(value: MotionValue<number>) {
+  return useSpring(value, { stiffness: 120, damping: 22, mass: 0.8 });
+}
+
+function SideCard({
+  card,
+  progress,
+  direction,
+}: {
+  card: CardItem;
+  progress: MotionValue<number>;
+  direction: Direction;
+}) {
+  const sign = direction === "left" ? -1 : 1;
   const isExternal = card.link.startsWith("http");
+
+const x = useSpringValue(
+  useTransform(progress, [0, 1], [0, sign * 340]) // ← increase spacing
+);
+  const z = useSpringValue(useTransform(progress, [0, 1], [-220, 0]));
+  const scale = useSpringValue(useTransform(progress, [0, 1], [0.86, 1]));
+  const opacity = useSpringValue(useTransform(progress, [0, 0.2, 1], [0.35, 0.7, 1]));
+  const rotateY = useSpringValue(useTransform(progress, [0, 1], [sign * -18, 0]));
+  const y = useSpringValue(useTransform(progress, [0, 1], [14, 0]));
 
   return (
     <motion.a
       href={card.link}
       target={isExternal ? "_blank" : "_self"}
       rel={isExternal ? "noreferrer" : undefined}
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: [0.16, 1, 0.3, 1],
+      className="busy-card busy-card--side"
+      style={{
+        x,
+        y,
+        z,
+        scale,
+        opacity,
+        rotateY,
+        position: "absolute",
+        transformOrigin: direction === "left" ? "right center" : "left center",
+        zIndex: 1,
       }}
-      viewport={{ once: true, amount: 0.15 }}
-      // onHoverStart={() => setHovered(true)}
-      // onHoverEnd={() => setHovered(false)}
-      className="busy-card"
+      whileHover={{ y: -4 }}
     >
-      {/* icon */}
-      <div style={{ width: 52, height: 52, marginBottom: 32 }}>{card.icon}</div>
-
-      {/* number */}
-      <p
-        style={{
-          // fontFamily: "'Space Mono', monospace",
-          fontSize: 10,
-          color: "#818180",
-          letterSpacing: "0.2em",
-          marginBottom: 12,
-        }}
-      >
-        {card.num}
-      </p>
-
-      {/* title */}
-      <h3
-        style={{
-          fontSize: 22,
-          fontWeight: 500,
-          color: "#EFEEEC",
-          letterSpacing: "-0.02em",
-          marginBottom: 14,
-          lineHeight: 1.1,
-        }}
-      >
-        {card.title}
-      </h3>
-
-      {/* description */}
-      <p
-        style={{
-          fontSize: 12,
-          color: "#555",
-          lineHeight: 1.7,
-          letterSpacing: "0.02em",
-          flex: 1,
-          marginBottom: 32,
-          fontFamily: "'Syne', sans-serif",
-        }}
-      >
-        {card.desc}
-      </p>
-
-      {/* CTA */}
-      <div
-        className="cta"
-      >
-        View work{" "}
-        <span
-          style={{
-            display: "inline-block",
-            // transform: hovered ? "translateX(4px)" : "translateX(0)",
-            transition: "transform 0.3s ease",
-          }}
-        >
-          →
-        </span>
-      </div>
-
-      {/* bottom accent line */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 32,
-          right: 32,
-          height: 1,
-          // background: hovered ? "#EFEEEC" : "transparent",
-          transition: "background 0.3s",
-        }}
-      />
+      <CardFace card={card} />
     </motion.a>
   );
-};
+}
 
-// ─── Main export ──────────────────────────────────────────────────────────────
-const Cards = () => {
-  const [windowWidth, setWindowWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 1200,
-  );
+function CenterCard({
+  card,
+  progress,
+}: {
+  card: CardItem;
+  progress: MotionValue<number>;
+}) {
+  const isExternal = card.link.startsWith("http");
 
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const isMobile = windowWidth <= 560;
-  const isTablet = windowWidth <= 900;
-
-  const gridCols = isMobile ? "1fr" : isTablet ? "1fr 1fr" : "repeat(3, 1fr)";
-  const sectionPadding = isMobile
-    ? "40px 20px 56px"
-    : isTablet
-      ? "48px 32px 64px"
-      : "64px 48px 80px";
+  const z = useSpringValue(useTransform(progress, [0, 1], [140, 0]));
+  const scale = useSpringValue(useTransform(progress, [0, 1], [1.05, 1]));
+  const y = useSpringValue(useTransform(progress, [0, 1], [0, -8]));
+  const shadowOpacity = useTransform(progress, [0, 0.6], [0.22, 0]);
 
   return (
-    <div
+    <motion.a
+      href={card.link}
+      target={isExternal ? "_blank" : "_self"}
+      rel={isExternal ? "noreferrer" : undefined}
+      className="busy-card busy-card--center"
       style={{
-        padding: sectionPadding,
-        display: "flex",
-        justifyContent: "center",
+        z,
+        scale,
+        y,
+        position: "absolute",
+        zIndex: 3,
+        boxShadow: useTransform(
+          shadowOpacity,
+          (v) => `0 ${v * 38}px ${v * 64}px rgba(0,0,0,${v})`
+        ),
       }}
+      whileHover={{ y: -4 }}
     >
-      <div style={{ width: "100%", maxWidth: 1200 }}>
-        {/* ── Header ── */}
+      <CardFace card={card} />
+    </motion.a>
+  );
+}
+
+const Cards = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const progress = useTransform(scrollYProgress, [0.1, 0.55], [0, 1], {
+    clamp: true,
+  });
+
+  /* ─── Blob motion ─── */
+  const blobX1 = useTransform(progress, [0, 1], [0, 40]);
+  const blobX2 = useTransform(progress, [0, 1], [0, -40]);
+
+
+  return (
+    <section
+      id="cards-section"
+      ref={sectionRef}
+      className="cards-section"
+    >
+      <div className="cards-sticky">
         {/* <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          className="cards-header"
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          viewport={{ once: true }}
-        >
-          <p
-            style={{
-              fontFamily: "'Space Mono', monospace",
-              fontSize: 10,
-              letterSpacing: "0.3em",
-              textTransform: "uppercase",
-              color: "#555",
-              marginBottom: 16,
-            }}
-          >
-            Areas of work
-          </p>
-          <h2
-            style={{
-              fontSize: "clamp(28px, 5vw, 64px)",
-              fontWeight: 800,
-              color: "#EFEEEC",
-              lineHeight: 1,
-              letterSpacing: "-0.03em",
-              marginBottom: 56,
-            }}
-          >
-            What keeps <span style={{ color: "#333" }}>me</span> busy
-          </h2>
-        </motion.div> */}
-
-        <motion.div
-          className="header-content"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
           viewport={{ once: true, amount: 0.2 }}
         >
-        <div className="between-lines">
-          <div>
-            <h1 className="about-me-header">Areas of work</h1>
-          </div>
-        </div>
-        <h1 className="second-header">
-          What Keeps Me Busy
-        </h1>
-        </motion.div>
+          <h1 className="cards-header__label">Areas of work</h1>
+          <h2 className="cards-header__title">What Keeps Me Busy</h2>
+        </motion.div> */}
+                  <motion.div
+            className="work-header"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            <div className="work-header__top">
+              <div>
+                <h1 className="work-header__title">Area of Work</h1>
+              </div>
+            </div>
+            {/* {isMobileHeader ? (
+              <h2 className="experience-header__subtitle">Career Highlights</h2>
+            ) : ( */}
+              <div className="work-header__flip">
+                <FlipLink href="#">What</FlipLink>
+                <FlipLink href="#">I'm</FlipLink>
+                <FlipLink href="#">Building</FlipLink>
+              </div>
+             {/* )}  */}
 
-        {/* ── Cards grid ── */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: gridCols,
-            gap: 0,
-            // background: "#1c1c1c",
-            // border: "1px solid #1c1c1c",
-          }}
-        >
-          {CARDS.map((card, i) => (
-            <BusyCard key={card.title} card={card} index={i} />
-          ))}
+          </motion.div>
+
+          {/* ─── Background blobs ─── */}
+        <div className="cards-bg">
+          <motion.div
+            className="cards-blob"
+            style={{
+              width: 360,
+              height: 360,
+              top: "55%",
+              left: "60%",
+              background: "rgba(241, 119, 37, 0.05)",
+              x: blobX1,
+            }}
+          />
+          <motion.div
+            className="cards-blob"
+            style={{
+              width: 300,
+              height: 300,
+              top: "30%",
+              left: "35%",
+              background: "rgba(152, 192, 239, 0.08)",
+              x: blobX2,
+            }}
+          />
+        </div>
+
+        <div className="cards-stage">
+          <SideCard card={CARDS[0]} progress={progress} direction="left" />
+          <CenterCard card={CARDS[1]} progress={progress} />
+          <SideCard card={CARDS[2]} progress={progress} direction="right" />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
