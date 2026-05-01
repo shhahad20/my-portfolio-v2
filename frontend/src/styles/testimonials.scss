@@ -8,7 +8,7 @@
   flex-direction: column;
   justify-content: center;
   margin-bottom: 8rem;
-
+  margin-top: 10rem;
   .header-content {
     display: flex;
     flex-direction: column;
@@ -98,7 +98,7 @@
     //   padding: 1rem;
   }
 
-  .card {
+  .test-card {
     // transform-origin: center;
     border: map-get($borders, 3);
     padding: 2rem;

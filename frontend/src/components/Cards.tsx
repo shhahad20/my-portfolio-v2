@@ -271,7 +271,7 @@ const CARDS: CardItem[] = [
     num: "02",
     title: "Branding",
     desc: "Graphic design, visual identity, and brand systems. Translating ideas into visual language.",
-    link: "/branding",
+    link: "https://www.behance.net/shhahad20",
     icon: <BrandingIcon />,
   },
   {

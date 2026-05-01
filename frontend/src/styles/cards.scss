@@ -322,7 +322,7 @@
   .about-me-header {
     @include header-style(15px);
   }
-}
+} 
 .between-lines:before {
   @include betweenLines;
 }
@@ -333,6 +333,11 @@
 .second-header {
   @include header-style(50px);
   margin: 0;
+}
+@media (max-width: 480px) {
+  .second-header{
+    @include header-style(2rem);
+  }
 }
 }
 

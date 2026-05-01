@@ -447,7 +447,6 @@
   width: 280px;
   height: 310px;
   // border-radius: 20px;
-
   backdrop-filter: blur(32px) saturate(180%);
   -webkit-backdrop-filter: blur(32px) saturate(180%);
 
@@ -582,7 +581,6 @@
 .experience-section {
   position: relative;
   background: #070707;
-
   // padding-bottom: 55vh;
 }
 
@@ -621,6 +619,7 @@
   align-items: center;
   gap: 1rem;
   flex-shrink: 0;
+  margin-top: 10rem;
 }
 
 .experience-header__top {
@@ -710,6 +709,7 @@
 @media (max-width: 1490px) {
   .experience-section {
     padding-bottom: 5vh;
+    
   }
   .experience-sticky {
     justify-content: flex-start;
@@ -745,6 +745,8 @@
 @media (max-width: 480px) {
   .experience-section {
     padding-bottom: 55vh;
+      margin-bottom: 10rem;
+
   }
   .experience-sticky {
     padding-top: 1.5rem;

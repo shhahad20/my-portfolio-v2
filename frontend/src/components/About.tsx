@@ -42,7 +42,6 @@ const About = () => {
       transition={{ duration: 0.8, ease: "easeOut" }}
       viewport={{ once: true, amount: 0.2 }}
     >
-      
       <div id="about-paragraph">
         <div className="between-lines">
           <div>
@@ -110,13 +109,16 @@ const About = () => {
           ref={paragraphs["Teaching Assistant"]}
           className={highlighted === "Teaching Assistant" ? "highlighted" : ""}
         >
-          Currently, I serve as a Teaching Assistant at the University of Hail,
-          where I teach Java and data structures.
+          I previously worked as a Teaching Assistant at the University of Hail,
+          where I taught Java and data structures, supporting students in
+          building strong programming foundations.
         </p>
         <p>
-          Looking ahead, I aspire to become a full-stack developer and explore
-          data science to build intelligent, scalable software that makes a real
-          impact.
+          I am passionate about becoming a full-stack developer while also
+          exploring artificial intelligence to build intelligent, scalable
+          software that creates real impact. <span className="span-color">I hold professional certifications
+          in SCRUM and Microsoft Azure AI Fundamentals</span>, which strengthen my
+          approach to modern development and AI-driven solutions.
         </p>
       </div>
     </motion.div>
