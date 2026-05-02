@@ -189,7 +189,7 @@ const Testimonials = () => {
               style={{ width: effectiveCardWidth }}
             >
               <div
-                className="card"
+                className="test-card"
                 style={{
                   opacity: index === currentIndex ? 1 : 0.5,
                   transform: `scale(${index === currentIndex ? 1 : 0.9})`,
