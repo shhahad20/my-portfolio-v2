@@ -70,55 +70,59 @@ const About = () => {
             highlighted === "Software Engineering" ? "highlighted" : ""
           }
         >
-          As a Software Engineer, I excel in software architecture, algorithm
-          design, and problem-solving across multiple languages and frameworks.
-          I'm dedicated to staying current with tech trends and optimizing code
-          for performance. I earned my
+          My journey in tech started with a curiosity for how things work, which
+          led me to earn my
           <span className="span-color">
             {" "}
-            Bachelor of Software Engineering from the University of Hail (2018 -
-            2023), majoring in Software Engineering.
+            Bachelor’s degree in Software Engineering from the University of
+            Hail (2018–2023)
           </span>
+          . Along the way, I developed a strong foundation in problem-solving,
+          algorithms, and building efficient, scalable systems.
         </p>
+
         <p
           ref={paragraphs["Full-Stack"]}
           className={highlighted === "Full-Stack" ? "highlighted" : ""}
         >
-          Over the years, I've built diverse software development
-          skills—starting in front-end design with HTML, CSS, and JavaScript,
-          then moving into robust backend development with Python. I've mastered
-          database management, API integration, and debugging. A year ago, I
-          completed a <br />
+          I began with front-end development—bringing ideas to life with HTML,
+          CSS, and JavaScript—then naturally moved into backend development with
+          Python, working with databases and APIs.
+          <br />
           <span className="span-color">
-            MERN Software Development Bootcamp at Saudi Digital Academy x
-            Integrify (Sep 2023 - Dec 2023)
-          </span>{" "}
-          <br />, which further ignited my passion for full-stack development
-          and data science.
+            MERN Bootcamp at Saudi Digital Academy x Integrify (Sep–Dec 2023)
+          </span>
+          <br />
+          helped me grow into a more confident full-stack developer and explore
+          data-driven solutions.
         </p>
 
         <p
           ref={paragraphs["Graphic Design"]}
           className={highlighted === "Graphic Design" ? "highlighted" : ""}
         >
-          I also spent over five years as a freelance Graphic Designer,
-          completing 200+ projects that honed my visual design and user
-          experience skills.
+          Before all that, I spent over five years as a freelance graphic
+          designer, completing 200+ projects—an experience that still shapes how
+          I think about design and user experience today.
         </p>
+
         <p
           ref={paragraphs["Teaching Assistant"]}
           className={highlighted === "Teaching Assistant" ? "highlighted" : ""}
         >
-          I previously worked as a Teaching Assistant at the University of Hail,
-          where I taught Java and data structures, supporting students in
-          building strong programming foundations.
+          I also worked as a Teaching Assistant, where I taught Java and data
+          structures and supported students in building strong programming
+          foundations.
         </p>
+
         <p>
-          I am passionate about becoming a full-stack developer while also
-          exploring artificial intelligence to build intelligent, scalable
-          software that creates real impact. <span className="span-color">I hold professional certifications
-          in SCRUM and Microsoft Azure AI Fundamentals</span>, which strengthen my
-          approach to modern development and AI-driven solutions.
+          Today, I’m focused on growing as a full-stack developer while
+          exploring artificial intelligence to build smarter, more impactful
+          systems.{" "}
+          <span className="span-color">
+            I hold SCRUM and Microsoft Azure AI Fundamentals certifications
+          </span>{" "}
+          that support this journey.
         </p>
       </div>
     </motion.div>
