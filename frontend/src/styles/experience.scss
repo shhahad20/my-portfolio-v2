@@ -581,7 +581,8 @@
 .experience-section {
   position: relative;
   background: #070707;
-  
+    margin-top: -15vh;
+  margin-bottom: -15vh;
   // padding-bottom: 55vh;
 }
 
@@ -591,14 +592,21 @@
   top: 0;
   height: 100vh;
   overflow: hidden;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-  // justify-content: center;
-  justify-content: flex-start;
-}
+  justify-content: center;
 
+}
+.experience-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 1.5rem; // controls space between header & cards
+
+   transform: translateY(clamp(-8%, -5vw, -4%));
+}
 /* Background blobs */
 .experience-bg {
   position: absolute;
@@ -620,7 +628,7 @@
   align-items: center;
   gap: 1rem;
   flex-shrink: 0;
-  margin-top: 10rem;
+  // margin-top: 10rem;
 }
 
 .experience-header__top {
@@ -663,6 +671,7 @@
   width: 400px;
   text-align: center;
   color: #f5f5f5;
+  margin-bottom: 0;
 }
 
 /* ─── 3D Stage (desktop) ─────────────────────────────────────────────────── */
@@ -670,7 +679,9 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  height: 100%;
+  // height: 100%;
+    height: auto;
+  margin-top: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -709,7 +720,7 @@
 /* ─── Responsive overrides ────────────────────────────────────────────────── */
 @media (max-width: 1490px) {
   .experience-section {
-    padding-bottom: 5vh;
+    padding-bottom: 40vh;
     
   }
   .experience-sticky {
@@ -721,6 +732,7 @@
 
   .experience-header {
     gap: 0.6rem;
+    padding-top: 10rem;
   }
 
   .experience-header__quote {
@@ -731,7 +743,7 @@
 }
 @media (max-width: 1024px) {
   .experience-section {
-    padding-bottom: 15vh;
+    padding-bottom: 5vh;
   }
     .experience-header__subtitle {
     @include header-style(2rem);
@@ -746,7 +758,8 @@
 @media (max-width: 480px) {
   .experience-section {
     padding-bottom: 55vh;
-      margin-bottom: 10rem;
+      // margin-bottom: 10rem;
+      margin-top: 0;
 
   }
   .experience-sticky {

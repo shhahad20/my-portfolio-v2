@@ -8,6 +8,7 @@ import {
 import { useRef } from "react";
 import "../styles/cards.scss";
 import FlipLink from "./AnimatedHeader ";
+import { useBreakpoint } from "./Experience";
 
 interface CardItem {
   num: string;
@@ -213,6 +214,7 @@ const Cards = () => {
   const blobX1 = useTransform(progress, [0, 1], [0, 40]);
   const blobX2 = useTransform(progress, [0, 1], [0, -40]);
 
+  const isMobileHeader = useBreakpoint(769);
 
   return (
     <section
@@ -221,16 +223,6 @@ const Cards = () => {
       className="cards-section"
     >
       <div className="cards-sticky">
-        {/* <motion.div
-          className="cards-header"
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          <h1 className="cards-header__label">Areas of work</h1>
-          <h2 className="cards-header__title">What Keeps Me Busy</h2>
-        </motion.div> */}
                   <motion.div
             className="work-header"
             initial={{ opacity: 0, y: 20 }}
@@ -243,15 +235,15 @@ const Cards = () => {
                 <h1 className="work-header__title">Area of Work</h1>
               </div>
             </div>
-            {/* {isMobileHeader ? (
-              <h2 className="experience-header__subtitle">Career Highlights</h2>
-            ) : ( */}
+            {isMobileHeader ? (
+              <h2 className="work-header__subtitle">What I'm building</h2>
+            ) : (
               <div className="work-header__flip">
                 <FlipLink href="#">What</FlipLink>
                 <FlipLink href="#">I'm</FlipLink>
                 <FlipLink href="#">Building</FlipLink>
               </div>
-             {/* )}  */}
+             )}  
 
           </motion.div>
 

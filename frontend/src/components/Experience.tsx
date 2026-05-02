@@ -215,7 +215,7 @@ function CardInner({ card }: { card: (typeof CARDS)[0] }) {
 }
 
 // ─── Reusable hook ────────────────────────────────────────────────────────────
-function useBreakpoint(maxWidth: number): boolean {
+export function useBreakpoint(maxWidth: number): boolean {
   const [matches, setMatches] = useState(false); // safe SSR default
 
   useEffect(() => {
@@ -235,8 +235,6 @@ export default function ExperienceCards() {
   const [enterP, setEnterP] = useState(0);
   const [hasEntered, setHasEntered] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  // const [isMobile, setIsMobile] = useState(false);
-  //   const [isMobileHeader, setIsMobileHeader] = useState(window.innerWidth <= 768);
 
    // Fully independent — different breakpoints, different concerns
   const isMobile       = useBreakpoint(1490); // card layout: vertical vs 3D
@@ -247,16 +245,6 @@ export default function ExperienceCards() {
   const targetScroll = useRef(0);
   const targetEnter = useRef(0);
   const rafRef = useRef<number | null>(null);
-
-    
-  // useEffect(() => {
-  //   // Treat tablets (< 1024px) as "mobile" for vertical layout
-  //   // const check = () => setIsMobile(window.innerWidth < 1024);
-  //   const check = () => setIsMobile(window.innerWidth < 1490);
-  //   check();
-  //   window.addEventListener("resize", check);
-  //   return () => window.removeEventListener("resize", check);
-  // }, []);
 
   // ── IntersectionObserver
   useEffect(() => {
@@ -316,7 +304,7 @@ export default function ExperienceCards() {
   const ep = easeInOutCubic(Math.max(0, Math.min(1, scrollP)));
 
   // Mobile: taller section to give vertical spread enough scroll room
-  const sectionHeight = isMobile ? "780vh" : "420vh";
+  const sectionHeight = isMobile ? "500vh" : "260vh";
 
   return (
     <>
@@ -360,7 +348,7 @@ export default function ExperienceCards() {
               />
             ))}
           </div>
-
+<div className="experience-center">
           {/* ── Header ── */}
           <motion.div
             className="experience-header"
@@ -400,6 +388,7 @@ export default function ExperienceCards() {
                 : undefined
             }
           >
+            
             <div
               className={`experience-cards ${isMobile ? "experience-cards--vertical" : ""}`}
             >
@@ -418,6 +407,7 @@ export default function ExperienceCards() {
                 />
               ))}
             </div>
+          </div>
           </div>
         </div>
       </div>
