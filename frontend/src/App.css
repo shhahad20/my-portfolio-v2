@@ -40,16 +40,55 @@
 .read-the-docs {
   color: #888;
 } */
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap'); */
+
+@font-face {
+  font-family: "PPNeueMontreal-Light";
+  src: url("../src/assets/fonts/PPNeueMontreal-Light.woff2") format("woff2");
+    font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PPNeueMontreal-Regular";
+  src: url("../src/assets/fonts/PPNeueMontreal-Regular.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PPNeueMontreal-Medium";
+  src: url("../src/assets/fonts/PPNeueMontreal-Semibold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 body{
   background-color: #070707;
-  font-family: "Inter", serif;
+  background-color:  #f8f6f2;
+  /* font-family: "Inter", serif; */
+  font-family: "PPNeueMontreal-Regular", sans-serif;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
   margin: 0;
+  padding: 0;
 }
+
 html, body {
   height: 100%;
   margin: 0;

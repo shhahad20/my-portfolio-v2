@@ -398,46 +398,49 @@ $card-radius: 6px;
   position: sticky;
   top: 0;
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 0 24px;
+  padding: 0 clamp(1rem, 4vw, 24px);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
 }
 
 .cards-header {
   position: relative;
   z-index: 2;
   text-align: center;
-  margin-bottom: 56px;
+  margin-bottom: clamp(2rem, 6vw, 56px);
 
   &__label {
     @include mono;
-    font-size: 10px;
+    font-size: clamp(8px, 1.5vw, 10px);
     font-weight: 400;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: $text-tertiary;
-    margin: 0 0 14px;
+    margin: 0 0 clamp(0.8rem, 2vw, 14px);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: clamp(0.5rem, 1vw, 10px);
 
     &::before,
     &::after {
       content: "";
       display: block;
-      width: 32px;
+      width: clamp(20px, 3vw, 32px);
       height: 1px;
       background: $border-hover;
     }
   }
 
   &__title {
-    // @include display;
-    font-size: clamp(32px, 5vw, 52px);
+    font-size: clamp(1.8rem, 6vw, 52px);
     font-weight: 400;
     font-style: italic;
     color: $text-primary;
@@ -465,8 +468,8 @@ $card-radius: 6px;
 
 .cards-stage {
   position: relative;
-  width: min(860px, 100%);
-  height: 340px;
+  width: clamp(80vw, 95%, 860px);
+  height: clamp(240px, 50vh, 340px);
   perspective: 1200px;
   perspective-origin: 50% 50%;
   transform-style: preserve-3d;
@@ -634,14 +637,19 @@ $card-radius: 6px;
 
   .cards-sticky {
     height: auto;
+    min-height: 100dvh;
     position: relative;
-    padding: 72px 20px 90px;
+    padding: clamp(3rem, 8vw, 72px) clamp(1rem, 3vw, 20px) clamp(5rem, 10vw, 90px);
+  }
+
+  .cards-header {
+    margin-bottom: clamp(2rem, 5vw, 3rem);
   }
 
   .cards-stage {
     perspective: none;
     flex-direction: column;
-    gap: 16px;
+    gap: clamp(1rem, 2vw, 16px);
     height: auto;
   }
 
@@ -650,18 +658,81 @@ $card-radius: 6px;
     transform: none !important;
     opacity: 1 !important;
     width: 100%;
-    max-width: 340px;
+    max-width: clamp(280px, 90vw, 340px);
     height: auto;
-    min-height: 240px;
+    min-height: clamp(200px, 50vh, 240px);
+    padding: clamp(1rem, 2vw, 1.5rem);
   }
 
   .cards-header__title {
-    font-size: 28px;
+    font-size: clamp(1.5rem, 4vw, 28px);
+  }
+
+  .busy-card__title {
+    font-size: clamp(15px, 3vw, 19px);
+  }
+
+  .busy-card__desc {
+    font-size: clamp(11px, 2.5vw, 12.5px);
   }
 }
+
 @media (max-width: 480px) {
-.busy-card{
-  // padding: 10px 10px;
-  width: 260px;
+  .cards-sticky {
+    padding: clamp(2rem, 5vw, 3rem) clamp(0.75rem, 2vw, 1rem) clamp(3rem, 5vw, 4rem);
+    height: auto;
+    min-height: auto;
+  }
+
+  .busy-card {
+    width: clamp(85vw, 90%, 260px) !important;
+    max-width: clamp(85vw, 90%, 260px) !important;
+    min-height: clamp(180px, 45vh, 220px);
+    padding: clamp(0.9rem, 1.5vw, 1rem);
+    gap: clamp(0.3rem, 0.5vw, 0.5rem);
+  }
+
+  .busy-card__category {
+    font-size: clamp(7px, 1.5vw, 9px);
+  }
+
+  .busy-card__num {
+    font-size: clamp(8px, 1.5vw, 10px);
+  }
+
+  .busy-card__title {
+    font-size: clamp(14px, 2.8vw, 17px);
+    margin-bottom: clamp(0.2rem, 0.5vw, 0.3rem);
+  }
+
+  .busy-card__divider {
+    width: clamp(16px, 3vw, 24px);
+    margin-bottom: clamp(0.7rem, 1.5vw, 12px);
+  }
+
+  .busy-card__desc {
+    font-size: clamp(10px, 2vw, 11.5px);
+    line-height: 1.5;
+  }
+
+  .busy-card__cta {
+    font-size: clamp(7px, 1.3vw, 9px);
+  }
+
+  .cards-header__title {
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+  }
 }
+
+@media (max-width: 360px) {
+  .cards-sticky {
+    padding: 1.5rem 0.75rem 2rem;
+  }
+
+  .busy-card {
+    width: 85vw !important;
+    max-width: 85vw !important;
+    min-height: 180px;
+    padding: 0.8rem;
+  }
 }

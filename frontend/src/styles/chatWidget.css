@@ -1,9 +1,11 @@
 .chat-widget {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 400px;
+  bottom: clamp(1rem, 3vw, 24px);
+  right: clamp(1rem, 3vw, 24px);
+  width: clamp(280px, 85vw, 400px);
+  max-width: 85vw;
   max-height: 70vh;
+  max-height: clamp(50vh, 70vh, 100dvh);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -23,6 +25,10 @@
   transition: transform 0.3s ease-in-out;
   transition: transform 0.3s ease-in-out, -webkit-transform 0.3s ease-in-out;
   z-index: 999;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 .chat-widget.open {
@@ -37,7 +43,7 @@
   background: transparent;
   border: none;
   color: #ccc;
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
   cursor: pointer;
 }
 
@@ -46,15 +52,17 @@
 }
 
 .chat-widget .chat-header {
-  padding: 16px;
+  padding: clamp(1rem, 2vw, 16px);
   background-color: #2e2e2e;
   color: #EFEEEC;
   border-bottom: 1px solid #444;
 }
 
 .chat-widget .chat-img {
-  margin: 16px auto;
+  margin: clamp(1rem, 2vw, 16px) auto;
   display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 .chat-widget .chat-messages {

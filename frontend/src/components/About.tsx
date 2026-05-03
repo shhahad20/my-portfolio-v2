@@ -86,7 +86,7 @@ const About = () => {
           className={highlighted === "Full-Stack" ? "highlighted" : ""}
         >
           I began with front-end development—bringing ideas to life with HTML,
-          CSS, and JavaScript—then naturally moved into backend development with
+          CSS, and JavaScript, then naturally moved into backend development with
           Python, working with databases and APIs.
           <br />
           <span className="span-color">
@@ -102,7 +102,7 @@ const About = () => {
           className={highlighted === "Graphic Design" ? "highlighted" : ""}
         >
           Before all that, I spent over five years as a freelance graphic
-          designer, completing 200+ projects—an experience that still shapes how
+          designer, completing 200+ projects, an experience that still shapes how
           I think about design and user experience today.
         </p>
 

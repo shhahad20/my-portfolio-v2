@@ -22,10 +22,11 @@
 
 .animated-link .default-text {
   color: #818180;
+  color: #000000;
 }
 
 .animated-link .hover-text {
-  color: #EFEEEC;
+  color: #818180;
   position: absolute;
   top: 0;
   left: 0;

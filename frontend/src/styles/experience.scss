@@ -1,446 +1,6 @@
 @import "mixins";
 @import "variables";
 
-// a {
-//   text-decoration: none;
-//   color: $primary-white-color;
-// }
-// #experience {
-//   //   border: 1px solid red;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   align-items: center;
-//   color: $primary_white_color;
-//   padding: 0 2rem;
-//   margin: 3rem 0 0 0;
-//   margin-bottom: 8rem;
-//   height: 100%;
-//   // min-height: 120vh;
-//   .header-content {
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: center;
-//     align-items: center;
-//     .flip {
-//       display: flex;
-//       gap: 1rem;
-//     }
-//     .mobile-header {
-//       @include header-style(2rem);
-//       margin: 0;
-//     }
-//     .between-lines {
-//       position: relative;
-//       display: flex;
-//       flex-direction: row;
-//       align-items: center;
-//       justify-content: center;
-//       font-size: 14px;
-//       font-weight: 400;
-//       line-height: 20px;
-//       color: rgba(186, 214, 247, 0.32);
-
-//       .experience-header {
-//         @include header-style(15px);
-//       }
-//     }
-//     .between-lines:before {
-//       @include betweenLines;
-//     }
-//     .between-lines:after {
-//       @include betweenLines;
-//       transform: rotate(180deg);
-//     }
-//     .second-header {
-//       // max-width: 70px;
-//       @include header-style(50px);
-//       margin: 0;
-//     }
-//     .third-p {
-//       width: 400px;
-//       text-align: center;
-//       color: $primary-white-blue-color;
-//     }
-//   }
-
-//   .cards_container {
-//     margin: 2rem 0;
-//     width: 100%;
-//     max-width: 1320px;
-//     // display: flex;
-//     // max-height: 1000px;
-//     display: grid;
-//     grid-template-columns: repeat(4, 1fr);
-//     grid-template-rows: repeat(4, 1fr);
-//     gap: 1.5rem;
-//     // border: 1px solid red;
-//     // .left-column,
-//     // .right-column {
-//     //   flex: 1;
-//     //   display: flex;
-//     //   flex-direction: column;
-//     //   gap: 2rem;
-//     // }
-//     // .right-column {
-//     //   height: 100%;
-//     // }
-//     .card {
-//       border: map-get($borders, 3);
-//       background-color: $second-bg-color;
-//       border-radius: 16px;
-//       padding: 3rem;
-//       display: flex;
-//       flex-direction: column;
-//       // justify-content: flex-start;
-//       gap: 5px;
-//       // overflow: hidden;
-//       h1 {
-//         font-weight: 500;
-//         font-size: 36px;
-//         margin: 0;
-//       }
-//       .blue_content {
-//         margin: 0;
-//         display: flex;
-//         gap: 20px;
-//         font-family: "Space Mono", serif;
-//         font-size: 18px;
-//         color: $secondary-light-blue-color;
-//       }
-//       .description {
-//         margin: 0;
-//         line-height: 30px;
-//         font-size: 18px;
-//       }
-
-//       .code-container {
-//         position: relative;
-//         background-color: $background-color;
-//         border: map-get($borders, 3);
-//         border-radius: 16px;
-//         // padding: 10px;
-//         padding-top: 30px;
-//         overflow-x: auto;
-//         overflow-y: auto;
-//         scrollbar-width: none; /* Firefox */
-//         -ms-overflow-style: none; /* IE 10+ */
-//         .codeSnippet {
-//           overflow-x: auto; /* Enable horizontal scrolling */
-//           overflow-y: auto;
-//           scrollbar-width: none; /* Firefox */
-//           -ms-overflow-style: none; /* IE 10+ */
-//         }
-
-//         .codeSnippet::-webkit-scrollbar {
-//           display: none; /* Chrome, Safari, Opera */
-//         }
-
-//         .code-header {
-//           display: flex;
-//           justify-content: space-between;
-//           align-items: center;
-//           margin-bottom: 0.5rem;
-//           padding: 0 20px;
-//           .code-title {
-//             color: $secondary-light-blue-color;
-//             color: $primary_white_color;
-//             font-weight: 400;
-//             // font-family: "Source Code Pro", monospace;
-//             font-size: 1rem;
-//             margin: 0;
-//           }
-//           .copy-btn {
-//             position: absolute;
-//             top: 10px;
-//             right: 10px;
-//             font-family: "Space Mono", serif;
-//             cursor: pointer;
-//             background-color: #0e0e0e;
-//             border: none;
-//             color: $primary_white_color;
-//             padding: 5px 15px;
-//             border-radius: 4px;
-//           }
-//         }
-
-//         // .code{
-//         //     background-color: #0E0E0E;
-//         //     margin-bottom: 0;
-//         //     // padding-bottom: 10px;
-//         //     // white-space: pre-wrap;
-//         //     padding: 1rem;
-
-//         // }
-//       }
-//       .img-container {
-//         display: flex;
-//         justify-content: center;
-//         margin-top: 2rem;
-//         img {
-//           width: 70%;
-//         }
-//       }
-//     }
-//     // Adjusting individual card sizes:
-//     .card_1 {
-//       // border: 1px solid green;
-//       grid-column: 1 / span 2;
-//       grid-row: 1 / span 2;
-//     }
-//     .card_2 {
-//       // border: 1px solid yellow;
-//       grid-column: 3 / span 2;
-//       grid-row: 1 / span 3;
-//     }
-//     .card_3 {
-//       // border: 1px solid pink;
-//       grid-column: 1 / span 2;
-//       grid-row: 3 / span 2;
-//     }
-//     .card_4 {
-//       // border: 1px solid white;
-//       grid-column: 3 / span 2;
-//       grid-row: 4 / span 1;
-//     }
-//   }
-//   // ===== Responsive Styles =====
-
-//   // For screens 1024px and below
-//   @media screen and (max-width: 1024px) {
-//     padding: 0 1.5rem;
-
-//     .header-content {
-//       .third-p {
-//         width: 90%;
-//       }
-//     }
-
-//     .cards_container {
-//       gap: 1rem;
-//       // The flex-direction remains row for 2 columns
-//       // .left-column,
-//       // .right-column {
-//       //   gap: 1rem;
-//       // }
-//       grid-template-columns: repeat(6, 1fr);
-//       // grid-template-rows: repeat(6, 1fr);
-//       grid-template-rows: auto;
-//       max-width: 100%;
-//       .card {
-//         padding: 2rem;
-//         h1 {
-//           font-size: 1.75em;
-//         }
-//         .blue_content {
-//           font-size: 0.875em;
-//         }
-//         .description {
-//           font-size: 0.875em;
-//           line-height: 28px;
-//         }
-//         .code-container {
-//           .code-header {
-//             padding: 0 15px;
-//             .code-title {
-//               font-size: 0.875em;
-//             }
-//             .copy-btn {
-//               padding: 4px 10px;
-//             }
-//           }
-//           .codeSnippet {
-//             font-size: 0.7em;
-//           }
-//         }
-//         .img-container {
-//           img {
-//             width: 80%;
-//           }
-//         }
-//       }
-//       .card_1 {
-//         // border: 1px solid green;
-//         grid-column: 1 / span 3;
-//         grid-row: 1 / span 1;
-//       }
-//       .card_2 {
-//         // border: 1px solid yellow;
-//         grid-column: 4 / span 3;
-//         grid-row: 1 / span 3;
-//       }
-//       .card_3 {
-//         // border: 1px solid pink;
-//         grid-column: 1 / span 3;
-//         grid-row: 2 / span 3;
-//       }
-//       .card_4 {
-//         // border: 1px solid white;
-//         grid-column: 4 / span 3;
-//         grid-row: 4 / span 1;
-//       }
-//     }
-//   }
-
-//   // For screens 768px and below
-//   @media screen and (max-width: 768px) {
-//     margin: 2rem 0;
-//     .header-content {
-//       .second-header {
-//         @include header-style(40px);
-//       }
-//       .third-p {
-//         width: 90%;
-//         font-size: 14px;
-//       }
-//     }
-//     .cards_container {
-//       gap: 1rem;
-//       // The flex-direction remains row for 2 columns
-//       // .left-column,
-//       // .right-column {
-//       //   gap: 1rem;
-//       // }
-//       grid-template-columns: repeat(6, 1fr);
-//       // grid-template-rows: repeat(6, 1fr);
-//       grid-template-rows: auto;
-//       max-width: 100%;
-//       .card {
-//         padding: 2rem;
-//         h1 {
-//           font-size: 1.75em;
-//         }
-//         .blue_content {
-//           font-size: 0.875em;
-//         }
-//         .description {
-//           font-size: 0.875em;
-//           line-height: 28px;
-//         }
-//         .code-container {
-//           .code-header {
-//             padding: 0 15px;
-//             .code-title {
-//               font-size: 0.875em;
-//             }
-//             .copy-btn {
-//               padding: 4px 10px;
-//             }
-//           }
-//           .codeSnippet {
-//             font-size: 0.7em;
-//           }
-//         }
-//         .img-container {
-//           img {
-//             width: 80%;
-//           }
-//         }
-//       }
-//       .card_1 {
-//         // border: 1px solid green;
-//         grid-column: 1 / span 3;
-//         grid-row: 4 / span 1;
-//       }
-//       .card_2 {
-//         // border: 1px solid yellow;
-//         grid-column: 1 / span 6;
-//         grid-row: 3 / span 1;
-//       }
-//       .card_3 {
-//         // border: 1px solid pink;
-//         grid-column: 1 / span 6;
-//         grid-row: 5 / span 1;
-//       }
-//       .card_4 {
-//         // border: 1px solid white;
-//         grid-column: 4 / span 3;
-//         grid-row: 4 / span 1;
-//       }
-//     }
-//   }
-
-//   @media screen and (max-width: 480px) {
-//     margin: 2rem 0;
-
-//     .header-content {
-//       .flip {
-//         flex-direction: column;
-//         margin: 0;
-//         padding: 0;
-//         margin: 1rem 0;
-//         gap: 0;
-//       }
-//       .third-p {
-//         width: 88%;
-//         font-size: 14px;
-//       }
-//     }
-//     .cards_container {
-//       // display: grid;
-//       // grid-template-columns: 1fr; // Single column layout for mobile
-//       // grid-auto-rows: auto; // Let rows adjust to content
-//       gap: 1rem;
-
-//       .card {
-//         padding: 1.5rem; // Reduced padding for smaller screens
-
-//         h1 {
-//           font-size: 1.5rem; // Adjust header size for mobile
-//         }
-//         .blue_content {
-//           font-size: 0.75em; // Smaller font for supporting text
-//         }
-//         .description {
-//           font-size: 0.85rem;
-//           line-height: 22px; // Tighter line height on mobile
-//         }
-//         .code-container {
-//           .code-header {
-//             padding: 0 10px;
-//             .code-title {
-//               font-size: 0.75em;
-//             }
-//             .copy-btn {
-//               padding: 3px 8px;
-//             }
-//           }
-//           .codeSnippet {
-//             font-size: 0.65em;
-//           }
-//         }
-//         .img-container {
-//           img {
-//             width: 100%; // Make images full width on mobile
-//           }
-//         }
-//       }
-//       .card_1 {
-//         // border: 1px solid green;
-//         grid-column: 1 / span 6;
-//         grid-row: 2 / span 1;
-//       }
-//       .card_2 {
-//         // border: 1px solid yellow;
-//         grid-column: 1 / span 6;
-//         grid-row: 1 / span 1;
-//       }
-//       .card_3 {
-//         // border: 1px solid pink;
-//         grid-column: 1 / span 6;
-//         grid-row: 3 / span 1;
-//       }
-//       .card_4 {
-//         // border: 1px solid white;
-//         grid-column: 1 / span 6;
-//         grid-row: 4 / span 1;
-//       }
-//     }
-//   }
-// }
-
-// NEW EXPERIENCE SECTION STYLES //
-/* ─── Cards ─────────────────────────────────────────────────────────────────── */
 /* ─── Cards ─────────────────────────────────────────────────────────────────── */
 .card {
   position: absolute;
@@ -581,9 +141,13 @@
 .experience-section {
   position: relative;
   background: #070707;
-    margin-top: -15vh;
-  margin-bottom: -15vh;
-  // padding-bottom: 55vh;
+  margin-top: clamp(0, 2vw, -10vh);
+  margin-bottom: clamp(1rem, 6vw, 0);
+  padding-bottom: clamp(4vh, 8vw, 10vh);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* Sticky container */
@@ -718,74 +282,225 @@
 }
 
 /* ─── Responsive overrides ────────────────────────────────────────────────── */
-@media (max-width: 1490px) {
-  .experience-section {
-    padding-bottom: 40vh;
+// @media (max-width: 1490px) {
+//   .experience-section {
+//     padding-bottom: 40vh;
     
-  }
-  .experience-sticky {
-    justify-content: flex-start;
-    padding-top: 2rem;
-    gap: 1rem;
-    overflow: visible;
-  }
+//   }
+//   .experience-sticky {
+//     justify-content: flex-start;
+//     padding-top: 2rem;
+//     gap: 1rem;
+//     overflow: visible;
+//   }
 
+//   .experience-header {
+//     gap: 0.6rem;
+//     padding-top: 10rem;
+//   }
+
+//   .experience-header__quote {
+//     width: 90vw;
+//     max-width: 340px;
+//     font-size: 0.82rem;
+//   }
+// }
+// @media (max-width: 1024px) {
+//   .experience-section {
+//     padding-bottom: 5vh;
+//   }
+//     .experience-header__subtitle {
+//     @include header-style(2rem);
+//     margin: 0;
+//   }
+// }
+// @media (max-width: 768px) {
+//   .experience-section {
+//     padding-bottom: 30vh;
+//     margin-bottom: 10rem;
+//   }
+// }
+// @media (max-width: 480px) {
+//   .experience-section {
+//     padding-bottom: 55vh;
+//       // margin-bottom: 10rem;
+//       margin-top: 0;
+//       margin-bottom: 5rem;
+
+//   }
+//   .experience-sticky {
+//     padding-top: 1.5rem;
+//     gap: 1rem;
+//     overflow: visible;
+//   }
+
+//   .experience-header__subtitle {
+//     @include header-style(2rem);
+//     margin: 0;
+//   }
+
+//   .experience-stage--vertical {
+//     width: 260px;
+//     height: auto; /* ← no more magic pixel height */
+//     overflow: visible;
+//   }
+
+//   .experience-cards--vertical {
+//     width: 260px;
+//   }
+
+//   .card--vertical {
+//     width: 260px;
+//     height: 295px;
+//   }
+// }
+
+@media (max-width: 1490px) {
   .experience-header {
-    gap: 0.6rem;
-    padding-top: 10rem;
+    padding-top: clamp(2rem, 4vw, 3rem);
   }
 
-  .experience-header__quote {
-    width: 90vw;
-    max-width: 340px;
-    font-size: 0.82rem;
+  .experience-center {
+    transform: none;
+  }
+
+  .experience-section {
+    padding-bottom: 10vh;
   }
 }
+
 @media (max-width: 1024px) {
   .experience-section {
-    padding-bottom: 5vh;
+    padding-bottom: 8vh;
   }
-    .experience-header__subtitle {
-    @include header-style(2rem);
-    margin: 0;
+  
+  .experience-header__subtitle {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+  
+  .card {
+    width: clamp(250px, 90vw, 280px);
+    height: auto;
+    min-height: 280px;
   }
 }
+
 @media (max-width: 768px) {
   .experience-section {
-    padding-bottom: 30vh;
+    padding-bottom: clamp(4vh, 6vw, 6vh);
+    margin-bottom: 0;
+  }
+  
+  .experience-sticky {
+    height: auto;
+    min-height: auto;
+    position: relative;
+  }
+  
+  .experience-header__subtitle {
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+  }
+  
+  .experience-header__quote {
+    width: clamp(80vw, 90%, 350px);
+    font-size: clamp(13px, 3vw, 15px);
+  }
+  
+  .card {
+    width: clamp(240px, 85vw, 270px);
+    height: auto;
+    min-height: 260px;
+    padding: clamp(1rem, 2vw, 1.5rem);
+  }
+  
+  .card__title {
+    font-size: clamp(16px, 3.5vw, 19px);
+  }
+  
+  .card__description {
+    font-size: clamp(11px, 2.5vw, 12.5px);
   }
 }
+
 @media (max-width: 480px) {
   .experience-section {
-    padding-bottom: 55vh;
-      // margin-bottom: 10rem;
-      margin-top: 0;
-      margin-bottom: 5rem;
-
+    padding-bottom: clamp(3vh, 5vw, 4vh);
+    margin-top: 0;
+    margin-bottom: 0;
   }
+  
   .experience-sticky {
-    padding-top: 1.5rem;
-    gap: 1rem;
-    overflow: visible;
+    height: auto;
+    position: relative;
   }
-
+  
+  .experience-center {
+    transform: none;
+    gap: clamp(1rem, 3vw, 1.5rem);
+  }
+  
+  .experience-header {
+    padding-top: clamp(1.5rem, 3vw, 2rem);
+  }
+  
   .experience-header__subtitle {
-    @include header-style(2rem);
-    margin: 0;
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
   }
-
+  
+  .experience-header__quote {
+    width: clamp(75vw, 90%, 280px);
+    font-size: clamp(12px, 2.5vw, 13px);
+    margin-bottom: clamp(0.5rem, 1vw, 1rem);
+  }
+  
   .experience-stage--vertical {
-    width: 260px;
-    height: auto; /* ← no more magic pixel height */
+    width: clamp(75vw, 90%, 260px);
+    height: auto;
     overflow: visible;
   }
 
   .experience-cards--vertical {
-    width: 260px;
+    width: 100%;
+    max-width: clamp(75vw, 90%, 260px);
   }
 
   .card--vertical {
-    width: 260px;
-    height: 295px;
+    width: 100% !important;
+    max-width: clamp(75vw, 90%, 260px) !important;
+    height: auto;
+    min-height: 240px;
+  }
+  
+  .card {
+    width: 100%;
+    max-width: clamp(75vw, 90%, 260px);
+    height: auto;
+    min-height: 240px;
+    padding: clamp(0.9rem, 2vw, 1.3rem);
+    margin: clamp(0.5rem, 1.5vw, 1rem) 0;
+  }
+  
+  .card__title {
+    font-size: clamp(15px, 3vw, 17px);
+  }
+  
+  .card__description {
+    font-size: clamp(10px, 2vw, 11px);
+  }
+  
+  .card__place {
+    font-size: clamp(9px, 2vw, 10.5px);
+  }
+}
+
+@media (max-width: 360px) {
+  .experience-section {
+    padding: 1rem;
+    padding-bottom: 3vh;
+  }
+  
+  .card {
+    padding: 0.8rem;
+    min-height: 220px;
   }
 }

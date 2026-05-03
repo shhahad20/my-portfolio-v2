@@ -1,5 +1,5 @@
 #testimonials {
-  padding: 2rem 0;
+  padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem);
   text-align: center;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -11,7 +11,13 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  margin-bottom: 8rem;
+  margin-bottom: clamp(2rem, 8vw, 6rem);
+  margin-top: clamp(1rem, 4vw, 3rem);
+  width: 100%;
+  max-width: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 #testimonials .header-content {
@@ -130,7 +136,7 @@
 
 #testimonials .header-content .second-header {
   text-align: center;
-  font-size: 50px;
+  font-size: clamp(2rem, 6vw, 50px);
   font-weight: 500;
   padding: 0 15px;
   background: -webkit-gradient(linear, left bottom, left top, from(#f5f5f5), to(#deddda));
@@ -144,9 +150,10 @@
 }
 
 #testimonials .header-content .third-p {
-  width: 400px;
+  width: clamp(90vw, 90%, 400px);
   text-align: center;
   color: #f5f5f5;
+  font-size: clamp(14px, 3.5vw, 16px);
 }
 
 #testimonials .slider {
@@ -190,7 +197,7 @@
           align-items: center;
 }
 
-#testimonials .card {
+#testimonials .test-card {
   border: 1px solid #2C2C2C;
   padding: 2rem;
   border-radius: 16px;
@@ -204,7 +211,7 @@
   position: relative;
 }
 
-#testimonials .card::before {
+#testimonials .test-card::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -217,7 +224,7 @@
   pointer-events: none;
 }
 
-#testimonials .card::after {
+#testimonials .test-card::after {
   content: "";
   position: absolute;
   top: 0;
@@ -230,13 +237,13 @@
   pointer-events: none;
 }
 
-#testimonials .card p {
+#testimonials .test-card p {
   font-size: 1.1rem;
   margin-bottom: 1rem;
   color: #EFEEEC;
 }
 
-#testimonials .card h4 {
+#testimonials .test-card h4 {
   margin: 0;
   font-size: 1rem;
   color: #818180;
@@ -244,7 +251,7 @@
   font-weight: 600;
 }
 
-#testimonials .card span {
+#testimonials .test-card span {
   font-size: 0.9rem;
   color: #818180;
 }
@@ -289,12 +296,17 @@
     display: none;
   }
   #testimonials .header-content .third-p {
-    width: 90%;
+    width: clamp(90vw, 95%, 500px);
     margin: 1rem auto;
   }
 }
 
 @media (max-width: 768px) {
+  #testimonials {
+    padding: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: clamp(2rem, 6vw, 4rem);
+    margin-top: clamp(1rem, 4vw, 2rem);
+  }
   #testimonials .header-content {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -327,14 +339,56 @@
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center;
-    gap: 1rem;
-  }
-  #testimonials .header-content .flip .comma {
-    display: none;
+    gap: 0.5rem;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
   }
   #testimonials .header-content .third-p {
-    width: 90%;
+    width: clamp(80vw, 90%, 400px);
     margin: 1rem auto;
+    font-size: clamp(13px, 3vw, 15px);
+  }
+}
+
+@media (max-width: 480px) {
+  #testimonials {
+    padding: clamp(1rem, 3vw, 1.5rem);
+    margin-bottom: clamp(1.5rem, 5vw, 3rem);
+    margin-top: clamp(1rem, 3vw, 1.5rem);
+  }
+  #testimonials .header-content {
+    gap: clamp(0.5rem, 2vw, 0.8rem);
+  }
+  #testimonials .header-content .flip {
+    gap: 0.5rem;
+  }
+  #testimonials .header-content .third-p {
+    width: clamp(85vw, 95%, 300px);
+    font-size: clamp(12px, 2.5vw, 14px);
+  }
+  #testimonials .test-card {
+    margin: 0 clamp(0.5rem, 2vw, 10px);
+    padding: clamp(1rem, 3vw, 2rem);
+  }
+  #testimonials .test-card p {
+    font-size: clamp(14px, 3vw, 1.1rem);
+    margin-bottom: 0.8rem;
+  }
+  #testimonials .test-card h4 {
+    font-size: clamp(14px, 3vw, 1rem);
+  }
+  #testimonials .test-card span {
+    font-size: clamp(12px, 2.5vw, 0.9rem);
+  }
+}
+
+@media (max-width: 360px) {
+  #testimonials {
+    padding: 1rem;
+  }
+  #testimonials .test-card {
+    margin: 0 5px;
+    padding: 1rem;
   }
 }
 
