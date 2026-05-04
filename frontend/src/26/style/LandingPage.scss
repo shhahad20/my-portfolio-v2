@@ -10,17 +10,18 @@
 
   &__content {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1350px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 0 auto;
     flex: 1;
-    gap: 40px;
+    // gap: 40px;
   }
 
   &__left {
     flex: 1;
+      border: 1px solid blue;
 
     .linkedin {
       font-size: 14px;
@@ -30,42 +31,35 @@
       margin-bottom: 20px;
     }
 
+    // .title {
+    //   font-size: clamp(62px, 10vw, 120px);
+    //   line-height: 1;
+    //   margin: 0 0 5px;
+    //   font-family: "PPNeueMontreal-Medium", sans-serif;
+    //   // height: 400px;
+    // }
     .title {
+      border: 1px solid red;
       font-size: clamp(62px, 10vw, 120px);
       line-height: 1;
       margin: 0 0 5px;
       font-family: "PPNeueMontreal-Medium", sans-serif;
+      // ← no filter here — font renders clean at rest
+
+      .title-line {
+        display: inline-block; // keeps each line as its own block for layout
+      }
+
+      .letter {
+        display: inline-block; // required for transform + filter to apply
+        cursor: default;
+        transition: filter 0.15s ease;
+
+        &:hover {
+          filter: url(#goo-title); // ← goo activates only on the hovered char
+        }
+      }
     }
-
-    .liquid-char {
-  display: inline-block;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  cursor: default;
-  transition:
-    font-weight 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-    letter-spacing 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  // The hovered character — goes thin/wide
-  &:hover {
-    font-weight: 200;
-    letter-spacing: 0.08em;
-    transform: scaleY(1.08);
-  }
-
-  // Neighbors — proximity-based ripple via JS data attribute
-  &[data-proximity="1"] {
-    font-weight: 500;
-    letter-spacing: 0.03em;
-  }
-  &[data-proximity="2"] {
-    font-weight: 600;
-    letter-spacing: 0.01em;
-  }
-}
-
-
     .small-content {
       display: flex;
       justify-content: space-between;
@@ -101,7 +95,6 @@
         color: #ff005a;
         font-size: 14px;
         cursor: pointer;
-
       }
 
       input {
@@ -125,10 +118,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+      border: 1px solid blue;
 
     img {
       max-width: 300px;
       width: 100%;
+      border: 1px solid pink;
+
     }
 
     .vertical-text {
@@ -146,10 +142,12 @@
     font-size: 12px;
     color: #777;
     margin-top: 20px;
-    animation: bounce 4s infinite;}
+    animation: bounce 4s infinite;
+  }
 }
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
