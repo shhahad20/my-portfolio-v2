@@ -12,6 +12,7 @@
       -ms-flex-pack: center;
           justify-content: center;
   margin-bottom: 8rem;
+  margin-top: 10rem;
 }
 
 #testimonials .header-content {
@@ -190,7 +191,7 @@
           align-items: center;
 }
 
-#testimonials .card {
+#testimonials .test-card {
   border: 1px solid #2C2C2C;
   padding: 2rem;
   border-radius: 16px;
@@ -204,7 +205,7 @@
   position: relative;
 }
 
-#testimonials .card::before {
+#testimonials .test-card::before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -217,7 +218,7 @@
   pointer-events: none;
 }
 
-#testimonials .card::after {
+#testimonials .test-card::after {
   content: "";
   position: absolute;
   top: 0;
@@ -230,13 +231,13 @@
   pointer-events: none;
 }
 
-#testimonials .card p {
+#testimonials .test-card p {
   font-size: 1.1rem;
   margin-bottom: 1rem;
   color: #EFEEEC;
 }
 
-#testimonials .card h4 {
+#testimonials .test-card h4 {
   margin: 0;
   font-size: 1rem;
   color: #818180;
@@ -244,7 +245,7 @@
   font-weight: 600;
 }
 
-#testimonials .card span {
+#testimonials .test-card span {
   font-size: 0.9rem;
   color: #818180;
 }

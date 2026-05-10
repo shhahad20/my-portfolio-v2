@@ -32,14 +32,12 @@
 }
 
 .components-cards-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   margin-top: 4rem;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
 }
 
 .error-msg {
@@ -63,7 +61,7 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  width: 25%;
+  width: 100%;
 }
 
 .component-card .component-preview {
@@ -93,13 +91,15 @@
   left: 0;
   right: 0;
   bottom: 0;
-  display: "flex";
-  -webkit-box-align: "center";
-      -ms-flex-align: "center";
-          align-items: "center";
-  -webkit-box-pack: "center";
-      -ms-flex-pack: "center";
-          justify-content: "center";
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   z-index: 2;
 }
 
@@ -151,20 +151,16 @@
 @media screen and (max-width: 1024px) {
   .components-page {
     min-height: 100%;
+    margin: 8rem auto 6rem auto;
   }
   .components-cards-container {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-            flex-direction: row;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-grid-columns: (1fr)[3];
+        grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
-    margin: 1rem 0;
+    margin-top: 2rem;
   }
-  .component-card {
-    width: 30%;
+  .component-card__preview {
+    height: 160px;
   }
   .component-card__title {
     font-size: 14px;
@@ -176,30 +172,29 @@
 }
 
 @media screen and (max-width: 768px) {
-  .components-cards-container {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-            flex-direction: row;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    gap: 1rem;
-    margin-top: 1rem;
+  .components-page {
+    margin: 6rem auto 4rem auto;
   }
-  .component-card {
-    width: 40%;
-    height: 220px;
-    margin-bottom: 1.5rem;
+  .components-cards-container {
+    -ms-grid-columns: (1fr)[2];
+        grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .component-card__preview {
+    height: 180px;
   }
   .component-card__title {
-    font-size: 16px;
+    font-size: 15px;
+  }
+  .component-card__label {
+    font-size: 9px;
   }
 }
 
 @media screen and (max-width: 480px) {
   .components-page {
-    padding: 0 2rem;
+    padding: 0 1.5rem;
     margin: 5rem auto 4rem auto;
   }
   .components-page .second-header {
@@ -216,16 +211,14 @@
     text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
     margin: 0;
   }
-  .components-page .components-cards-container {
-    margin-top: 0;
-    gap: 0.5rem;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
+  .components-cards-container {
+    -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
   }
-  .component-card {
-    width: 100%;
+  .component-card__preview {
+    height: 200px;
   }
   .component-card__title {
     font-size: 14px;

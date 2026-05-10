@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "../styles/about.scss";
+import Shuffle from "../components/Shuffle";
 
 interface Paragraphs {
   [key: string]: React.RefObject<HTMLDivElement | null>;
@@ -51,6 +52,22 @@ const About = () => {
         <h1 className="second-header">
           Shahad Altharwa <br /> Behind the Code
         </h1>
+       
+        <Shuffle
+          text="Hello World"
+          shuffleDirection="right"
+          duration={0.35}
+          animationMode="evenodd"
+          shuffleTimes={1}
+          ease="power3.out"
+          stagger={0.03}
+          threshold={0.1}
+          triggerOnce={true}
+          triggerOnHover
+          respectReducedMotion={true}
+          loop={false}
+          loopDelay={0}
+        />
         <div id="keywords-container">
           {Object.keys(paragraphs).map((keyword) => (
             <a
@@ -80,7 +97,6 @@ const About = () => {
           . Along the way, I developed a strong foundation in problem-solving,
           algorithms, and building efficient, scalable systems.
         </p>
-
         <p
           ref={paragraphs["Full-Stack"]}
           className={highlighted === "Full-Stack" ? "highlighted" : ""}
@@ -96,7 +112,6 @@ const About = () => {
           helped me grow into a more confident full-stack developer and explore
           data-driven solutions.
         </p>
-
         <p
           ref={paragraphs["Graphic Design"]}
           className={highlighted === "Graphic Design" ? "highlighted" : ""}
@@ -105,7 +120,6 @@ const About = () => {
           designer, completing 200+ projects—an experience that still shapes how
           I think about design and user experience today.
         </p>
-
         <p
           ref={paragraphs["Teaching Assistant"]}
           className={highlighted === "Teaching Assistant" ? "highlighted" : ""}
@@ -114,7 +128,6 @@ const About = () => {
           structures and supported students in building strong programming
           foundations.
         </p>
-
         <p>
           Today, I’m focused on growing as a full-stack developer while
           exploring artificial intelligence to build smarter, more impactful
