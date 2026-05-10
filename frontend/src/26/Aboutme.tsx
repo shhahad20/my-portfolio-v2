@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import "./style/AboutMe.scss";
+import AnimatedLink from "../components/AnimatedLink";
 
 interface NavLink {
   id: string;
@@ -10,24 +11,24 @@ interface NavLink {
 
 const AboutMe: React.FC = () => {
   const navLinks: NavLink[] = [
-    { id: "engineering", label: "SOFTWARE ENGINEERING" },
-    { id: "fullstack", label: "FULL-STACK DEV" },
-    { id: "design", label: "GRAPHIC DESIGN" },
-    { id: "teaching", label: "TEACHING ASSISTANT" },
-    { id: "certifications", label: "CERTIFICATIONS" },
+    { id: "engineering", label: "SOFTWARE ENGINEERING ↗" },
+    { id: "fullstack", label: "FULL-STACK DEV ↗" },
+    { id: "design", label: "GRAPHIC DESIGN ↗" },
+    { id: "teaching", label: "TEACHING ASSISTANT ↗" },
+    { id: "certifications", label: "CERTIFICATIONS ↗" },
   ];
 
   const paragraphs = [
     "My journey in tech started with a curiosity for how things work, which led me to earn my **Bachelor's degree** in Software Engineering from the University of Hail 2018–2023. Along the way, I developed a strong foundation in problem-solving, algorithms, and building efficient, scalable systems.",
-    
+
     "I began with front-end development bringing ideas to life with HTML, CSS, and JavaScript, then naturally moved into backend development with Python, working with databases and APIs.",
-    
+
     "**MERN Bootcamp** at Saudi Digital Academy x Integrify (Sep–Dec 2023) helped me grow into a more confident full-stack developer and explore data-driven solutions.",
-    
+
     "I spent over five years as a **freelance graphic designer**, completing 300+ projects, an experience that still shapes how I think about design and user experience today.",
-    
+
     "I also worked as a **Teaching Assistant**, where I taught Java and data structures and supported students in building strong programming foundations.",
-    
+
     "Today, I'm focused on growing as a full-stack developer while exploring artificial intelligence to build smarter, more impactful systems. I hold **SCRUM** and **Microsoft Azure AI Fundamentals** certifications that support this journey.",
   ];
 
@@ -39,7 +40,7 @@ const AboutMe: React.FC = () => {
       y: 0,
       transition: {
         duration: 0.8,
-        ease: [0.23, 1, 0.320, 1],
+        ease: [0.23, 1, 0.32, 1],
       },
     },
   };
@@ -105,18 +106,32 @@ const AboutMe: React.FC = () => {
           variants={navVariants}
         >
           {navLinks.map((link, index) => (
-            <motion.a
-              key={link.id}
-              href={link.href || `#${link.id}`}
-              className="about__nav-link"
-              whileHover={{ opacity: 0.7 }}
-              transition={{
-                duration: 0.3,
-                delay: index * 0.05,
-              }}
+            // <motion.a
+            //   key={link.id}
+            //   href={link.href || `#${link.id}`}
+            //   className="about__nav-link"
+            //   whileHover={{ opacity: 0.7 }}
+            //   transition={{
+            //     duration: 0.3,
+            //     delay: index * 0.05,
+            //   }}
+            // >
+            //   {link.label} <span className="about__nav-arrow">↗</span>
+            // </motion.a>
+            <motion.div
+                key={link.id}
+                // href={link.href || `#${link.id}`}
+              className="linkedin"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
             >
-              {link.label} <span className="about__nav-arrow">↗</span>
-            </motion.a>
+              <AnimatedLink
+                linkText={link.label}
+                hoverText={link.label}
+                href="/"
+              />
+            </motion.div>
           ))}
         </motion.nav>
 
@@ -152,9 +167,9 @@ function renderParagraph(text: string): React.ReactNode {
 
   return parts.map((part, index) => {
     if (part.startsWith("**") && part.endsWith("**")) {
-      return (
-        <strong key={index}>{part.slice(2, -2)}</strong>
-      );
+      return <strong key={index}>
+        {part.slice(2, -2)}
+      </strong>;
     }
     return part;
   });

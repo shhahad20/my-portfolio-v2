@@ -194,12 +194,12 @@ const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
     const canvasB = document.createElement("canvas");
 
     Object.assign(canvasB.style, {
-      position: "fixed",
+      position: "absolute",
       top: "0",
       left: "0",
       width: "100%",
       height: "100%",
-      zIndex: "-1",
+      // zIndex: "-1",
       inset: "0",
       pointerEvents: "none",
     });
@@ -337,7 +337,7 @@ const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
     <div
       ref={containerRef}
       className={className}
-      style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}
+      style={{ position: "absolute", inset: 0, zIndex: -1, overflow: "hidden", pointerEvents: "none" }}
     />
   );
 };
