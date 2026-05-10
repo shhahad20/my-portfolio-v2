@@ -1,0 +1,352 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   ABOUT ME SECTION — Fully Responsive Design Matching Screenshot
+   Mobile-First Approach with Comprehensive Breakpoints
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.about {
+  position: relative;
+  width: 100%;
+  min-height: auto;
+  background: #f8f6f2;
+  color: #000000;
+  padding: clamp(48px, 10vw, 100px) clamp(20px, 5vw, 60px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+
+  /* ─ Container ──────────────────────────────────────────────────────────── */
+  &__container {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(32px, 8vw, 60px);
+  }
+
+  /* ─ Header section ─────────────────────────────────────────────────────── */
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  &__title {
+    font-size: clamp(42px, 10vw, 96px);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    font-family: "PPNeueMontreal-Medium", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    text-transform: uppercase;
+    display: inline-block;
+
+    /* Responsive letter-spacing */
+    @media (max-width: 768px) {
+      letter-spacing: -0.01em;
+    }
+  }
+
+  &__number {
+    display: inline;
+    font-size: clamp(14px, 3vw, 20px);
+    font-weight: 300;
+    color: rgba(87, 79, 71, 0.5);
+    letter-spacing: 1px;
+    margin-left: clamp(8px, 2vw, 16px);
+    white-space: nowrap;
+  }
+
+  /* ─ Navigation / Links ─────────────────────────────────────────────────── */
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(16px, 3vw, 32px);
+    row-gap: clamp(12px, 2vw, 20px);
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: rgba(87, 79, 71, 0.7);
+    
+    font-size: clamp(11px, 2vw, 14px);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    
+    transition: all 0.3s ease;
+    white-space: nowrap;
+
+    &:hover {
+      color: #000000;
+
+      .about__nav-arrow {
+        opacity: 1;
+        transform: translate(2px, -2px);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(87, 79, 71, 0.4);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+  }
+
+  &__nav-arrow {
+    font-size: clamp(10px, 2vw, 12px);
+    opacity: 0.5;
+    transition: all 0.3s ease;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  /* ─ Content section ────────────────────────────────────────────────────── */
+  &__content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 5vw, 40px);
+    padding: 0;
+  }
+
+  &__paragraph {
+    font-size: clamp(15px, 2.2vw, 18px);
+    line-height: clamp(1.65px, 3vw, 1.85px);
+    color: #2c2820;
+    margin: 0;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    max-width: 100%;
+
+    /* Bold text */
+    strong {
+      font-weight: 600;
+      color: #000000;
+    }
+  }
+
+  /* ─ Responsive adjustments ─────────────────────────────────────────────── */
+
+  /* Mobile optimization (320px - 480px) */
+  @media (max-width: 480px) {
+    padding: clamp(36px, 6vw, 48px) clamp(16px, 4vw, 24px);
+
+    &__container {
+      gap: clamp(24px, 6vw, 36px);
+    }
+
+    &__title {
+      font-size: clamp(32px, 9vw, 48px);
+      word-spacing: -0.1em;
+    }
+
+    &__nav {
+      gap: clamp(12px, 2.5vw, 20px);
+    }
+
+    &__nav-link {
+      font-size: clamp(10px, 1.8vw, 12px);
+    }
+
+    &__paragraph {
+      font-size: clamp(14px, 2vw, 16px);
+      line-height: 1.7;
+      text-align: left;
+    }
+  }
+
+  /* Small Mobile (481px - 640px) */
+  @media (min-width: 481px) and (max-width: 640px) {
+    padding: 48px 24px;
+
+    &__title {
+      font-size: clamp(40px, 9vw, 64px);
+    }
+
+    &__nav-link {
+      font-size: 13px;
+    }
+  }
+
+  /* Tablet (641px - 768px) */
+  @media (min-width: 641px) and (max-width: 768px) {
+    padding: 60px 40px;
+
+    &__container {
+      max-width: 850px;
+    }
+
+    &__title {
+      font-size: clamp(48px, 10vw, 80px);
+    }
+
+    &__paragraph {
+      max-width: 95%;
+    }
+  }
+
+  /* Desktop (769px - 1024px) */
+  @media (min-width: 769px) {
+    padding: 80px 60px;
+
+    &__container {
+      gap: 60px;
+    }
+
+    &__title {
+      font-size: clamp(80px, 10vw, 96px);
+    }
+
+    &__nav {
+      gap: 28px;
+    }
+
+    &__nav-link {
+      font-size: 14px;
+      
+      &:hover {
+        transform: translateY(-1px);
+      }
+    }
+
+    &__paragraph {
+      max-width: 92%;
+      font-size: 18px;
+      line-height: 1.8;
+    }
+  }
+
+  /* Large Desktop (1025px - 1440px) */
+  @media (min-width: 1025px) {
+    padding: 100px 80px;
+
+    &__container {
+      gap: 80px;
+      max-width: 950px;
+    }
+
+    &__title {
+      font-size: 96px;
+    }
+
+    &__nav-link {
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+
+      &:hover {
+        transform: translateY(-2px);
+        color: #ff9500;
+      }
+    }
+
+    &__paragraph {
+      max-width: 88%;
+      font-size: 18px;
+      line-height: 1.85;
+    }
+  }
+
+  /* Ultra-Wide (2560px+) */
+  @media (min-width: 2560px) {
+    padding: 120px 140px;
+
+    &__container {
+      max-width: 1100px;
+      gap: 100px;
+    }
+
+    &__title {
+      font-size: 120px;
+    }
+
+    &__number {
+      font-size: 28px;
+    }
+
+    &__nav-link {
+      font-size: 16px;
+    }
+
+    &__paragraph {
+      font-size: 20px;
+      line-height: 1.9;
+    }
+  }
+
+  /* Landscape orientation */
+  @media (max-height: 800px) and (orientation: landscape) {
+    min-height: auto;
+    padding: clamp(24px, 3vh, 40px) clamp(20px, 5vw, 60px);
+
+    &__container {
+      gap: clamp(24px, 4vh, 40px);
+    }
+
+    &__title {
+      font-size: clamp(36px, 8vw, 64px);
+    }
+
+    &__paragraph {
+      font-size: clamp(14px, 2.2vh, 16px);
+      line-height: 1.6;
+    }
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   ANIMATIONS & TRANSITIONS
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.about__nav-link {
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+/* Reduce motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .about {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Print styles */
+@media print {
+  .about {
+    background: white;
+    padding: 40px;
+
+    &__container {
+      max-width: 100%;
+    }
+
+    &__content {
+      break-inside: avoid;
+    }
+
+    &__paragraph {
+      page-break-inside: avoid;
+      orphans: 3;
+      widows: 3;
+    }
+  }
+}

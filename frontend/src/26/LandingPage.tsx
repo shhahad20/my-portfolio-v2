@@ -191,7 +191,7 @@ const LandingPage: React.FC<Props> = () => {
         </div>
 
         {/* RIGHT COLUMN — Image (Hidden on mobile, shown on tablet+) */}
-        <div className="landing__right">
+        {/* <div className="landing__right"> */}
           {/* Placeholder for image content */}
           {/* {imageSrc && (
             <motion.img
@@ -209,7 +209,7 @@ const LandingPage: React.FC<Props> = () => {
           >
             This website made with Love & Coffee
           </motion.div> */}
-        </div>
+        {/* </div> */}
       </div>
 
       {/* Scroll Indicator */}

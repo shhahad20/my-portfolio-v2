@@ -11,6 +11,7 @@
 // import Navbar from "../components/Navbar";
 // import Testimonials from "../components/Testimonials";
 
+import AboutMe from "../26/Aboutme";
 import LandingPage from "../26/LandingPage";
 
 const Home: React.FC = () => {
@@ -31,6 +32,7 @@ const Home: React.FC = () => {
     // </>
     <>
     <LandingPage imageSrc="../public/Landingill.svg"/>
+    <AboutMe/>
     </>
   );
 };
