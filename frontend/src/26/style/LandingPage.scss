@@ -1,124 +1,473 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   LANDING PAGE — Fully Responsive Across All Devices
+   Mobile-First Approach with Comprehensive Breakpoints
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   BASE / MOBILE-FIRST (320px - 480px)
+
+   clamp(minimum, preferred, maximum)
+   MIN → the smallest allowed value
+   PREFERRED → usually a responsive value such as vw
+   MAX → the largest allowed value
+   ───────────────────────────────────────────────────────────────────────────── */
+
 .landing {
   min-height: 100vh;
-  background: #f8f6f2;
+  width: 100%;
+  background: transparent;
   color: #000000;
-  padding: 20px 40px;
+  position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
 
+  /* Mobile-first padding */
+  padding: clamp(16px, 5vw, 20px);
+  gap: clamp(24px, 6vw, 40px);
+
+  /* Grid pattern background */
+  &::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='20'%3E%3Cline x1='0.5' y1='0' x2='0.5' y2='20' stroke='%23574f47' stroke-opacity='0.1' stroke-width='1' stroke-dasharray='3 10'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 100px 20px;
+  }
+
+  /* ─ Content wrapper ────────────────────────────────────────────────────── */
   &__content {
+    position: relative;
     width: 100%;
     max-width: 1350px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
     margin: 0 auto;
     flex: 1;
-    // gap: 40px;
+    z-index: 2;
+    gap: clamp(32px, 8vw, 60px);
   }
 
+  /* ─ Left column ────────────────────────────────────────────────────────── */
   &__left {
-    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: clamp(16px, 4vw, 28px);
 
     .linkedin {
-      font-size: 14px;
+      font-size: clamp(11px, 2.5vw, 14px);
       text-decoration: none;
       color: #555;
       display: inline-block;
-      margin-bottom: 20px;
+      line-height: 1.4;
+      font-weight: 500;
+      letter-spacing: 0.5px;
     }
 
     .title {
-      font-size: clamp(82px, 15vw, 150px);
-      line-height: 1;
-      margin: 0 0 5px;
+      /* Fluid typography: scales from 36px on mobile to 150px on desktop */
+      font-size: clamp(36px, 15vw, 150px);
+      line-height: 0.95;
+      margin: 0;
       text-align: left;
-      font-family: "PPNeueMontreal-Medium", sans-serif;
+      font-family: "inter", sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      word-spacing: -0.1em;
     }
+
     .small-content {
+      width: 100%;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: clamp(8px, 2vw, 16px);
     }
+
     .subtitle {
-      font-size: 16px;
+      font-size: clamp(13px, 3vw, 16px);
+      line-height: 1.6;
       color: #555;
-      margin-bottom: 10px;
+      margin: 0;
+      max-width: 100%;
     }
 
     .meta {
-      font-size: 12px;
+      font-size: clamp(10px, 2.2vw, 12px);
       color: #888;
-      margin-bottom: 30px;
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
+    /* ─ AI Input — Fully responsive ─────────────────────────────────────── */
     .ai-input {
       display: flex;
       align-items: center;
-      background: #efece8;
-      border-radius: 30px;
-      padding: 6px;
-      width: fit-content;
+      gap: clamp(8px, 2vw, 10px);
 
-      .ai-button {
-        background-color: rgba(255, 0, 89, 0.282);
-        border: none;
-        display: flex;
-        align-items: center;
-        border-radius: 20px;
-        padding: 8px 16px;
-        color: #ff005a;
-        font-size: 14px;
-        cursor: pointer;
+      width: 100%;
+      max-width: clamp(280px, 100%, 340px);
+
+      padding: clamp(3px, 0.8vw, 5px) clamp(6px, 1vw, 10px);
+      border-radius: 500px;
+      border: 1px solid rgba(87, 79, 71, 0.14);
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+
+      transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease;
+
+      &:focus-within {
+        border-color: rgba(87, 79, 71, 0.32);
+        background: rgba(255, 255, 255, 0.88);
+        box-shadow: 0 0 0 3px rgba(87, 79, 71, 0.06);
+
+        .ai-input__icon {
+          opacity: 0.85;
+        }
+        .ai-input__send {
+          color: rgba(87, 79, 71, 0.8);
+        }
       }
 
-      input {
+      /* Icon */
+      &__icon {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.55;
+        transition: opacity 0.18s ease;
+
+        svg {
+          width: clamp(14px, 3vw, 16px);
+          height: clamp(14px, 3vw, 16px);
+        }
+      }
+
+      /* Input field */
+      &__field {
+        flex: 1;
+        min-width: 0;
+
         border: none;
         outline: none;
         background: transparent;
-        padding: 8px 12px;
-        min-width: 180px;
+
+        font-size: clamp(10.5px, 2vw, 12px);
+        font-family: inherit;
+        color: #2c2820;
+        line-height: 1.4;
+
+        padding: 0;
+
+        &::placeholder {
+          color: rgba(87, 79, 71, 0.38);
+        }
+
+        /* Better mobile input experience */
+        @media (max-width: 480px) {
+          font-size: 13px; // prevents iOS zoom-on-focus
+        }
       }
 
-      .arrow {
-        font-size: 18px;
-        margin-right: 10px;
+      /* Send button */
+      &__send {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        min-width: clamp(26px, 8vw, 30px);
+        min-height: clamp(26px, 8vw, 30px);
+        padding: 6px;
+
+        border: none;
+        border-radius: 6px;
+        background: transparent;
+        color: rgba(87, 79, 71, 0.5);
+        cursor: pointer;
+
+        transition:
+          background 0.15s ease,
+          color 0.15s ease;
+
+        svg {
+          width: clamp(10px, 2.5vw, 12px);
+          height: clamp(10px, 2.5vw, 12px);
+        }
+
+        &:hover {
+          background: rgba(87, 79, 71, 0.07);
+          color: rgba(87, 79, 71, 0.8);
+        }
+
+        &:active {
+          background: rgba(87, 79, 71, 0.12);
+        }
       }
     }
   }
 
+  /* ─ Right column ───────────────────────────────────────────────────────── */
   &__right {
-    flex: 1;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    img {
-      max-width: 300px;
-      width: 100%;
-
-    }
-
-    .vertical-text {
-      position: absolute;
-      right: -40px;
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      font-size: 12px;
-      color: #333;
-    }
+    display: none; // hidden on mobile by default
   }
 
+  /* ─ Scroll indicator ───────────────────────────────────────────────────── */
   .scroll {
+    position: relative;
+    z-index: 2;
     text-align: center;
-    font-size: 12px;
+    font-size: clamp(10px, 2vw, 12px);
     color: #777;
-    margin-top: 20px;
+    margin-top: clamp(16px, 4vw, 24px);
     animation: bounce 4s infinite;
+    letter-spacing: 0.5px;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SMALL MOBILE (481px - 767px)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (min-width: 481px) {
+  .landing {
+    &__left {
+      .title {
+        font-size: clamp(40px, 12vw, 100px);
+      }
+
+      .small-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: clamp(16px, 4vw, 24px);
+      }
+
+      .ai-input {
+        max-width: clamp(300px, 90%, 360px);
+      }
+    }
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   TABLET (768px - 1024px)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  .landing {
+    padding: clamp(20px, 6vw, 40px);
+
+    &__content {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: clamp(40px, 8vw, 80px);
+    }
+
+    &__left {
+      flex: 1;
+      max-width: 60%;
+
+      .title {
+        font-size: clamp(48px, 10vw, 120px);
+      }
+
+      .small-content {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: clamp(12px, 3vw, 20px);
+      }
+
+      .ai-input {
+        max-width: clamp(320px, 95%, 360px);
+      }
+    }
+
+    &__right {
+      display: flex;
+      flex: 1;
+      position: relative;
+      justify-content: center;
+      align-items: center;
+      min-height: 300px;
+
+      img {
+        max-width: 100%;
+        width: clamp(200px, 45vw, 300px);
+        height: auto;
+        object-fit: contain;
+      }
+
+      .vertical-text {
+        display: none;
+      }
+    }
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   DESKTOP (1025px - 1440px)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (min-width: 1025px) {
+  .landing {
+    padding: 40px 60px;
+
+    &__content {
+      gap: 60px;
+    }
+
+    &__left {
+      max-width: none;
+
+      .title {
+        font-size: clamp(80px, 15vw, 150px);
+      }
+
+      .ai-input {
+        max-width: 360px;
+
+        &__field {
+          font-size: 13.5px;
+        }
+      }
+    }
+
+    &__right {
+      min-height: 400px;
+
+      img {
+        max-width: 350px;
+      }
+
+      .vertical-text {
+        position: absolute;
+        right: -50px;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        font-size: 12px;
+        color: #555;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+      }
+    }
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   LARGE DESKTOP (1441px+)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (min-width: 1441px) {
+  .landing {
+    padding: 40px 80px;
+
+    &__content {
+      max-width: 1400px;
+      gap: 80px;
+    }
+
+    &__left {
+      .title {
+        font-size: 150px;
+      }
+    }
+
+    &__right {
+      img {
+        max-width: 400px;
+      }
+    }
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   LANDSCAPE ORIENTATION (Mobile & Tablet)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (max-height: 600px) and (orientation: landscape) {
+  .landing {
+    min-height: auto;
+    padding: clamp(12px, 3vh, 20px);
+    gap: clamp(16px, 3vh, 24px);
+
+    &__content {
+      gap: clamp(24px, 4vw, 40px);
+    }
+
+    &__left {
+      gap: clamp(12px, 3vh, 16px);
+
+      .title {
+        font-size: clamp(28px, 8vw, 64px);
+        line-height: 0.9;
+      }
+
+      .ai-input {
+        max-width: clamp(250px, 70%, 340px);
+      }
+    }
+
+    .scroll {
+      display: none;
+    }
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   ULTRA-WIDE DISPLAYS (2560px+)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (min-width: 2560px) {
+  .landing {
+    padding: 60px 120px;
+
+    &__content {
+      max-width: 1600px;
+      gap: 100px;
+    }
+
+    &__left {
+      .title {
+        font-size: 180px;
+      }
+
+      .subtitle {
+        font-size: 20px;
+      }
+    }
+
+    &__right {
+      img {
+        max-width: 500px;
+      }
+    }
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   ANIMATIONS
+   ───────────────────────────────────────────────────────────────────────────── */
+
 @keyframes bounce {
   0%,
   100% {
@@ -126,32 +475,5 @@
   }
   50% {
     transform: translateY(-5px);
-  }
-}
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .landing {
-    padding: 20px;
-
-    &__content {
-      flex-direction: column;
-      align-items: center; // center on mobile
-      text-align: center;
-    }
-    &__left {
-      align-items: center;
-    }
-    &__right {
-      width: 100%;
-      margin-top: 40px;
-
-      img {
-        max-width: 220px;
-      }
-
-      .vertical-text {
-        display: none;
-      }
-    }
   }
 }

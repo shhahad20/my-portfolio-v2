@@ -26,8 +26,8 @@ class SimplexNoise {
   }
 
   private static grad3 = new Float32Array([
-    1, 1, 0, -1, 1, 0, 1, -1, 0, -1, -1, 0, 1, 0, 1, -1, 0, 1, 1, 0, -1, -1,
-    0, -1, 0, 1, 1, 0, -1, 1, 0, 1, -1, 0, -1, -1,
+    1, 1, 0, -1, 1, 0, 1, -1, 0, -1, -1, 0, 1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0,
+    -1, 0, 1, 1, 0, -1, 1, 0, 1, -1, 0, -1, -1,
   ]);
 
   noise3D(xin: number, yin: number, zin: number): number {
@@ -78,28 +78,29 @@ class SimplexNoise {
     const dot = (g: number, x: number, y: number, z: number) =>
       grad3[g * 3] * x + grad3[g * 3 + 1] * y + grad3[g * 3 + 2] * z;
 
-    const contrib = (
-      x: number,
-      y: number,
-      z: number,
-      gi: number
-    ): number => {
+    const contrib = (x: number, y: number, z: number, gi: number): number => {
       const t = 0.6 - x * x - y * y - z * z;
       return t < 0 ? 0 : t * t * t * t * dot(gi, x, y, z);
     };
 
     const n0 = contrib(x0, y0, z0, permMod12[ii + perm[jj + perm[kk]]]);
     const n1 = contrib(
-      x1, y1, z1,
-      permMod12[ii + i1 + perm[jj + j1 + perm[kk + k1]]]
+      x1,
+      y1,
+      z1,
+      permMod12[ii + i1 + perm[jj + j1 + perm[kk + k1]]],
     );
     const n2 = contrib(
-      x2, y2, z2,
-      permMod12[ii + i2 + perm[jj + j2 + perm[kk + k2]]]
+      x2,
+      y2,
+      z2,
+      permMod12[ii + i2 + perm[jj + j2 + perm[kk + k2]]],
     );
     const n3 = contrib(
-      x3, y3, z3,
-      permMod12[ii + 1 + perm[jj + 1 + perm[kk + 1]]]
+      x3,
+      y3,
+      z3,
+      permMod12[ii + 1 + perm[jj + 1 + perm[kk + 1]]],
     );
 
     return 32 * (n0 + n1 + n2 + n3);
@@ -142,18 +143,18 @@ const THEME_PRESETS = {
   dark: {
     backgroundColor: "hsla(220,60%,3%,1)",
     compositeOp: "lighter" as GlobalCompositeOperation,
-    baseHue: 120,   // green → teal
+    baseHue: 120, // green → teal
     rangeHue: 60,
     rayLightness: 65,
     maxAlpha: 1,
   },
-light: {
-backgroundColor: "#fef7e8",
-baseHue: 28,
-rangeHue: 18,
-rayLightness: 68,
-maxAlpha: 0.22,
-},
+  light: {
+    backgroundColor: "#fef7e8",
+    baseHue: 28,
+    rangeHue: 18,
+    rayLightness: 68,
+    maxAlpha: 0.22,
+  },
 } as const;
 
 // ─── Component ─────────────────────────────────────────────────────────────
@@ -175,8 +176,8 @@ const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
   className,
 }) => {
   const preset = THEME_PRESETS[theme];
-  const resolvedBg   = backgroundColor ?? preset.backgroundColor;
-  const resolvedHue  = baseHue        ?? preset.baseHue;
+  const resolvedBg = backgroundColor ?? preset.backgroundColor;
+  const resolvedHue = baseHue ?? preset.baseHue;
   const { compositeOp, rangeHue, rayLightness, maxAlpha } = preset;
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
@@ -185,8 +186,8 @@ const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
     const container = containerRef.current;
     if (!container) return;
     // Capture resolved values so the closure stays stable
-    const bgColor   = resolvedBg;
-    const hue       = resolvedHue;
+    const bgColor = resolvedBg;
+    const hue = resolvedHue;
 
     // Two-canvas setup: `a` is the offscreen drawing buffer, `b` is displayed
     const canvasA = document.createElement("canvas");
@@ -238,8 +239,7 @@ const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
       const life = 0;
       const ttl = BASE_TTL + rand(RANGE_TTL);
       const width = BASE_WIDTH + rand(RANGE_WIDTH);
-      const speed =
-        BASE_SPEED + rand(RANGE_SPEED) * (round(rand(1)) ? 1 : -1);
+      const speed = BASE_SPEED + rand(RANGE_SPEED) * (round(rand(1)) ? 1 : -1);
       const rayHue = hue + rand(rangeHue);
       rayProps.set([x, y1, y2, life, ttl, width, speed, rayHue], i);
     };
@@ -252,8 +252,13 @@ const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
     };
 
     const drawRay = (
-      x: number, y1: number, y2: number,
-      life: number, ttl: number, width: number, hue: number
+      x: number,
+      y1: number,
+      y2: number,
+      life: number,
+      ttl: number,
+      width: number,
+      hue: number,
     ) => {
       const gradient = ctxA.createLinearGradient(x, y1, x, y2);
       const alpha = fadeInOut(life, ttl) * maxAlpha;
@@ -272,20 +277,20 @@ const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
     };
 
     const updateRay = (i: number) => {
-      let x     = rayProps[i];
-      const y1    = rayProps[i + 1];
-      const y2    = rayProps[i + 2];
-      let life  = rayProps[i + 3];
-      const ttl   = rayProps[i + 4];
+      let x = rayProps[i];
+      const y1 = rayProps[i + 1];
+      const y2 = rayProps[i + 2];
+      let life = rayProps[i + 3];
+      const ttl = rayProps[i + 4];
       const width = rayProps[i + 5];
       const speed = rayProps[i + 6];
-      const hue   = rayProps[i + 7];
+      const hue = rayProps[i + 7];
 
       drawRay(x, y1, y2, life, ttl, width, hue);
 
       x += speed;
       life++;
-      rayProps[i]     = x;
+      rayProps[i] = x;
       rayProps[i + 3] = life;
 
       if (x < 0 || x > canvasA.width || life > ttl) initRay(i);

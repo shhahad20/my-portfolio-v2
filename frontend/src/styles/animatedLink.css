@@ -21,7 +21,6 @@
 }
 
 .animated-link .default-text {
-  color: #818180;
   color: #000000;
 }
 
@@ -34,7 +33,7 @@
 
 @media (max-width: 768px) {
   .animated-link .default-text {
-    color: #EFEEEC;
+    color: #000000;
   }
 }
 /*# sourceMappingURL=animatedLink.css.map */
