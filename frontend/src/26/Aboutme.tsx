@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import "./style/AboutMe.scss";
 import AnimatedLink from "../components/AnimatedLink";
@@ -7,15 +7,18 @@ interface NavLink {
   id: string;
   label: string;
   href?: string;
+  paragraphIndex: number;
 }
 
 const AboutMe: React.FC = () => {
+  const [activeId, setActiveId] = useState<string | null>(null);
+
   const navLinks: NavLink[] = [
-    { id: "engineering", label: "SOFTWARE ENGINEERING ↗" },
-    { id: "fullstack", label: "FULL-STACK DEV ↗" },
-    { id: "design", label: "GRAPHIC DESIGN ↗" },
-    { id: "teaching", label: "TEACHING ASSISTANT ↗" },
-    { id: "certifications", label: "CERTIFICATIONS ↗" },
+    { id: "engineering", label: "SOFTWARE ENGINEERING ↗", paragraphIndex: 0 },
+    { id: "fullstack", label: "FULL-STACK DEV ↗", paragraphIndex: 2 },
+    { id: "design", label: "GRAPHIC DESIGN ↗", paragraphIndex: 3 },
+    { id: "teaching", label: "TEACHING ASSISTANT ↗", paragraphIndex: 4 },
+    { id: "certifications", label: "CERTIFICATIONS ↗", paragraphIndex: 5 },
   ];
 
   const paragraphs = [
@@ -81,6 +84,19 @@ const AboutMe: React.FC = () => {
     },
   };
 
+  const handleNavLinkClick = (linkId: string, paragraphIndex: number) => {
+    setActiveId(linkId);
+    
+    // Optional: Scroll to paragraph smoothly
+    const contentElement = document.querySelector(".about__content");
+    if (contentElement) {
+      const paragraphs = contentElement.querySelectorAll(".about__paragraph");
+      if (paragraphs[paragraphIndex]) {
+        paragraphs[paragraphIndex].scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+  };
+
   return (
     <section className="about" id="about">
       <div className="about__container">
@@ -105,37 +121,23 @@ const AboutMe: React.FC = () => {
           viewport={{ once: true, margin: "-100px" }}
           variants={navVariants}
         >
-          {navLinks.map((link, index) => (
-            // <motion.a
-            //   key={link.id}
-            //   href={link.href || `#${link.id}`}
-            //   className="about__nav-link"
-            //   whileHover={{ opacity: 0.7 }}
-            //   transition={{
-            //     duration: 0.3,
-            //     delay: index * 0.05,
-            //   }}
-            // >
-            //   {link.label} <span className="about__nav-arrow">↗</span>
-            // </motion.a>
-            <motion.div
-                key={link.id}
-                // href={link.href || `#${link.id}`}
-              className="linkedin"
+          {navLinks.map((link) => (
+            <motion.button
+              key={link.id}
+              className={`about__nav-button ${activeId === link.id ? "about__nav-button--active" : ""}`}
+              onClick={() => handleNavLinkClick(link.id, link.paragraphIndex)}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
+              whileHover={{ opacity: 0.7 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <AnimatedLink
-                linkText={link.label}
-                hoverText={link.label}
-                href="/"
-              />
-            </motion.div>
+              <span className="about__nav-text">{link.label}</span>
+            </motion.button>
           ))}
         </motion.nav>
 
-        {/* Content - All Paragraphs Visible */}
+        {/* Content - All Paragraphs Visible with Highlight Support */}
         <motion.div
           className="about__content"
           initial="hidden"
@@ -143,15 +145,20 @@ const AboutMe: React.FC = () => {
           viewport={{ once: true, margin: "-100px" }}
           variants={contentVariants}
         >
-          {paragraphs.map((paragraph, index) => (
-            <motion.p
-              key={index}
-              className="about__paragraph"
-              variants={paragraphVariants}
-            >
-              {renderParagraph(paragraph)}
-            </motion.p>
-          ))}
+          {paragraphs.map((paragraph, index) => {
+            const navLink = navLinks.find((link) => link.paragraphIndex === index);
+            const isActive = activeId === navLink?.id;
+
+            return (
+              <motion.p
+                key={index}
+                className={`about__paragraph ${isActive ? "about__paragraph--highlighted" : ""}`}
+                variants={paragraphVariants}
+              >
+                {renderParagraph(paragraph)}
+              </motion.p>
+            );
+          })}
         </motion.div>
       </div>
     </section>
@@ -167,9 +174,7 @@ function renderParagraph(text: string): React.ReactNode {
 
   return parts.map((part, index) => {
     if (part.startsWith("**") && part.endsWith("**")) {
-      return <strong key={index}>
-        {part.slice(2, -2)}
-      </strong>;
+      return <strong key={index}>{part.slice(2, -2)}</strong>;
     }
     return part;
   });

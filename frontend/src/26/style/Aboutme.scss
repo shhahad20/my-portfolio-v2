@@ -35,7 +35,7 @@
 
   &__title {
     font-size: clamp(42px, 10vw, 96px);
-    font-weight: 400;
+    font-weight: 300;
     letter-spacing: -0.02em;
     line-height: 1;
     margin: 0;
@@ -51,9 +51,10 @@
   }
 
   &__number {
+    font-family: "PPNeueMontreal-Light", sans-serif;
     display: inline;
     font-size: clamp(14px, 3vw, 20px);
-    font-weight: 300;
+    font-weight: 200;
     color: rgba(87, 79, 71, 0.5);
     letter-spacing: 1px;
     margin-left: clamp(8px, 2vw, 16px);
@@ -71,12 +72,12 @@
     margin: 0;
   }
 
-  &__nav-link {
+  &__nav-button {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: 0;
-    border: none;
+    padding: 8px 12px;
+    border: 1px solid transparent;
     background: transparent;
     color: rgba(87, 79, 71, 0.7);
     
@@ -86,32 +87,37 @@
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
+    border-radius: 4px;
     
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
     white-space: nowrap;
 
     &:hover {
       color: #000000;
-
-      .about__nav-arrow {
-        opacity: 1;
-        transform: translate(2px, -2px);
-      }
+      background: rgba(87, 79, 71, 0.05);
+      transform: translateY(-1px);
     }
 
     &:focus-visible {
       outline: 2px solid rgba(87, 79, 71, 0.4);
       outline-offset: 4px;
-      border-radius: 2px;
+    }
+
+    /* Active state */
+    &--active {
+      color: #000000;
+      background: rgba(255, 149, 0, 0.1);
+      border-color: rgba(255, 149, 0, 0.3);
+      font-weight: 600;
+
+      &:hover {
+        background: rgba(255, 149, 0, 0.15);
+      }
     }
   }
 
-  &__nav-arrow {
-    font-size: clamp(10px, 2vw, 12px);
-    opacity: 0.5;
-    transition: all 0.3s ease;
+  &__nav-text {
     display: inline-block;
-    flex-shrink: 0;
   }
 
   /* ─ Content section ────────────────────────────────────────────────────── */
@@ -131,11 +137,28 @@
     font-weight: 400;
     letter-spacing: 0.2px;
     max-width: 100%;
+    padding: clamp(16px, 3vw, 24px);
+    border-left: 3px solid transparent;
+    border-radius: 4px;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 
     /* Bold text */
     strong {
-      font-weight: 600;
+      font-weight: 700;
       color: #000000;
+    }
+
+    /* Highlighted state */
+    &--highlighted {
+      background: rgba(255, 149, 0, 0.08);
+      border-left-color: #ff9500;
+      color: #1a1713;
+      padding: clamp(16px, 3vw, 24px);
+
+      strong {
+        color: #ff9500;
+        font-weight: 700;
+      }
     }
   }
 
@@ -158,14 +181,16 @@
       gap: clamp(12px, 2.5vw, 20px);
     }
 
-    &__nav-link {
+    &__nav-button {
       font-size: clamp(10px, 1.8vw, 12px);
+      padding: 6px 10px;
     }
 
     &__paragraph {
       font-size: clamp(14px, 2vw, 16px);
       line-height: 1.7;
       text-align: left;
+      padding: clamp(12px, 2vw, 16px);
     }
   }
 
@@ -177,8 +202,12 @@
       font-size: clamp(40px, 9vw, 64px);
     }
 
-    &__nav-link {
+    &__nav-button {
       font-size: 13px;
+    }
+
+    &__paragraph {
+      padding: 14px 16px;
     }
   }
 
@@ -196,6 +225,7 @@
 
     &__paragraph {
       max-width: 95%;
+      padding: 16px 20px;
     }
   }
 
@@ -215,11 +245,16 @@
       gap: 28px;
     }
 
-    &__nav-link {
+    &__nav-button {
       font-size: 14px;
+      padding: 8px 14px;
       
       &:hover {
-        transform: translateY(-1px);
+        transform: translateY(-2px);
+      }
+
+      &--active {
+        transform: translateY(-2px);
       }
     }
 
@@ -227,6 +262,7 @@
       max-width: 92%;
       font-size: 18px;
       line-height: 1.8;
+      padding: 18px 24px;
     }
   }
 
@@ -243,12 +279,19 @@
       font-size: 96px;
     }
 
-    &__nav-link {
+    &__nav-button {
       transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+      padding: 10px 16px;
 
       &:hover {
         transform: translateY(-2px);
         color: #ff9500;
+      }
+
+      &--active {
+        color: #ff9500;
+        background: rgba(255, 149, 0, 0.12);
+        border-color: rgba(255, 149, 0, 0.4);
       }
     }
 
@@ -256,6 +299,7 @@
       max-width: 88%;
       font-size: 18px;
       line-height: 1.85;
+      padding: 20px 28px;
     }
   }
 
@@ -276,13 +320,15 @@
       font-size: 28px;
     }
 
-    &__nav-link {
+    &__nav-button {
       font-size: 16px;
+      padding: 12px 20px;
     }
 
     &__paragraph {
       font-size: 20px;
       line-height: 1.9;
+      padding: 24px 32px;
     }
   }
 
@@ -302,6 +348,7 @@
     &__paragraph {
       font-size: clamp(14px, 2.2vh, 16px);
       line-height: 1.6;
+      padding: clamp(12px, 2vh, 16px);
     }
   }
 }
@@ -310,9 +357,8 @@
    ANIMATIONS & TRANSITIONS
    ───────────────────────────────────────────────────────────────────────────── */
 
-.about__nav-link {
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
-
+.about__nav-button,
+.about__paragraph {
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
@@ -347,6 +393,13 @@
       page-break-inside: avoid;
       orphans: 3;
       widows: 3;
+      padding: 0;
+      border: none;
+      background: none;
+    }
+
+    &__nav-button {
+      display: none;
     }
   }
 }
