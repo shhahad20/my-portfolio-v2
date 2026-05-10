@@ -2,28 +2,39 @@ import React from "react";
 import { motion } from "framer-motion";
 import "./style/LandingPage.scss";
 import AnimatedLink from "../components/AnimatedLink";
+import Shuffle from "../components/Shuffle";
+import AuroraBackground from "./Aurorabackground";
 
 interface Props {
   imageSrc?: string;
 }
 
-const SHAHAD = "SHAHAD".split("");
-const ALTHARWA = "ALTHARWA".split("");
+// const SHAHAD = "SHAHAD".split("");
+// const ALTHARWA = "ALTHARWA".split("");
 
-const letterVariants = (i: number, lineOffset = 0) => ({
-  gooHover: {
-    y: [0, -14, 0],
-    transition: {
-      delay: (i + lineOffset) * 0.045,
-      duration: 0.5,
-      ease: "easeInOut",
-    },
-  },
-});
+// const letterVariants = (i: number, lineOffset = 0) => ({
+//   gooHover: {
+//     y: [0, -14, 0],
+//     transition: {
+//       delay: (i + lineOffset) * 0.045,
+//       duration: 0.5,
+//       ease: "easeInOut",
+//     },
+//   },
+// });
 
-const LandingPage: React.FC<Props> = ({ imageSrc }) => {
+const LandingPage: React.FC<Props> = () => {
   return (
     <div className="landing">
+      {/* ── Aurora canvas background ─────────────────────────────────────── */}
+      {/*
+        theme="light"  → multiply composite, blue/violet/rose hues on #f8f6f2
+        theme="dark"   → lighter composite, green/teal glow on deep navy
+        You can still override backgroundColor and baseHue individually.
+      */}
+      <AuroraBackground theme="light" />
+
+
       {/* Hidden SVG — defines the goo filter for HTML elements */}
       <svg
         aria-hidden="true"
@@ -64,7 +75,7 @@ const LandingPage: React.FC<Props> = ({ imageSrc }) => {
             />
           </motion.div>
 
-          <motion.h1
+          {/* <motion.h1
             className="title"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -96,8 +107,25 @@ const LandingPage: React.FC<Props> = ({ imageSrc }) => {
                 </motion.span>
               ))}
             </span>
-          </motion.h1>
+          </motion.h1> */}
 
+          <Shuffle
+            className="title"
+            text="Shahad altharwa"
+            shuffleDirection="right"
+            duration={0.35}
+            textAlign="left"
+            animationMode="evenodd"
+            shuffleTimes={1}
+            ease="power3.out"
+            stagger={0.03}
+            threshold={0.1}
+            triggerOnce={true}
+            triggerOnHover
+            respectReducedMotion={true}
+            loop={false}
+            loopDelay={0}
+          />
           <div className="small-content">
             <motion.p
               className="subtitle"
@@ -171,8 +199,9 @@ const LandingPage: React.FC<Props> = ({ imageSrc }) => {
           </motion.div>
         </div>
 
+        <div className="landing__right"></div>
         {/* RIGHT */}
-        <div className="landing__right">
+        {/* <div className="landing__right">
           {imageSrc && (
             <motion.img
               src={imageSrc}
@@ -189,7 +218,7 @@ const LandingPage: React.FC<Props> = ({ imageSrc }) => {
           >
             This website made with Love & Coffee
           </motion.div>
-        </div>
+        </div> */}
       </div>
 
       <div className="scroll">scroll for more</div>

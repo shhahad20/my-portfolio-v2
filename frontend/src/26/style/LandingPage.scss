@@ -21,7 +21,6 @@
 
   &__left {
     flex: 1;
-      border: 1px solid blue;
 
     .linkedin {
       font-size: 14px;
@@ -31,34 +30,12 @@
       margin-bottom: 20px;
     }
 
-    // .title {
-    //   font-size: clamp(62px, 10vw, 120px);
-    //   line-height: 1;
-    //   margin: 0 0 5px;
-    //   font-family: "PPNeueMontreal-Medium", sans-serif;
-    //   // height: 400px;
-    // }
     .title {
-      border: 1px solid red;
-      font-size: clamp(62px, 10vw, 120px);
+      font-size: clamp(82px, 15vw, 150px);
       line-height: 1;
       margin: 0 0 5px;
+      text-align: left;
       font-family: "PPNeueMontreal-Medium", sans-serif;
-      // ← no filter here — font renders clean at rest
-
-      .title-line {
-        display: inline-block; // keeps each line as its own block for layout
-      }
-
-      .letter {
-        display: inline-block; // required for transform + filter to apply
-        cursor: default;
-        transition: filter 0.15s ease;
-
-        &:hover {
-          filter: url(#goo-title); // ← goo activates only on the hovered char
-        }
-      }
     }
     .small-content {
       display: flex;
@@ -118,12 +95,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-      border: 1px solid blue;
-
     img {
       max-width: 300px;
       width: 100%;
-      border: 1px solid pink;
 
     }
 
