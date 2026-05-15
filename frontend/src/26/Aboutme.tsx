@@ -86,13 +86,16 @@ const AboutMe: React.FC = () => {
 
   const handleNavLinkClick = (linkId: string, paragraphIndex: number) => {
     setActiveId(linkId);
-    
+
     // Optional: Scroll to paragraph smoothly
     const contentElement = document.querySelector(".about__content");
     if (contentElement) {
       const paragraphs = contentElement.querySelectorAll(".about__paragraph");
       if (paragraphs[paragraphIndex]) {
-        paragraphs[paragraphIndex].scrollIntoView({ behavior: "smooth", block: "center" });
+        paragraphs[paragraphIndex].scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
       }
     }
   };
@@ -132,7 +135,12 @@ const AboutMe: React.FC = () => {
               whileHover={{ opacity: 0.7 }}
               whileTap={{ scale: 0.98 }}
             >
-              <span className="about__nav-text">{link.label}</span>
+              {/* <span className="about__nav-text">{link.label}</span> */}
+              <AnimatedLink
+                linkText={link.label}
+                hoverText={link.label}
+                href="#"
+              />
             </motion.button>
           ))}
         </motion.nav>
@@ -146,7 +154,9 @@ const AboutMe: React.FC = () => {
           variants={contentVariants}
         >
           {paragraphs.map((paragraph, index) => {
-            const navLink = navLinks.find((link) => link.paragraphIndex === index);
+            const navLink = navLinks.find(
+              (link) => link.paragraphIndex === index,
+            );
             const isActive = activeId === navLink?.id;
 
             return (
