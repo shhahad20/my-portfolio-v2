@@ -23,7 +23,7 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: clamp(32px, 8vw, 60px);
+    // gap: clamp(32px, 8vw, 60px);
   }
 
   /* ─ Header section ─────────────────────────────────────────────────────── */
@@ -136,7 +136,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: clamp(24px, 5vw, 40px);
+    gap: clamp(8px, 2vw, 10px);
     padding: 0;
   }
 
@@ -182,7 +182,8 @@
     padding: clamp(36px, 6vw, 48px) clamp(16px, 4vw, 24px);
 
     &__container {
-      gap: clamp(24px, 6vw, 36px);
+      // gap: clamp(24px, 6vw, 36px);
+      gap: 10px;
     }
 
     &__title {
@@ -250,7 +251,7 @@
     padding: 80px 60px;
 
     &__container {
-      gap: 60px;
+      // gap: 60px;
     }
 
     &__title {
@@ -287,7 +288,7 @@
     padding: 100px 80px;
 
     &__container {
-      gap: 80px;
+      gap: 20px;
       max-width: 950px;
     }
 
