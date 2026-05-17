@@ -151,7 +151,6 @@ export default function WhatKeepsMeBusy() {
   }, []);
 
   const satellites = isMobile ? SATELLITES_MOBILE : SATELLITES_DESKTOP;
-  const active = hoverId !== null ? PROJECTS[hoverId] : null;
 
   /* Small debounce so the center doesn't flicker between adjacent circles */
   const handleEnter = (id: number) => {
@@ -216,55 +215,68 @@ export default function WhatKeepsMeBusy() {
           />
         ))}
 
-        {/* Center circle */}
+        {/* Center circle — always shows idle prompt */}
         <div
           className="wkmb-center"
-          style={{
-            left: `${CENTER_X}%`,
-            top: `${CENTER_Y}%`,
-            background: active ? active.bg : "transparent",
-          }}
-          aria-live="polite"
-          aria-atomic="true"
+          style={{ left: `${CENTER_X}%`, top: `${CENTER_Y}%` }}
         >
-          {/* Media layer (image / video) */}
-          {active && isMedia(active.bg) && (
-            isVideo(active.bg) ? (
-              <video
-                key={active.id}
-                className="wkmb-media"
-                src={active.bg}
-                autoPlay
-                muted
-                loop
-                playsInline
-              />
-            ) : (
-              <img
-                key={active.id}
-                className="wkmb-media"
-                src={active.bg}
-                alt={active.label}
-              />
-            )
-          )}
-
-          {/* Text overlay */}
           <div className="wkmb-center-label">
-            {active ? (
-              <span
-                className="wkmb-center-project"
-                style={{ color: active.accent }}
-              >
-                {active.label}
-              </span>
-            ) : (
-              <span className="wkmb-center-idle">
-                Choose a circle<br />to <em>Explore</em>
-              </span>
-            )}
+            <span className="wkmb-center-idle">
+              Choose a circle<br />to <em>Explore</em>
+            </span>
           </div>
         </div>
+
+        {/* Floating preview rectangle — appears above/below the hovered satellite.
+            Flips to "below" for circles in the upper 42 % of the field so it
+            never clips outside the viewport. key={hoverId} re-mounts on each
+            new hover to restart the entrance animation cleanly. */}
+        {hoverId !== null && (() => {
+          const sat  = satellites[hoverId];
+          const proj = PROJECTS[hoverId];
+          const dir  = sat.y >= 42 ? "above" : "below";
+
+          return (
+            <div
+              key={`preview-${hoverId}`}
+              className={`wkmb-preview wkmb-preview--${dir}`}
+              style={{ left: `${sat.x}%`, top: `${sat.y}%` }}
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {/* Inner element carries the float + enter animations so they
+                  don't overwrite the wrapper's static positioning transform */}
+              <div className="wkmb-preview-inner">
+
+                {/* Media fill */}
+                {isVideo(proj.bg) ? (
+                  <video
+                    className="wkmb-preview-media"
+                    src={proj.bg}
+                    autoPlay muted loop playsInline
+                  />
+                ) : isMedia(proj.bg) ? (
+                  <img
+                    className="wkmb-preview-media"
+                    src={proj.bg}
+                    alt={proj.label}
+                  />
+                ) : (
+                  <div
+                    className="wkmb-preview-fill"
+                    style={{ background: proj.bg }}
+                  />
+                )}
+
+                {/* Label strip */}
+                <div className="wkmb-preview-label">
+                  <span style={{ color: proj.accent }}>{proj.label}</span>
+                </div>
+
+              </div>
+            </div>
+          );
+        })()}
       </main>
 
       {/* Bottom accent line */}
