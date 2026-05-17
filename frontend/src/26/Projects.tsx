@@ -3,13 +3,14 @@ import "./style/projects.scss";
 import { Project, fetchProjects } from "../redux/slices/projectsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
+import AnimatedLink from "../components/AnimatedLink";
 
 /* ─── Data ──────────────────────────────────────────────────────────────── */
 
 const NAV_LINKS = [
-  { label: "GITHUB",    href: "#" },
-  { label: "INSTAGRAM", href: "#" },
-  { label: "BEHANCE",   href: "#" },
+  { id:1, label: "GITHUB ↗",    href: "https://github.com/shhahad20" },
+  { id:2, label: "INSTAGRAM ↗", href: "https://www.instagram.com/shahad.th.designer/" },
+  { id:3, label: "BEHANCE ↗",   href: "https://www.behance.net/shhahad20" },
 ];
 
 export const FALLBACK_PROJECTS: Project[] = [
@@ -134,16 +135,21 @@ export default function WhatKeepsMeBusy() {
         </div>
         <nav className="wkmb-nav" aria-label="External links">
           {NAV_LINKS.map(({ label, href }) => (
-            <a
-              key={label}
-              href={href}
-              className="wkmb-nav-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {label}
-              <span className="wkmb-arrow" aria-hidden="true">↗</span>
-            </a>
+            // <a
+            //   key={label}
+            //   href={href}
+            //   className="wkmb-nav-link"
+            //   target="_blank"
+            //   rel="noopener noreferrer"
+            // >
+            //   {label}
+            //   <span className="wkmb-arrow" aria-hidden="true">↗</span>
+            // </a>
+            <AnimatedLink
+                linkText={label}
+                hoverText={label}
+                href={href}
+              />
           ))}
         </nav>
       </header>
@@ -250,7 +256,7 @@ export default function WhatKeepsMeBusy() {
       </main>
 
       {/* Bottom accent line */}
-      <div className="wkmb-baseline" />
+      {/* <div className="wkmb-baseline" /> */}
     </div>
   );
 }
