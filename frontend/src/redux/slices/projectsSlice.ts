@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { API_URL } from "../../api/api";
 
 /* ─── Types ──────────────────────────────────────────────────────────────── */
 
@@ -31,7 +32,7 @@ export const fetchProjects = createAsyncThunk<
   { rejectValue: string }
 >("projects/fetchAll", async (_, { rejectWithValue }) => {
   try {
-    const res = await fetch("/api/projects");
+    const res = await fetch(`${API_URL}/projects`);
 
     if (!res.ok) {
       return rejectWithValue(
