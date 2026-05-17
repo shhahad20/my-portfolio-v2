@@ -10,7 +10,9 @@
   max-width: 1350px;
   margin-left: auto;
   margin-right: auto;
-  padding: clamp(48px, 8vw, 100px) clamp(24px, 6vw, 100px);
+//   padding: clamp(48px, 8vw, 100px) clamp(24px, 6vw, 100px);
+padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem) 0.75rem;
+
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
