@@ -2,7 +2,6 @@
 
 /* ── Root ─────────────────────────────────────────────────────────────────── */
 .wkmb-root {
-  min-height: 100vh;
   font-family: "DM Sans", system-ui, sans-serif;
   overflow: hidden;
   display: flex;
@@ -82,9 +81,10 @@
 .wkmb-field {
   position: relative;
   width: 100%;
-  flex: 1;
 
-  // Desktop: landscape 16:11 keeps the concentric rings circular in px-space
+  // Desktop: landscape 16:11 keeps the concentric rings circular in px-space.
+  // No flex: 1 here — flex stretching in a column container overrides
+  // aspect-ratio and turns the rings into ovals on tablet viewports.
   aspect-ratio: 16 / 11;
   min-height: 480px;
   overflow: hidden;
@@ -194,9 +194,6 @@
 
 /* ── Mobile — vertical rectangle layout (≤ 640 px) ───────────────────────── */
 @media (max-width: 640px) {
-    // .wkmb-root {
-    // max-width: 100%;
-    // }
   .wkmb-header {
     flex-direction: column;
     align-items: flex-start;
