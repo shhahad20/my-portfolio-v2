@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import './style/projects.scss';
+import "./style/projects.scss";
+import { Project, fetchProjects } from "../redux/slices/projectsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
 
 /* ─── Data ──────────────────────────────────────────────────────────────── */
 
@@ -9,116 +12,49 @@ const NAV_LINKS = [
   { label: "BEHANCE",   href: "#" },
 ];
 
-/**
- * Projects — replace `bg` with a real image URL / video src when ready.
- * The component treats any value that starts with "http" or "/" as a media URL.
- */
-const PROJECTS = [
-  { id: 0,  label: "Design Systems",      bg: "#c8cec5", accent: "#2d3a29" },
-  { id: 1,  label: "Motion Graphics",     bg: "#c5c8ce", accent: "#29303a" },
-  { id: 2,  label: "Brand Identity",      bg: "https://puakrabhbhosdpyxfsfk.supabase.co/storage/v1/object/public/images/Hillside%2017.png", accent: "#3a2929" },
-  { id: 3,  label: "3D Visualization",    bg: "#c5cece", accent: "#293a3a" },
-  { id: 4,  label: "Web Development",     bg: "#cec8c5", accent: "#3a3029" },
-  { id: 5,  label: "Photography",         bg: "#c5c5ce", accent: "#29293a" },
-  { id: 6,  label: "UI/UX Research",      bg: "#cec5c8", accent: "#3a2930" },
-  { id: 7,  label: "Typography",          bg: "#c8cec5", accent: "#303a2d" },
-  { id: 8,  label: "Illustration",        bg: "#cecec5", accent: "#3a3a29" },
-  { id: 9,  label: "Prototyping",         bg: "#c5c8c5", accent: "#2d302d" },
-  { id: 10, label: "Creative Coding",     bg: "#c8c5ce", accent: "#30293a" },
-  { id: 11, label: "Video Editing",       bg: "#cec5ce", accent: "#3a293a" },
-  { id: 12, label: "Art Direction",       bg: "#c5cec8", accent: "#293a30" },
-  { id: 13, label: "Interaction Design",  bg: "#cec8ce", accent: "#3a303a" },
-  { id: 14, label: "Data Visualization",  bg: "#c5cec5", accent: "#293a29" },
-  { id: 15, label: "Product Design",      bg: "#cec5c5", accent: "#3a2929" },
-  { id: 16, label: "Animation",           bg: "#c8c8ce", accent: "#30303a" },
-  { id: 17, label: "User Research",       bg: "#cecec8", accent: "#3a3a30" },
-  { id: 18, label: "Print Design",        bg: "#c5c8ce", accent: "#293040" },
-  { id: 19, label: "AR / VR",             bg: "#cec8c5", accent: "#3a3029" },
-  { id: 20, label: "Copywriting",         bg: "#c8cec8", accent: "#303a30" },
-  { id: 21, label: "Concept Art",         bg: "#c8c5c8", accent: "#30293a" },
-  { id: 22, label: "Sound Design",        bg: "#c5c5c8", accent: "#292930" },
-  { id: 23, label: "Generative Art",      bg: "#c8c5c5", accent: "#302929" },
+export const FALLBACK_PROJECTS: Project[] = [
+  { id: "fallback-0",  label: "Design Systems",     project_name: "Design Systems",     bg: "#c8cec5", accent: "#2d3a29", created_at: "", updated_at: "" },
+  { id: "fallback-1",  label: "Motion Graphics",     project_name: "Motion Graphics",     bg: "#c5c8ce", accent: "#29303a", created_at: "", updated_at: "" },
+  { id: "fallback-2",  label: "Brand Identity",      project_name: "Brand Identity",      bg: "https://puakrabhbhosdpyxfsfk.supabase.co/storage/v1/object/public/images/Hillside%2017.png", accent: "#3a2929", created_at: "", updated_at: "" },
+  { id: "fallback-3",  label: "3D Visualization",    project_name: "3D Visualization",    bg: "#c5cece", accent: "#293a3a", created_at: "", updated_at: "" },
+  { id: "fallback-4",  label: "Web Development",     project_name: "Web Development",     bg: "#cec8c5", accent: "#3a3029", created_at: "", updated_at: "" },
+  { id: "fallback-5",  label: "Photography",         project_name: "Photography",         bg: "#c5c5ce", accent: "#29293a", created_at: "", updated_at: "" },
+  { id: "fallback-6",  label: "UI/UX Research",      project_name: "UI/UX Research",      bg: "#cec5c8", accent: "#3a2930", created_at: "", updated_at: "" },
+  { id: "fallback-7",  label: "Typography",          project_name: "Typography",          bg: "#c8cec5", accent: "#303a2d", created_at: "", updated_at: "" },
+  { id: "fallback-8",  label: "Illustration",        project_name: "Illustration",        bg: "#cecec5", accent: "#3a3a29", created_at: "", updated_at: "" },
+  { id: "fallback-9",  label: "Prototyping",         project_name: "Prototyping",         bg: "#c5c8c5", accent: "#2d302d", created_at: "", updated_at: "" },
+  { id: "fallback-10", label: "Creative Coding",     project_name: "Creative Coding",     bg: "#c8c5ce", accent: "#30293a", created_at: "", updated_at: "" },
+  { id: "fallback-11", label: "Video Editing",       project_name: "Video Editing",       bg: "#cec5ce", accent: "#3a293a", created_at: "", updated_at: "" },
+  { id: "fallback-12", label: "Art Direction",       project_name: "Art Direction",       bg: "#c5cec8", accent: "#293a30", created_at: "", updated_at: "" },
+  { id: "fallback-13", label: "Interaction Design",  project_name: "Interaction Design",  bg: "#cec8ce", accent: "#3a303a", created_at: "", updated_at: "" },
+  { id: "fallback-14", label: "Data Visualization",  project_name: "Data Visualization",  bg: "#c5cec5", accent: "#293a29", created_at: "", updated_at: "" },
+  { id: "fallback-15", label: "Product Design",      project_name: "Product Design",      bg: "#cec5c5", accent: "#3a2929", created_at: "", updated_at: "" },
+  { id: "fallback-16", label: "Animation",           project_name: "Animation",           bg: "#c8c8ce", accent: "#30303a", created_at: "", updated_at: "" },
+  { id: "fallback-17", label: "User Research",       project_name: "User Research",       bg: "#cecec8", accent: "#3a3a30", created_at: "", updated_at: "" },
+  { id: "fallback-18", label: "Print Design",        project_name: "Print Design",        bg: "#c5c8ce", accent: "#293040", created_at: "", updated_at: "" },
+  { id: "fallback-19", label: "AR / VR",             project_name: "AR / VR",             bg: "#cec8c5", accent: "#3a3029", created_at: "", updated_at: "" },
+  { id: "fallback-20", label: "Copywriting",         project_name: "Copywriting",         bg: "#c8cec8", accent: "#303a30", created_at: "", updated_at: "" },
+  { id: "fallback-21", label: "Concept Art",         project_name: "Concept Art",         bg: "#c8c5c8", accent: "#30293a", created_at: "", updated_at: "" },
+  { id: "fallback-22", label: "Sound Design",        project_name: "Sound Design",        bg: "#c5c5c8", accent: "#292930", created_at: "", updated_at: "" },
+  { id: "fallback-23", label: "Generative Art",      project_name: "Generative Art",      bg: "#c8c5c5", accent: "#302929", created_at: "", updated_at: "" },
 ];
 
-/**
- * DESKTOP — Two concentric rings around the center circle at (51%, 47%).
- *
- * Layer 1 — inner ring (r ≈ 16 % width), 8 circles, 45° step.
- * Layer 2 — outer ring (r ≈ 26 % width), 16 circles, 22.5° step.
- * Y-offsets are scaled by the 16:11 aspect ratio so the rings read
- * as true circles in pixel space.
- */
 const SATELLITES_DESKTOP = [
-  // ── Inner ring ────────────────────────────────────────────────────────────
-  { id: 0,  x: 51,  y: 24  },
-  { id: 1,  x: 62,  y: 31  },
-  { id: 2,  x: 67,  y: 47  },
-  { id: 3,  x: 62,  y: 63  },
-  { id: 4,  x: 51,  y: 70  },
-  { id: 5,  x: 40,  y: 63  },
-  { id: 6,  x: 35,  y: 47  },
-  { id: 7,  x: 40,  y: 31  },
-  // ── Outer ring ────────────────────────────────────────────────────────────
-  { id: 8,  x: 51,  y: 9   },
-  { id: 9,  x: 61,  y: 12  },
-  { id: 10, x: 69,  y: 20  },
-  { id: 11, x: 75,  y: 33  },
-  { id: 12, x: 77,  y: 47  },
-  { id: 13, x: 75,  y: 61  },
-  { id: 14, x: 69,  y: 74  },
-  { id: 15, x: 61,  y: 82  },
-  { id: 16, x: 51,  y: 85  },
-  { id: 17, x: 41,  y: 82  },
-  { id: 18, x: 33,  y: 74  },
-  { id: 19, x: 27,  y: 61  },
-  { id: 20, x: 25,  y: 47  },
-  { id: 21, x: 27,  y: 33  },
-  { id: 22, x: 33,  y: 20  },
-  { id: 23, x: 41,  y: 12  },
+  { id: 0,  x: 51, y: 24 }, { id: 1,  x: 62, y: 31 }, { id: 2,  x: 67, y: 47 }, { id: 3,  x: 62, y: 63 },
+  { id: 4,  x: 51, y: 70 }, { id: 5,  x: 40, y: 63 }, { id: 6,  x: 35, y: 47 }, { id: 7,  x: 40, y: 31 },
+  { id: 8,  x: 51, y: 9  }, { id: 9,  x: 61, y: 12 }, { id: 10, x: 69, y: 20 }, { id: 11, x: 75, y: 33 },
+  { id: 12, x: 77, y: 47 }, { id: 13, x: 75, y: 61 }, { id: 14, x: 69, y: 74 }, { id: 15, x: 61, y: 82 },
+  { id: 16, x: 51, y: 85 }, { id: 17, x: 41, y: 82 }, { id: 18, x: 33, y: 74 }, { id: 19, x: 27, y: 61 },
+  { id: 20, x: 25, y: 47 }, { id: 21, x: 27, y: 33 }, { id: 22, x: 33, y: 20 }, { id: 23, x: 41, y: 12 },
 ];
 
-/**
- * MOBILE — 4-column × 6-row aligned grid inside a portrait (2:3) field.
- *
- * Columns  x : [18, 39, 63, 82] %
- * Rows     y : [6, 18, 30, ·, 62, 74, 86] % — gap at ~47 % for center circle.
- *
- * Closest satellite to center (51 %, 47 %):
- *   (39 %, 30 %) → Δx = 45 px, Δy = 96 px (at 375 × 562 px)
- *   distance ≈ 106 px  >  clearance (40 + 21 = 61 px) ✓
- */
 const SATELLITES_MOBILE = [
-  // Row 1 — y = 6 %
-  { id: 0,  x: 18, y: 6  },
-  { id: 1,  x: 39, y: 6  },
-  { id: 2,  x: 63, y: 6  },
-  { id: 3,  x: 82, y: 6  },
-  // Row 2 — y = 18 %
-  { id: 4,  x: 18, y: 18 },
-  { id: 5,  x: 39, y: 18 },
-  { id: 6,  x: 63, y: 18 },
-  { id: 7,  x: 82, y: 18 },
-  // Row 3 — y = 30 % (above center gap)
-  { id: 8,  x: 18, y: 30 },
-  { id: 9,  x: 39, y: 30 },
-  { id: 10, x: 63, y: 30 },
-  { id: 11, x: 82, y: 30 },
-  //  ·····  center circle at (51 %, 47 %)  ·····
-  // Row 4 — y = 62 % (below center gap)
-  { id: 12, x: 18, y: 62 },
-  { id: 13, x: 39, y: 62 },
-  { id: 14, x: 63, y: 62 },
-  { id: 15, x: 82, y: 62 },
-  // Row 5 — y = 74 %
-  { id: 16, x: 18, y: 74 },
-  { id: 17, x: 39, y: 74 },
-  { id: 18, x: 63, y: 74 },
-  { id: 19, x: 82, y: 74 },
-  // Row 6 — y = 86 %
-  { id: 20, x: 18, y: 86 },
-  { id: 21, x: 39, y: 86 },
-  { id: 22, x: 63, y: 86 },
-  { id: 23, x: 82, y: 86 },
+  { id: 0,  x: 18, y: 6  }, { id: 1,  x: 39, y: 6  }, { id: 2,  x: 63, y: 6  }, { id: 3,  x: 82, y: 6  },
+  { id: 4,  x: 18, y: 18 }, { id: 5,  x: 39, y: 18 }, { id: 6,  x: 63, y: 18 }, { id: 7,  x: 82, y: 18 },
+  { id: 8,  x: 18, y: 30 }, { id: 9,  x: 39, y: 30 }, { id: 10, x: 63, y: 30 }, { id: 11, x: 82, y: 30 },
+  { id: 12, x: 18, y: 62 }, { id: 13, x: 39, y: 62 }, { id: 14, x: 63, y: 62 }, { id: 15, x: 82, y: 62 },
+  { id: 16, x: 18, y: 74 }, { id: 17, x: 39, y: 74 }, { id: 18, x: 63, y: 74 }, { id: 19, x: 82, y: 74 },
+  { id: 20, x: 18, y: 86 }, { id: 21, x: 39, y: 86 }, { id: 22, x: 63, y: 86 }, { id: 23, x: 82, y: 86 },
 ];
 
 const CENTER_X = 51;
@@ -136,12 +72,30 @@ const isVideo = (src: string) =>
 /* ─── Component ──────────────────────────────────────────────────────────── */
 
 export default function WhatKeepsMeBusy() {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { projects, loading, error } = useSelector(
+    (state: RootState) => state.projects,
+  );
+
+  // Fetch on mount — dispatching again is safe; add a loaded guard in the
+  // slice's extraReducers if you want to prevent duplicate requests.
+  useEffect(() => {
+    dispatch(fetchProjects());
+  }, [dispatch]);
+
   const [hoverId, setHoverId] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Show fallback data while loading or on error so the layout is never empty
+  const displayProjects  = projects.length > 0 ? projects : FALLBACK_PROJECTS;
+  const visibleProjects  = displayProjects.slice(0, 24);
+
   /* ── Responsive layout switch ── */
-  const [isMobile, setIsMobile] = useState<boolean>(
-    () => typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+  const [isMobile, setIsMobile] = useState<boolean>(() =>
+    typeof window !== "undefined"
+      ? window.innerWidth < MOBILE_BREAKPOINT
+      : false,
   );
 
   useEffect(() => {
@@ -150,9 +104,11 @@ export default function WhatKeepsMeBusy() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  const satellites = isMobile ? SATELLITES_MOBILE : SATELLITES_DESKTOP;
+  // Slice satellite positions to match however many projects are actually shown
+  const satellites = (isMobile ? SATELLITES_MOBILE : SATELLITES_DESKTOP)
+    .slice(0, visibleProjects.length);
 
-  /* Small debounce so the center doesn't flicker between adjacent circles */
+  /* Small debounce so the preview doesn't flicker when moving between circles */
   const handleEnter = (id: number) => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -185,7 +141,8 @@ export default function WhatKeepsMeBusy() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              {label}<span className="wkmb-arrow" aria-hidden="true">↗</span>
+              {label}
+              <span className="wkmb-arrow" aria-hidden="true">↗</span>
             </a>
           ))}
         </nav>
@@ -193,27 +150,41 @@ export default function WhatKeepsMeBusy() {
 
       {/* ── Circle Field ─────────────────────────────────────── */}
       <main
-        className={`wkmb-field${isMobile ? " wkmb-field--mobile" : ""}`}
+        className={`wkmb-field${isMobile ? " wkmb-field--mobile" : ""}${loading ? " wkmb-field--loading" : ""}`}
         aria-label="Portfolio projects"
+        aria-busy={loading}
       >
+        {/* Error banner — rendered in-field so the layout doesn't shift */}
+        {error && (
+          <p className="wkmb-error" role="alert">{error}</p>
+        )}
+
         {/* Satellite circles */}
-        {satellites.map((s) => (
-          <div
-            key={s.id}
-            className={`wkmb-sat${hoverId === s.id ? " wkmb-sat--active" : ""}`}
-            style={{ left: `${s.x}%`, top: `${s.y}%` }}
-            onMouseEnter={() => handleEnter(s.id)}
-            onMouseLeave={handleLeave}
-            onTouchStart={() => handleEnter(s.id)}
-            onTouchEnd={handleLeave}
-            role="button"
-            tabIndex={0}
-            aria-label={PROJECTS[s.id].label}
-            onKeyDown={(e) => e.key === "Enter" && handleEnter(s.id)}
-            onFocus={() => handleEnter(s.id)}
-            onBlur={handleLeave}
-          />
-        ))}
+        {satellites.map((s, index) => {
+          const project = visibleProjects[index];
+          if (!project) return null;
+
+          return (
+            <div
+              key={project.id}
+              className={`wkmb-sat${hoverId === index ? " wkmb-sat--active" : ""}${loading ? " wkmb-sat--skeleton" : ""}`}
+              style={{ left: `${s.x}%`, top: `${s.y}%` }}
+              onMouseEnter={() => handleEnter(index)}
+              onMouseLeave={handleLeave}
+              onTouchStart={() => handleEnter(index)}
+              onTouchEnd={handleLeave}
+              role="button"
+              tabIndex={loading ? -1 : 0}
+              aria-label={project.label}
+              aria-disabled={loading}
+              onKeyDown={(e) => !loading && e.key === "Enter" && handleEnter(index)}
+              onFocus={() => !loading && handleEnter(index)}
+              onBlur={handleLeave}
+            >
+              <span className="wkmb-sat-label">{project.label}</span>
+            </div>
+          );
+        })}
 
         {/* Center circle — always shows idle prompt */}
         <div
@@ -228,49 +199,48 @@ export default function WhatKeepsMeBusy() {
         </div>
 
         {/* Floating preview rectangle — appears above/below the hovered satellite.
-            Flips to "below" for circles in the upper 42 % of the field so it
-            never clips outside the viewport. key={hoverId} re-mounts on each
-            new hover to restart the entrance animation cleanly. */}
-        {hoverId !== null && (() => {
-          const sat  = satellites[hoverId];
-          const proj = PROJECTS[hoverId];
-          const dir  = sat.y >= 42 ? "above" : "below";
+            key={preview-${project.id}} re-mounts on each new hover so the
+            entrance animation always plays from scratch. */}
+        {hoverId !== null && visibleProjects[hoverId] && (() => {
+          const sat     = satellites[hoverId];
+          const project = visibleProjects[hoverId];
+          const dir     = sat.y >= 42 ? "above" : "below";
 
           return (
             <div
-              key={`preview-${hoverId}`}
+              key={`preview-${project.id}`}
               className={`wkmb-preview wkmb-preview--${dir}`}
               style={{ left: `${sat.x}%`, top: `${sat.y}%` }}
               aria-live="polite"
               aria-atomic="true"
             >
-              {/* Inner element carries the float + enter animations so they
-                  don't overwrite the wrapper's static positioning transform */}
               <div className="wkmb-preview-inner">
 
-                {/* Media fill */}
-                {isVideo(proj.bg) ? (
+                {isVideo(project.bg) ? (
                   <video
                     className="wkmb-preview-media"
-                    src={proj.bg}
+                    src={project.bg}
                     autoPlay muted loop playsInline
                   />
-                ) : isMedia(proj.bg) ? (
+                ) : isMedia(project.bg) ? (
                   <img
                     className="wkmb-preview-media"
-                    src={proj.bg}
-                    alt={proj.label}
+                    src={project.bg}
+                    alt={project.label}
                   />
                 ) : (
                   <div
                     className="wkmb-preview-fill"
-                    style={{ background: proj.bg }}
+                    style={{ background: project.bg || "#c8cec5" }}
                   />
                 )}
 
-                {/* Label strip */}
+                {/* Uses project_name (the full DB title) rather than the
+                    short display label shown inside the satellite circle */}
                 <div className="wkmb-preview-label">
-                  <span style={{ color: proj.accent }}>{proj.label}</span>
+                  <span style={{ color: project.accent }}>
+                    {project.project_name}
+                  </span>
                 </div>
 
               </div>

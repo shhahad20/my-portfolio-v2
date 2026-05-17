@@ -52,6 +52,8 @@ export const fetchData = async (
     if (error) throw ApiError.internal(`Error fetching data from ${table}`);
 
     res.json(data);
+
+    console.log(`Fetched data from ${table} with search term: ${searchTerm || "none"}`);
   } catch (error) {
     next(error);
   }

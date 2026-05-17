@@ -5,6 +5,7 @@ import itemsRouter from "../src/routers/itemsRouter.js";
 import aiChatRouter from "../src/routers/aiChatRouter.js";
 import apiErrorHandler from '../src/middlewares/errorHandler.js';
 import homeRouter from '../src/routers/homeRouter.js';
+import projectsRouter from '../src/routers/projectsRouter.js';
 
 
 config()
@@ -41,6 +42,7 @@ app.use((req, res, next) => {
 });
 app.use('/', homeRouter)
 app.use('/api', itemsRouter)
+app.use('/api', projectsRouter)
 app.use('/api', aiChatRouter)
 
 app.use(apiErrorHandler);

@@ -100,6 +100,10 @@
   transform: translate(-50%, -50%);
   cursor: pointer;
   outline: none;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition:
     border-color  0.22s ease,
     border-style  0.22s ease,
@@ -113,6 +117,28 @@
     border-style: solid;
     transform: translate(-50%, -50%) scale(1.07);
     background: rgba(0, 0, 0, 0.025);
+  }
+}
+
+// Label rendered inside the satellite — hidden by default, fades in on hover
+.wkmb-sat-label {
+  opacity: 0;
+  padding: 0 0.35rem;
+  font-size: clamp(0.44rem, 0.62vw, 0.58rem);
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #4a4744;
+  font-weight: 400;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease 0.05s;
+
+  .wkmb-sat--active & {
+    opacity: 1;
   }
 }
 
