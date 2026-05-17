@@ -165,7 +165,8 @@
 
   em {
     font-style: italic;
-    font-weight: 300;
+    // font-weight: 300;
+    font-family: 'PPNeueMontreal-Regular', sans-serif;
   }
 }
 
@@ -225,7 +226,7 @@
   // Idle / active text scales for the smaller circle
   .wkmb-center-idle,
   .wkmb-center-project {
-    font-size: clamp(0.55rem, 2.8vw, 0.72rem);
+    font-size: 10px;
   }
 }
 

@@ -16,7 +16,7 @@ const NAV_LINKS = [
 const PROJECTS = [
   { id: 0,  label: "Design Systems",      bg: "#c8cec5", accent: "#2d3a29" },
   { id: 1,  label: "Motion Graphics",     bg: "#c5c8ce", accent: "#29303a" },
-  { id: 2,  label: "Brand Identity",      bg: "#cec5c5", accent: "#3a2929" },
+  { id: 2,  label: "Brand Identity",      bg: "https://puakrabhbhosdpyxfsfk.supabase.co/storage/v1/object/public/images/Hillside%2017.png", accent: "#3a2929" },
   { id: 3,  label: "3D Visualization",    bg: "#c5cece", accent: "#293a3a" },
   { id: 4,  label: "Web Development",     bg: "#cec8c5", accent: "#3a3029" },
   { id: 5,  label: "Photography",         bg: "#c5c5ce", accent: "#29293a" },
