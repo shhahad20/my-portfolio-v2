@@ -13,6 +13,7 @@
 
 import AboutMe from "../26/Aboutme";
 import LandingPage from "../26/LandingPage";
+import WhatKeepsMeBusy from "../26/Projects";
 
 const Home: React.FC = () => {
   return (
@@ -33,6 +34,7 @@ const Home: React.FC = () => {
     <>
     <LandingPage imageSrc="../public/Landingill.svg"/>
     <AboutMe/>
+    <WhatKeepsMeBusy/>
     </>
   );
 };
