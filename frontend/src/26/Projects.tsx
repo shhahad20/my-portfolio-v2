@@ -1,5 +1,6 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import './style/projects.scss';
+
 /* ─── Data ──────────────────────────────────────────────────────────────── */
 
 const NAV_LINKS = [
@@ -40,46 +41,89 @@ const PROJECTS = [
 ];
 
 /**
- * Satellite positions: x/y are percentage of the field container.
- * All circles are centered on their x/y via transform: translate(-50%, -50%).
- * The center circle lives at CX=51%, CY=47%.
+ * DESKTOP — Two concentric rings around the center circle at (51%, 47%).
  *
- * Layer 1 — inner ring (ids 0–7):  r=16% of field width, 8 circles, 45° step.
- * Layer 2 — outer ring (ids 8–23): r=26% of field width, 16 circles, 22.5° step.
- * Y-offsets are scaled by 16/11 ≈ 1.4545 to compensate for the 16:11 aspect
- * ratio so both rings appear as true circles in pixel space.
+ * Layer 1 — inner ring (r ≈ 16 % width), 8 circles, 45° step.
+ * Layer 2 — outer ring (r ≈ 26 % width), 16 circles, 22.5° step.
+ * Y-offsets are scaled by the 16:11 aspect ratio so the rings read
+ * as true circles in pixel space.
  */
-const SATELLITES = [
-  // ── Inner ring (r = 16 % width) ──────────────────────────────────────────
-  { id: 0,  x: 51,  y: 24  }, // 0°   top
-  { id: 1,  x: 62,  y: 31  }, // 45°  top-right
-  { id: 2,  x: 67,  y: 47  }, // 90°  right
-  { id: 3,  x: 62,  y: 63  }, // 135° bottom-right
-  { id: 4,  x: 51,  y: 70  }, // 180° bottom
-  { id: 5,  x: 40,  y: 63  }, // 225° bottom-left
-  { id: 6,  x: 35,  y: 47  }, // 270° left
-  { id: 7,  x: 40,  y: 31  }, // 315° top-left
-  // ── Outer ring (r = 26 % width) ──────────────────────────────────────────
-  { id: 8,  x: 51,  y: 9   }, // 0°   top
-  { id: 9,  x: 61,  y: 12  }, // 22.5°
-  { id: 10, x: 69,  y: 20  }, // 45°
-  { id: 11, x: 75,  y: 33  }, // 67.5°
-  { id: 12, x: 77,  y: 47  }, // 90°  right
-  { id: 13, x: 75,  y: 61  }, // 112.5°
-  { id: 14, x: 69,  y: 74  }, // 135°
-  { id: 15, x: 61,  y: 82  }, // 157.5°
-  { id: 16, x: 51,  y: 85  }, // 180° bottom
-  { id: 17, x: 41,  y: 82  }, // 202.5°
-  { id: 18, x: 33,  y: 74  }, // 225°
-  { id: 19, x: 27,  y: 61  }, // 247.5°
-  { id: 20, x: 25,  y: 47  }, // 270° left
-  { id: 21, x: 27,  y: 33  }, // 292.5°
-  { id: 22, x: 33,  y: 20  }, // 315°
-  { id: 23, x: 41,  y: 12  }, // 337.5°
+const SATELLITES_DESKTOP = [
+  // ── Inner ring ────────────────────────────────────────────────────────────
+  { id: 0,  x: 51,  y: 24  },
+  { id: 1,  x: 62,  y: 31  },
+  { id: 2,  x: 67,  y: 47  },
+  { id: 3,  x: 62,  y: 63  },
+  { id: 4,  x: 51,  y: 70  },
+  { id: 5,  x: 40,  y: 63  },
+  { id: 6,  x: 35,  y: 47  },
+  { id: 7,  x: 40,  y: 31  },
+  // ── Outer ring ────────────────────────────────────────────────────────────
+  { id: 8,  x: 51,  y: 9   },
+  { id: 9,  x: 61,  y: 12  },
+  { id: 10, x: 69,  y: 20  },
+  { id: 11, x: 75,  y: 33  },
+  { id: 12, x: 77,  y: 47  },
+  { id: 13, x: 75,  y: 61  },
+  { id: 14, x: 69,  y: 74  },
+  { id: 15, x: 61,  y: 82  },
+  { id: 16, x: 51,  y: 85  },
+  { id: 17, x: 41,  y: 82  },
+  { id: 18, x: 33,  y: 74  },
+  { id: 19, x: 27,  y: 61  },
+  { id: 20, x: 25,  y: 47  },
+  { id: 21, x: 27,  y: 33  },
+  { id: 22, x: 33,  y: 20  },
+  { id: 23, x: 41,  y: 12  },
+];
+
+/**
+ * MOBILE — 4-column × 6-row aligned grid inside a portrait (2:3) field.
+ *
+ * Columns  x : [18, 39, 63, 82] %
+ * Rows     y : [6, 18, 30, ·, 62, 74, 86] % — gap at ~47 % for center circle.
+ *
+ * Closest satellite to center (51 %, 47 %):
+ *   (39 %, 30 %) → Δx = 45 px, Δy = 96 px (at 375 × 562 px)
+ *   distance ≈ 106 px  >  clearance (40 + 21 = 61 px) ✓
+ */
+const SATELLITES_MOBILE = [
+  // Row 1 — y = 6 %
+  { id: 0,  x: 18, y: 6  },
+  { id: 1,  x: 39, y: 6  },
+  { id: 2,  x: 63, y: 6  },
+  { id: 3,  x: 82, y: 6  },
+  // Row 2 — y = 18 %
+  { id: 4,  x: 18, y: 18 },
+  { id: 5,  x: 39, y: 18 },
+  { id: 6,  x: 63, y: 18 },
+  { id: 7,  x: 82, y: 18 },
+  // Row 3 — y = 30 % (above center gap)
+  { id: 8,  x: 18, y: 30 },
+  { id: 9,  x: 39, y: 30 },
+  { id: 10, x: 63, y: 30 },
+  { id: 11, x: 82, y: 30 },
+  //  ·····  center circle at (51 %, 47 %)  ·····
+  // Row 4 — y = 62 % (below center gap)
+  { id: 12, x: 18, y: 62 },
+  { id: 13, x: 39, y: 62 },
+  { id: 14, x: 63, y: 62 },
+  { id: 15, x: 82, y: 62 },
+  // Row 5 — y = 74 %
+  { id: 16, x: 18, y: 74 },
+  { id: 17, x: 39, y: 74 },
+  { id: 18, x: 63, y: 74 },
+  { id: 19, x: 82, y: 74 },
+  // Row 6 — y = 86 %
+  { id: 20, x: 18, y: 86 },
+  { id: 21, x: 39, y: 86 },
+  { id: 22, x: 63, y: 86 },
+  { id: 23, x: 82, y: 86 },
 ];
 
 const CENTER_X = 51;
 const CENTER_Y = 47;
+const MOBILE_BREAKPOINT = 640;
 
 /* ─── Helpers ────────────────────────────────────────────────────────────── */
 
@@ -93,11 +137,23 @@ const isVideo = (src: string) =>
 
 export default function WhatKeepsMeBusy() {
   const [hoverId, setHoverId] = useState<number | null>(null);
-  const timerRef = useRef<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  /* ── Responsive layout switch ── */
+  const [isMobile, setIsMobile] = useState<boolean>(
+    () => typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+  );
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const satellites = isMobile ? SATELLITES_MOBILE : SATELLITES_DESKTOP;
   const active = hoverId !== null ? PROJECTS[hoverId] : null;
 
-  /* Small debounce so the center doesn't flicker between close circles */
+  /* Small debounce so the center doesn't flicker between adjacent circles */
   const handleEnter = (id: number) => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -105,6 +161,7 @@ export default function WhatKeepsMeBusy() {
     }
     setHoverId(id);
   };
+
   const handleLeave = () => {
     timerRef.current = setTimeout(() => setHoverId(null), 60);
   };
@@ -122,7 +179,13 @@ export default function WhatKeepsMeBusy() {
         </div>
         <nav className="wkmb-nav" aria-label="External links">
           {NAV_LINKS.map(({ label, href }) => (
-            <a key={label} href={href} className="wkmb-nav-link" target="_blank" rel="noopener noreferrer">
+            <a
+              key={label}
+              href={href}
+              className="wkmb-nav-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {label}<span className="wkmb-arrow" aria-hidden="true">↗</span>
             </a>
           ))}
@@ -130,16 +193,20 @@ export default function WhatKeepsMeBusy() {
       </header>
 
       {/* ── Circle Field ─────────────────────────────────────── */}
-      <main className="wkmb-field" aria-label="Portfolio projects">
-
+      <main
+        className={`wkmb-field${isMobile ? " wkmb-field--mobile" : ""}`}
+        aria-label="Portfolio projects"
+      >
         {/* Satellite circles */}
-        {SATELLITES.map((s) => (
+        {satellites.map((s) => (
           <div
             key={s.id}
             className={`wkmb-sat${hoverId === s.id ? " wkmb-sat--active" : ""}`}
             style={{ left: `${s.x}%`, top: `${s.y}%` }}
             onMouseEnter={() => handleEnter(s.id)}
             onMouseLeave={handleLeave}
+            onTouchStart={() => handleEnter(s.id)}
+            onTouchEnd={handleLeave}
             role="button"
             tabIndex={0}
             aria-label={PROJECTS[s.id].label}
@@ -160,7 +227,7 @@ export default function WhatKeepsMeBusy() {
           aria-live="polite"
           aria-atomic="true"
         >
-          {/* Media layer */}
+          {/* Media layer (image / video) */}
           {active && isMedia(active.bg) && (
             isVideo(active.bg) ? (
               <video
@@ -182,7 +249,7 @@ export default function WhatKeepsMeBusy() {
             )
           )}
 
-          {/* Label overlay */}
+          {/* Text overlay */}
           <div className="wkmb-center-label">
             {active ? (
               <span
@@ -200,10 +267,8 @@ export default function WhatKeepsMeBusy() {
         </div>
       </main>
 
-      {/* Bottom accent line (matches reference) */}
+      {/* Bottom accent line */}
       <div className="wkmb-baseline" />
     </div>
   );
 }
-
-
