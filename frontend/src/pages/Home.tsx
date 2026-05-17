@@ -12,6 +12,7 @@
 // import Testimonials from "../components/Testimonials";
 
 import AboutMe from "../26/Aboutme";
+import BigPictureStats from "../26/BigPicture";
 import LandingPage from "../26/LandingPage";
 import WhatKeepsMeBusy from "../26/Projects";
 import TestimonialsSection from "../26/Testimonials";
@@ -37,6 +38,7 @@ const Home: React.FC = () => {
     <AboutMe/>
     <WhatKeepsMeBusy/>
     <TestimonialsSection/>
+    <BigPictureStats/>
     </>
   );
 };
