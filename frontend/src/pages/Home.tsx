@@ -13,10 +13,11 @@
 
 import AboutMe from "../26/Aboutme";
 import BigPictureStats from "../26/BigPicture";
+import StickyFooter from "../26/Footer";
 import LandingPage from "../26/LandingPage";
 import WhatKeepsMeBusy from "../26/Projects";
 import TestimonialsSection from "../26/Testimonials";
-
+import "../26/style/Footer.scss";
 const Home: React.FC = () => {
   return (
     // <>
@@ -33,13 +34,17 @@ const Home: React.FC = () => {
     //   <Contact/>
     //   <Footer/>
     // </>
-    <>
-    <LandingPage imageSrc="../public/Landingill.svg"/>
-    <AboutMe/>
-    <WhatKeepsMeBusy/>
-    <TestimonialsSection/>
-    <BigPictureStats/>
-    </>
+    <div className="page-shell">
+      <main className="page-shell-content">
+        <LandingPage imageSrc="../public/Landingill.svg" />
+        <AboutMe />
+        <WhatKeepsMeBusy />
+        <TestimonialsSection />
+        <BigPictureStats />
+        <StickyFooter />
+      </main>
+
+    </div>
   );
 };
 

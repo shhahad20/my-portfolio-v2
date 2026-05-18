@@ -139,7 +139,7 @@
   animation: smokeC 3.2s 2.13s ease-in-out infinite;
 }
 .big-picture-section {
-  //   min-height: 100vh;
+    min-height: 80vh;
   max-width: 1350px;
   margin-left: auto;
   margin-right: auto;
@@ -188,8 +188,6 @@ padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem) 0.75rem;
   grid-template-columns: 1fr 1fr;
   row-gap: clamp(52px, 8vw, 100px);
   column-gap: clamp(24px, 4vw, 60px);
-  border: 1px solid red;
-
 //   max-width: 680px;
 }
 .stat-item {
