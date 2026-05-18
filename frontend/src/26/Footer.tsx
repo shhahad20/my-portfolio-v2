@@ -178,6 +178,7 @@ const FooterContent: React.FC<FooterProps> = ({
                 linkText={s.platform}
                 hoverText={s.platform}
                 href={s.href}
+                linkColor="#f0ece3"
               />
             </a>
           </li>

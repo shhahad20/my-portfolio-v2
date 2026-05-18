@@ -1,14 +1,19 @@
 @import "variables";
 @import "mixins";
+
 .animated-link {
   display: inline-block;
   text-decoration: none;
   color: inherit;
 
+  // Default fallback values
+  --link-color: #000000;
+  --hover-link-color: #6b7280;
+
   .text-wrapper {
     position: relative;
     overflow: hidden;
-    height: 1.2em; // adjust this to match your font-size
+    height: 1.2em;
   }
 
   .default-text,
@@ -19,20 +24,19 @@
   }
 
   .default-text {
-    // color: $text-gray;
-    color: #000000;
+    color: var(--link-color);
   }
 
   .hover-text {
-    // color: $primary-white-color;
-    color: $text-gray;
+    color: var(--hover-link-color);
     position: absolute;
     top: 0;
     left: 0;
   }
+
   @media (max-width: 768px) {
     .default-text {
-      color: #000000;
+      color: var(--link-color);
     }
   }
 }
