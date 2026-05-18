@@ -372,7 +372,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({
   return (
     <header className="nm-header" role="banner">
       {/* Top bar */}
-      <div className="nm-bar">
+      <div className={`nm-bar ${isActive ? "is-open" : ""}`}>
         {/* Brand */}
         <a href="/" className="nm-bar__brand" aria-label="Go to homepage">
           {brand}

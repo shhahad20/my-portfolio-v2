@@ -121,6 +121,17 @@
       opacity: 0;
     }
   }
+  &.is-open {
+    .nm-bar__brand,
+    .nm-bar__toggle,
+    .nm-bar__label-text {
+      color: #ffffff;
+    }
+
+    .nm-burger__bar {
+      background: #ffffff;
+    }
+  }
 }
 
 // ── Burger ────────────────────────────────────────────────────────────────────
