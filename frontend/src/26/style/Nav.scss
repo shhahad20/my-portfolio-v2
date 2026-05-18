@@ -1,0 +1,361 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// NavigationMenu.scss
+// Luxury editorial aesthetic — warm neutrals, refined serif, precise spacing
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Fonts ─────────────────────────────────────────────────────────────────────
+// Add to your global CSS or <head>:
+// @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap');
+
+// ── Design Tokens ─────────────────────────────────────────────────────────────
+
+:root {
+  --nm-bg: #141210; // near-black
+  --nm-surface: #1d1b18; // panel background
+  --nm-text: #f0ebe4; // primary text
+  --nm-text-muted: rgba(240, 236, 227, 0.45); // muted / label text
+  --nm-accent: #ff9500; // warm gold accent
+  --nm-border: rgba(255, 255, 255, 0.08); // subtle border
+  --nm-font-display: "PPNeueMontreal-Regular", sans-serif;
+  --nm-font-mono: "PPNeueMontreal-Light", sans-serif;
+  --nm-ease: cubic-bezier(0.76, 0, 0.24, 1);
+  --nm-z-bg: 10;
+  --nm-z-nav: 20;
+  --nm-z-bar: 30;
+}
+
+// ── Reset helpers ─────────────────────────────────────────────────────────────
+
+.nm-header *,
+.nm-header *::before,
+.nm-header *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.nm-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  font-family: var(--nm-font-mono);
+}
+
+// ── Top Bar ───────────────────────────────────────────────────────────────────
+
+.nm-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  height: 64px;
+  position: relative;
+  z-index: var(--nm-z-bar);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease;
+
+  @media (max-width: 768px) {
+    padding: 0 1.25rem;
+    height: 56px;
+  }
+
+  &__brand {
+    font-family: var(--nm-font-display);
+    font-size: 1.35rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: #000000;
+    text-decoration: none;
+    transition: opacity 0.25s ease;
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    color: #000000;
+    font-family: var(--nm-font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+
+    &:focus-visible {
+      outline: 2px solid var(--nm-accent);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+  }
+
+  &__label {
+    position: relative;
+    width: 3.2rem;
+    height: 1.1em;
+    overflow: hidden;
+  }
+
+  &__label-text {
+    display: block;
+    color: #000000;
+    font-family: var(--nm-font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    user-select: none;
+
+    &--abs {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
+  }
+}
+
+// ── Burger ────────────────────────────────────────────────────────────────────
+
+.nm-burger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  width: 22px;
+  height: 22px;
+
+  &__bar {
+    display: block;
+    width: 100%;
+    height: 1.5px;
+    background: #111;
+    transform-origin: center;
+    will-change: transform;
+  }
+}
+
+// ── Sliding Background ────────────────────────────────────────────────────────
+
+.nm-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  //   background: var(--nm-surface);
+  background: #111;
+  z-index: var(--nm-z-bg);
+  pointer-events: none;
+  transform-origin: top;
+}
+
+// ── Nav Panel ─────────────────────────────────────────────────────────────────
+
+.nm-nav {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  z-index: var(--nm-z-nav);
+
+  @media (max-width: 768px) {
+    top: 56px;
+  }
+
+  &__wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 3.5rem 2.5rem 3rem;
+    // background: var(--nm-surface);
+    background: #111;
+    border-bottom: 1px solid var(--nm-border);
+    min-height: 320px;
+
+    @media (max-width: 1024px) {
+      padding: 2.5rem 2rem 2.5rem;
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      padding: 2rem 1.25rem 2rem;
+      gap: 2.5rem;
+      min-height: auto;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2.5rem;
+    min-height: 240px;
+
+    @media (max-width: 768px) {
+      min-height: auto;
+    }
+  }
+}
+
+// ── Nav Body (main links) ─────────────────────────────────────────────────────
+
+.nm-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+
+  &__link {
+    text-decoration: none;
+    display: block;
+    width: fit-content;
+
+    &:focus-visible {
+      outline: 2px solid var(--nm-accent);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+  }
+
+  &__title {
+    display: flex;
+    flex-wrap: nowrap;
+    font-family: var(--nm-font-display);
+    font-size: clamp(2.4rem, 5.5vw, 5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--nm-text);
+    cursor: pointer;
+    overflow: hidden;
+    will-change: filter, opacity;
+
+    // Hover underline accent
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--nm-accent);
+      transition: width 0.4s var(--nm-ease);
+    }
+
+    .nm-body__link:hover &::after {
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      font-size: clamp(2rem, 10vw, 3rem);
+    }
+  }
+
+  &__char {
+    display: inline-block;
+    will-change: transform, opacity;
+  }
+}
+
+// ── Nav Image ─────────────────────────────────────────────────────────────────
+
+.nm-image {
+  width: 280px;
+  height: 360px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  will-change: opacity;
+
+  @media (max-width: 1024px) {
+    width: 220px;
+    height: 280px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 200px;
+    display: none; // hidden on mobile to save space
+  }
+
+  &__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(20%);
+    transform: scale(1.04);
+    transition: transform 0.6s var(--nm-ease);
+
+    &:hover {
+      transform: scale(1);
+    }
+  }
+}
+
+// ── Nav Footer ────────────────────────────────────────────────────────────────
+
+.nm-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--nm-border);
+
+  @media (max-width: 768px) {
+    gap: 1.5rem;
+  }
+
+  &__col {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  &__label {
+    span {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--nm-text-muted);
+      font-family: var(--nm-font-mono);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+  }
+
+  &__item {
+    a {
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      color: var(--nm-text-muted);
+      text-decoration: none;
+      font-family: var(--nm-font-mono);
+      transition: color 0.25s ease;
+
+      &:hover {
+        color: var(--nm-text);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--nm-accent);
+        outline-offset: 3px;
+        border-radius: 2px;
+      }
+    }
+  }
+}

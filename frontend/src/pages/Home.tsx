@@ -15,6 +15,7 @@ import AboutMe from "../26/Aboutme";
 import BigPictureStats from "../26/BigPicture";
 import StickyFooter from "../26/Footer";
 import LandingPage from "../26/LandingPage";
+import NavigationMenu from "../26/Nav";
 import WhatKeepsMeBusy from "../26/Projects";
 import TestimonialsSection from "../26/Testimonials";
 import "../26/style/Footer.scss";
@@ -36,6 +37,7 @@ const Home: React.FC = () => {
     // </>
     <div className="page-shell">
       <main className="page-shell-content">
+        <NavigationMenu/>
         <LandingPage imageSrc="../public/Landingill.svg" />
         <AboutMe />
         <WhatKeepsMeBusy />
