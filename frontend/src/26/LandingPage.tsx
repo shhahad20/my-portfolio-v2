@@ -1,22 +1,26 @@
-import React, { useCallback } from "react";
+// import React, { useCallback } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import "./style/LandingPage.scss";
 import AnimatedLink from "../components/AnimatedLink";
 import Shuffle from "../components/Shuffle";
+import DecryptedText from "../components/DecryptedText";
 // import AuroraBackground from "./Aurorabackground";
-import AIInput from "./Aiinput";
+// import AIInput from "./Aiinput";
 
 interface Props {
   imageSrc?: string;
 }
 
 const LandingPage: React.FC<Props> = () => {
+  const [isButtonHovered, setIsButtonHovered] = React.useState(false);
+
   // Handle AI input submission
   // const handleAISubmit = (e: React.FormEvent<HTMLFormElement>) => {
   //   e.preventDefault();
   //   const formData = new FormData(e.currentTarget);
   //   const input = formData.get("ai-query") as string;
-    
+
   //   if (input.trim()) {
   //     console.log("AI Query:", input);
   //     // TODO: Connect to AI service
@@ -24,10 +28,10 @@ const LandingPage: React.FC<Props> = () => {
   //   }
   // };
 
-  const handleAISubmit = useCallback((query: string) => {
-    console.log("AI Query:", query);
-    // TODO: Connect to AI service
-  }, []);
+  // const handleAISubmit = useCallback((query: string) => {
+  //   console.log("AI Query:", query);
+  //   // TODO: Connect to AI service
+  // }, []);
   return (
     <div className="landing">
       {/* ── Aurora canvas background ─────────────────────────────────────── */}
@@ -123,9 +127,6 @@ const LandingPage: React.FC<Props> = () => {
 
           {/* AI Input Section ────────────────────────────────────────────── */}
 
-
-
-          
           {/* ── Premium AI Input ─────────────────────────────────────── */}
           {/* <AIInput
             placeholder="Ask anything about me…"
@@ -136,8 +137,8 @@ const LandingPage: React.FC<Props> = () => {
 
         {/* RIGHT COLUMN — Image (Hidden on mobile, shown on tablet+) */}
         {/* <div className="landing__right"> */}
-          {/* Placeholder for image content */}
-          {/* {imageSrc && (
+        {/* Placeholder for image content */}
+        {/* {imageSrc && (
             <motion.img
               src={imageSrc}
               alt="Portfolio illustration"
@@ -155,6 +156,61 @@ const LandingPage: React.FC<Props> = () => {
           </motion.div> */}
         {/* </div> */}
       </div>
+      <div style={{ position: "relative", display: "inline-block" }}>
+        {/* Waving Hand Emoji */}
+        <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.5 }}
+          animate={
+            isButtonHovered
+              ? { opacity: 1, y: -40, scale: 1 }
+              : { opacity: 0, y: 20, scale: 0.5 }
+          }
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 20,
+            duration: 0.4,
+          }}
+          style={{
+            position: "absolute",
+            top: -40,
+            left: "40%",
+            transform: "translateX(-50%)",
+            fontSize: "32px",
+            pointerEvents: "none",
+            transformOrigin: "center",
+          }}
+        >
+          <motion.span
+            animate={isButtonHovered ? { rotate: [0, 20, -20, 20, 0] } : {}}
+            transition={{
+              duration: 0.6,
+              repeat: Infinity,
+              repeatDelay: 0.5,
+            }}
+            style={{ display: "inline-block", transformOrigin: "70% 70%" }}
+          >
+            👋🏼
+          </motion.span>
+        </motion.div>
+
+        {/* Button */}
+        <button
+          className="button"
+          onMouseEnter={() => setIsButtonHovered(true)}
+          onMouseLeave={() => setIsButtonHovered(false)}
+        >
+          <DecryptedText
+            text="ASK ME ANYTHING"
+            speed={0.04}
+            animateOn="hover"
+            triggerOnce={false}
+            shouldAnimate={isButtonHovered}
+          />
+          <span className="button-span"> ─ Ai assistant</span>
+        </button>
+      </div>
+
 
       {/* Scroll Indicator */}
       <motion.div

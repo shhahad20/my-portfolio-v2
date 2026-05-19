@@ -108,6 +108,7 @@
       text-transform: uppercase;
     }
 
+
     // ── AI Input ───────────────────────────────────────────────────────────────
     .ai-input {
       display: flex;
@@ -204,6 +205,45 @@
   }
 
   // ── Scroll indicator ──────────────────────────────────────────────────────────
+  .button {
+    padding: 15px 20px;
+    border: none;
+    outline: none;
+    font-family: $font-display;
+    letter-spacing: $heading-ls;
+    background-color: #151515;
+    color: #eee;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease-out;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    &:active {
+      transform: translateY(-1px);
+    }
+
+    span:first-child {
+      font-family: "Courier New", monospace;
+      font-size: clamp(11px, 2.5vw, 13px);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      display: inline-block;
+    }
+  }
+
+  .button-span {
+    color: #aaa;
+    font-size: clamp(10px, 2vw, 12px);
+    margin-left: 4px;
+  }
+
   .scroll {
     position: relative;
     z-index: 2;
