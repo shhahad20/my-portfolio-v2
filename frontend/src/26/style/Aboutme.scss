@@ -1,32 +1,32 @@
-/* ─────────────────────────────────────────────────────────────────────────────
-   ABOUT ME SECTION — Fully Responsive Design Matching Screenshot
-   Mobile-First Approach with Comprehensive Breakpoints
-   ───────────────────────────────────────────────────────────────────────────── */
+@use './variables' as *;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ABOUT ME SECTION — mobile-first, fully responsive
+// ─────────────────────────────────────────────────────────────────────────────
 
 .about {
   position: relative;
   width: 100%;
   min-height: auto;
-  background: #f8f6f2;
-  color: #000000;
-  padding: clamp(48px, 10vw, 100px) clamp(20px, 5vw, 60px);
+  background: $color-bg;
+  color: $color-text;
+  padding: $section-padding;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow-x: hidden;
 
-  /* ─ Container ──────────────────────────────────────────────────────────── */
+  // ── Container ──────────────────────────────────────────────────────────────
   &__container {
     position: relative;
     width: 100%;
-    max-width: 900px;
+    max-width: $max-width;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    // gap: clamp(32px, 8vw, 60px);
   }
 
-  /* ─ Header section ─────────────────────────────────────────────────────── */
+  // ── Header ─────────────────────────────────────────────────────────────────
   &__header {
     display: flex;
     flex-direction: column;
@@ -40,90 +40,70 @@
     line-height: 1;
     margin: 0;
     padding: 0;
-    font-family:
-      "PPNeueMontreal-Medium",
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      sans-serif;
+    font-family: $font-display;
     text-transform: uppercase;
     display: inline-block;
 
-    /* Responsive letter-spacing */
     @media (max-width: 768px) {
       letter-spacing: -0.01em;
     }
   }
 
   &__number {
-    font-family: "PPNeueMontreal-Light", sans-serif;
+    font-family: $font-light;
     display: inline;
-    font-size: clamp(14px, 3vw, 20px);
-    font-weight: 200;
-    color: rgba(87, 79, 71, 0.5);
-    letter-spacing: 1px;
+    font-size: $num-size;
+    font-weight: $num-weight;
+    color: $color-muted;
+    letter-spacing: $num-ls;
     margin-left: clamp(8px, 2vw, 16px);
     white-space: nowrap;
   }
 
-  /* ─ Navigation / Links ─────────────────────────────────────────────────── */
+  // ── Navigation / Links ─────────────────────────────────────────────────────
   &__nav {
     display: flex;
     flex-wrap: wrap;
-    // flex-wrap: nowrap;
-    // gap: 8px;
-    // overflow-x: auto;
-    scrollbar-width: none; // Firefox
-    -ms-overflow-style: none; // Internet Explorer and Edge
-    // gap: clamp(16px, 3vw, 32px);
-    // row-gap: clamp(12px, 2vw, 20px);
     align-items: center;
     padding: 0;
     margin: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
     &::-webkit-scrollbar {
-      display: none; // Chrome, Safari
+      display: none;
     }
   }
 
   &__nav-button {
     display: inline-flex;
     align-items: center;
-    // gap: 4px;
-    padding: 6px 0px;
+    padding: 6px 0;
     border: 1px solid transparent;
     background: transparent;
-    color: rgba(87, 79, 71, 0.7);
-
+    color: $color-muted-alt;
     font-size: clamp(11px, 2vw, 14px);
     font-weight: 500;
     letter-spacing: 0.3px;
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
-    border-radius: 4px;
-
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    border-radius: $radius-sm;
+    transition: all $dur-base $ease-out;
     white-space: nowrap;
 
     &:hover {
-      // color: #000000;
-      // background: rgba(87, 79, 71, 0.05);
       transform: translateY(-1px);
     }
 
     &:focus-visible {
-      outline: 2px solid rgba(87, 79, 71, 0.4);
+      outline: 2px solid $color-muted-alt;
       outline-offset: 4px;
     }
 
-    /* Active state */
     &--active {
-      color: #000000;
+      color: $color-text;
       font-weight: 600;
-
-      // &:hover {
-      //   background: rgba(255, 149, 0, 0.15);
-      // }
     }
   }
 
@@ -131,7 +111,7 @@
     display: inline-block;
   }
 
-  /* ─ Content section ────────────────────────────────────────────────────── */
+  // ── Content ────────────────────────────────────────────────────────────────
   &__content {
     width: 100%;
     display: flex;
@@ -141,58 +121,47 @@
   }
 
   &__paragraph {
-    // font-size: clamp(15px, 2.2vw, 18px);
-    // line-height: clamp(1.65px, 3vw, 1.85px);
-    font-size: clamp(15px, 2.2vw, 18px);
-    line-height: 1.8;
-    color: #2c2820;
+    font-size: $body-size;
+    line-height: $body-lh;
+    color: $color-body;
     margin: 0;
-    font-weight: 400;
+    font-weight: $body-weight;
     letter-spacing: 0.2px;
     max-width: 100%;
     padding: clamp(16px, 3vw, 24px);
     border-left: 3px solid transparent;
-    border-radius: 4px;
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    border-radius: $radius-sm;
+    transition: all $dur-slow $ease-out;
 
-    /* Bold text */
     strong {
       font-weight: 700;
-      color: #000000;
+      color: $color-text;
     }
 
-    /* Highlighted state */
     &--highlighted {
-      background: #81818010;
-      // border-left-color: #1a1713;
+      background: rgba(129, 129, 129, 0.063);
       color: #1a1713;
       padding: clamp(16px, 3vw, 24px);
 
       strong {
-        color: black;
-        font-family: "PPNeueMontreal-Bold", sans-serif;
+        color: $color-text;
+        font-family: $font-bold;
       }
     }
   }
 
-  /* ─ Responsive adjustments ─────────────────────────────────────────────── */
+  // ── Responsive ─────────────────────────────────────────────────────────────
 
-  /* Mobile optimization (320px - 480px) */
   @media (max-width: 480px) {
     padding: clamp(36px, 6vw, 48px) clamp(16px, 4vw, 24px);
 
     &__container {
-      // gap: clamp(24px, 6vw, 36px);
       gap: 10px;
     }
 
     &__title {
       font-size: clamp(32px, 9vw, 48px);
       word-spacing: -0.1em;
-    }
-
-    &__nav {
-      // gap: clamp(12px, 2.5vw, 20px);
     }
 
     &__nav-button {
@@ -208,7 +177,6 @@
     }
   }
 
-  /* Small Mobile (481px - 640px) */
   @media (min-width: 481px) and (max-width: 640px) {
     padding: 48px 24px;
 
@@ -225,7 +193,6 @@
     }
   }
 
-  /* Tablet (641px - 768px) */
   @media (min-width: 641px) and (max-width: 768px) {
     padding: 60px 40px;
 
@@ -240,19 +207,15 @@
     &__nav {
       gap: clamp(12px, 2.5vw, 20px);
     }
+
     &__paragraph {
       max-width: 95%;
       padding: 16px 20px;
     }
   }
 
-  /* Desktop (769px - 1024px) */
   @media (min-width: 769px) {
     padding: 80px 60px;
-
-    &__container {
-      // gap: 60px;
-    }
 
     &__title {
       font-size: clamp(80px, 10vw, 96px);
@@ -278,12 +241,11 @@
     &__paragraph {
       max-width: 92%;
       font-size: 18px;
-      line-height: 1.8;
+      line-height: $body-lh;
       padding: 18px 24px;
     }
   }
 
-  /* Large Desktop (1025px - 1440px) */
   @media (min-width: 1025px) {
     padding: 100px 80px;
 
@@ -297,19 +259,8 @@
     }
 
     &__nav-button {
-      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      transition: all $dur-slow $ease-out;
       padding: 10px 16px;
-
-      // &:hover {
-      //   transform: translateY(-2px);
-      //   color: #ff9500;
-      // }
-
-      // &--active {
-      //   color: #ff9500;
-      //   background: rgba(255, 149, 0, 0.12);
-      //   border-color: rgba(255, 149, 0, 0.4);
-      // }
     }
 
     &__paragraph {
@@ -320,7 +271,6 @@
     }
   }
 
-  /* Ultra-Wide (2560px+) */
   @media (min-width: 2560px) {
     padding: 120px 140px;
 
@@ -349,7 +299,6 @@
     }
   }
 
-  /* Landscape orientation */
   @media (max-height: 800px) and (orientation: landscape) {
     min-height: auto;
     padding: clamp(24px, 3vh, 40px) clamp(20px, 5vw, 60px);
@@ -370,29 +319,23 @@
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   ANIMATIONS & TRANSITIONS
-   ───────────────────────────────────────────────────────────────────────────── */
+// ── Reduced motion ─────────────────────────────────────────────────────────────
 
-.about__nav-button,
-.about__paragraph {
-  @media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce) {
+  .about__nav-button,
+  .about__paragraph {
     transition: none;
   }
-}
 
-/* Reduce motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  .about {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
+  .about * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
-/* Print styles */
+// ── Print ──────────────────────────────────────────────────────────────────────
+
 @media print {
   .about {
     background: white;

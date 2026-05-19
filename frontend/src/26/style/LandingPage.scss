@@ -1,33 +1,30 @@
-/* ─────────────────────────────────────────────────────────────────────────────
-   LANDING PAGE — Fully Responsive Across All Devices
-   Mobile-First Approach with Comprehensive Breakpoints
-   ───────────────────────────────────────────────────────────────────────────── */
+@use './variables' as *;
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   BASE / MOBILE-FIRST (320px - 480px)
+// ─────────────────────────────────────────────────────────────────────────────
+// LANDING PAGE — hero section, mobile-first, fully responsive
+// ─────────────────────────────────────────────────────────────────────────────
 
-   clamp(minimum, preferred, maximum)
-   MIN → the smallest allowed value
-   PREFERRED → usually a responsive value such as vw
-   MAX → the largest allowed value
-   ───────────────────────────────────────────────────────────────────────────── */
+// ── Base / Mobile-first (320px+) ──────────────────────────────────────────────
 
 .landing {
-  min-height: 100vh;
-  width: 100%;
+  // Flexible height: never locks the section to a full viewport on tablet/iPad.
+  // clamp floor (480px) keeps it from collapsing on tiny phones; the 90svh ideal
+  // shrinks naturally on medium screens while 100svh caps on true large displays.
+  min-height: clamp(480px, 90svh, 100svh);
   background: transparent;
-  color: #000000;
+  color: $color-text;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: clamp(20px, 4vw, 32px);
+  max-width: $max-width;
+  padding: $section-padding;
+  margin-left: auto;
+  margin-right: auto;
 
-  /* Mobile-first padding */
-  padding: clamp(16px, 5vw, 20px);
-  gap: clamp(24px, 6vw, 40px);
-
-  /* Grid pattern background */
+  // Subtle vertical-line grid overlay
   &::before {
     content: "";
     position: fixed;
@@ -39,11 +36,11 @@
     background-size: 100px 20px;
   }
 
-  /* ─ Content wrapper ────────────────────────────────────────────────────── */
+  // ── Content wrapper ────────────────────────────────────────────────────────
   &__content {
     position: relative;
-    width: 100%;
-    max-width: 1350px;
+    width: fit-content;
+    max-width: $max-width;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -51,22 +48,22 @@
     margin: 0 auto;
     flex: 1;
     z-index: 2;
-    gap: clamp(32px, 8vw, 60px);
+    gap: clamp(24px, 5vw, 48px);
   }
 
-  /* ─ Left column ────────────────────────────────────────────────────────── */
+  // ── Left column ──────────────────────────────────────────────────────────────
   &__left {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    gap: clamp(16px, 4vw, 28px);
+    gap: clamp(12px, 3vw, 22px);
 
     .linkedin {
       font-size: clamp(11px, 2.5vw, 14px);
       text-decoration: none;
-      color: #555;
+      color: $color-muted-alt;
       display: inline-block;
       line-height: 1.4;
       font-weight: 500;
@@ -74,22 +71,22 @@
     }
 
     .title {
-      /* Fluid typography: scales from 36px on mobile to 150px on desktop */
       font-size: clamp(36px, 15vw, 150px);
       line-height: 0.95;
       margin: 0;
       text-align: left;
-      font-family: "inter", sans-serif;
+      font-family: $font-body;
       font-weight: 700;
       letter-spacing: -0.02em;
       word-spacing: -0.1em;
+      max-width: fit-content;
     }
 
     .small-content {
       width: 100%;
       display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
+      flex-direction: row;
+      justify-content: space-between;
       align-items: flex-start;
       gap: clamp(8px, 2vw, 16px);
     }
@@ -97,62 +94,54 @@
     .subtitle {
       font-size: clamp(13px, 3vw, 16px);
       line-height: 1.6;
-      color: #555;
+      color: $color-muted-alt;
       margin: 0;
       max-width: 100%;
     }
 
     .meta {
       font-size: clamp(10px, 2.2vw, 12px);
-      color: #888;
+      color: $color-muted;
       margin: 0;
       font-weight: 600;
       letter-spacing: 1px;
       text-transform: uppercase;
     }
 
-    /* ─ AI Input — Fully responsive ─────────────────────────────────────── */
+    // ── AI Input ───────────────────────────────────────────────────────────────
     .ai-input {
       display: flex;
       align-items: center;
       gap: clamp(8px, 2vw, 10px);
-
       width: 100%;
       max-width: clamp(280px, 100%, 340px);
-
       padding: clamp(3px, 0.8vw, 5px) clamp(6px, 1vw, 10px);
-      border-radius: 500px;
-      border: 1px solid rgba(87, 79, 71, 0.14);
+      border-radius: $radius-pill;
+      border: 1px solid $color-border;
       background: rgba(255, 255, 255, 0.65);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
-
       transition:
-        border-color 0.18s ease,
-        box-shadow 0.18s ease,
-        background 0.18s ease;
+        border-color $dur-fast ease,
+        box-shadow   $dur-fast ease,
+        background   $dur-fast ease;
 
       &:focus-within {
         border-color: rgba(87, 79, 71, 0.32);
         background: rgba(255, 255, 255, 0.88);
         box-shadow: 0 0 0 3px rgba(87, 79, 71, 0.06);
 
-        .ai-input__icon {
-          opacity: 0.85;
-        }
-        .ai-input__send {
-          color: rgba(87, 79, 71, 0.8);
-        }
+        .ai-input__icon  { opacity: 0.85; }
+        .ai-input__send  { color: $color-muted-alt; }
       }
 
-      /* Icon */
       &__icon {
         flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
         opacity: 0.55;
-        transition: opacity 0.18s ease;
+        transition: opacity $dur-fast ease;
 
         svg {
           width: clamp(14px, 3vw, 16px);
@@ -160,91 +149,75 @@
         }
       }
 
-      /* Input field */
       &__field {
         flex: 1;
         min-width: 0;
-
         border: none;
         outline: none;
         background: transparent;
-
         font-size: clamp(10.5px, 2vw, 12px);
         font-family: inherit;
-        color: #2c2820;
+        color: $color-body;
         line-height: 1.4;
-
         padding: 0;
 
         &::placeholder {
           color: rgba(87, 79, 71, 0.38);
         }
 
-        /* Better mobile input experience */
         @media (max-width: 480px) {
           font-size: 13px; // prevents iOS zoom-on-focus
         }
       }
 
-      /* Send button */
       &__send {
         flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-
         min-width: clamp(26px, 8vw, 30px);
         min-height: clamp(26px, 8vw, 30px);
         padding: 6px;
-
         border: none;
-        border-radius: 6px;
+        border-radius: $radius-sm + 2px;
         background: transparent;
-        color: rgba(87, 79, 71, 0.5);
+        color: $color-muted;
         cursor: pointer;
-
         transition:
-          background 0.15s ease,
-          color 0.15s ease;
+          background $dur-fast ease,
+          color      $dur-fast ease;
 
         svg {
           width: clamp(10px, 2.5vw, 12px);
           height: clamp(10px, 2.5vw, 12px);
         }
 
-        &:hover {
-          background: rgba(87, 79, 71, 0.07);
-          color: rgba(87, 79, 71, 0.8);
-        }
-
-        &:active {
-          background: rgba(87, 79, 71, 0.12);
-        }
+        &:hover  { background: rgba(87, 79, 71, 0.07); color: $color-muted-alt; }
+        &:active { background: rgba(87, 79, 71, 0.12); }
       }
     }
   }
 
-  /* ─ Right column ───────────────────────────────────────────────────────── */
+  // ── Right column ─────────────────────────────────────────────────────────────
   &__right {
-    display: none; // hidden on mobile by default
+    display: none;
   }
 
-  /* ─ Scroll indicator ───────────────────────────────────────────────────── */
+  // ── Scroll indicator ──────────────────────────────────────────────────────────
   .scroll {
     position: relative;
     z-index: 2;
     text-align: center;
     font-size: clamp(10px, 2vw, 12px);
     color: #777;
-    margin-top: clamp(16px, 4vw, 24px);
+    // Tighter margin on small/medium screens; expands only on true desktops
+    margin-top: clamp(12px, 3vw, 20px);
     animation: bounce 4s infinite;
     letter-spacing: 0.5px;
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   SMALL MOBILE (481px - 767px)
-   ───────────────────────────────────────────────────────────────────────────── */
+// ── Small Mobile (481px+) ─────────────────────────────────────────────────────
 
 @media (min-width: 481px) {
   .landing {
@@ -256,8 +229,9 @@
       .small-content {
         flex-direction: row;
         justify-content: space-between;
-        align-items: flex-end;
-        gap: clamp(16px, 4vw, 24px);
+        align-items: flex-start;
+        gap: clamp(12px, 3vw, 20px);
+        width: 100%;
       }
 
       .ai-input {
@@ -267,9 +241,80 @@
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   TABLET (768px - 1024px)
-   ───────────────────────────────────────────────────────────────────────────── */
+// ── Tablet / iPad (768px – 1024px) ────────────────────────────────────────────
+// This range gets the most targeted fix: min-height relaxes further, padding
+// tightens, and gaps compress so no large dead zones appear on 768–1024 screens.
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .landing {
+    // Gives the section a generous presence without locking to a full viewport.
+    // 75svh feels spacious on both portrait iPad (1024px tall) and landscape
+    // (768px tall) while still leaving room for subsequent sections to peek in.
+    min-height: clamp(560px, 75svh, 820px);
+    padding: clamp(40px, 7vh, 72px) clamp(24px, 5vw, 48px);
+    gap: clamp(20px, 3.5vw, 32px);
+    justify-content: center;
+
+    &__content {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      // Tighter gap than desktop — avoids large empty zone between columns
+      gap: clamp(28px, 5vw, 52px);
+    }
+
+    &__left {
+      flex: 1;
+      max-width: 65%;
+      gap: clamp(10px, 2.5vw, 18px);
+
+      .title {
+        // Slightly smaller than desktop so the title doesn't over-dominate
+        font-size: clamp(44px, 9vw, 88px);
+        margin-bottom: 0;
+      }
+
+      .small-content {
+        width: 100%;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: clamp(12px, 3vw, 24px);
+      }
+
+      .ai-input {
+        max-width: clamp(280px, 90%, 340px);
+      }
+    }
+
+    &__right {
+      display: flex;
+      flex: 1;
+      position: relative;
+      justify-content: center;
+      align-items: center;
+      // No forced min-height here; let content dictate
+      min-height: unset;
+
+      img {
+        max-width: 100%;
+        width: clamp(160px, 35vw, 260px);
+        height: auto;
+        object-fit: contain;
+      }
+
+      .vertical-text {
+        display: none;
+      }
+    }
+
+    .scroll {
+      margin-top: clamp(10px, 2.5vw, 16px);
+    }
+  }
+}
+
+// ── Tablet fallback — applies from 768px upward when not overridden by the
+//    range rule above (keeps legacy tablet styles for 768px+ baseline). ────────
 
 @media (min-width: 768px) {
   .landing {
@@ -285,16 +330,21 @@
     &__left {
       flex: 1;
       max-width: 60%;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(12px, 3vw, 20px);
 
       .title {
         font-size: clamp(48px, 10vw, 120px);
+        margin-bottom: clamp(0px, 1vw, 8px);
       }
 
       .small-content {
         width: 100%;
-        flex-direction: column;
+        display: flex;
+        justify-content: space-between;
         align-items: flex-start;
-        gap: clamp(12px, 3vw, 20px);
+        gap: clamp(16px, 4vw, 28px);
       }
 
       .ai-input {
@@ -324,12 +374,12 @@
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   DESKTOP (1025px - 1440px)
-   ───────────────────────────────────────────────────────────────────────────── */
+// ── Desktop (1025px+) ─────────────────────────────────────────────────────────
 
 @media (min-width: 1025px) {
   .landing {
+    // Restore full-viewport presence on true desktops
+    min-height: clamp(600px, 90svh, 100svh);
     padding: 40px 60px;
 
     &__content {
@@ -338,9 +388,18 @@
 
     &__left {
       max-width: none;
+      gap: clamp(16px, 3vw, 24px);
 
       .title {
         font-size: clamp(80px, 15vw, 150px);
+        margin-bottom: clamp(4px, 2vw, 12px);
+      }
+
+      .small-content {
+        width: 100%;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: clamp(20px, 5vw, 40px);
       }
 
       .ai-input {
@@ -365,44 +424,44 @@
         writing-mode: vertical-rl;
         text-orientation: mixed;
         font-size: 12px;
-        color: #555;
+        color: $color-muted-alt;
         opacity: 0.7;
-        transition: opacity 0.3s ease;
+        transition: opacity $dur-base ease;
       }
     }
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   LARGE DESKTOP (1441px+)
-   ───────────────────────────────────────────────────────────────────────────── */
+// ── Large Desktop (1441px+) ───────────────────────────────────────────────────
 
 @media (min-width: 1441px) {
   .landing {
     padding: 40px 80px;
 
     &__content {
-      max-width: 1400px;
       gap: 80px;
     }
 
     &__left {
+      gap: clamp(20px, 4vw, 32px);
+
       .title {
         font-size: 150px;
+        margin-bottom: 16px;
+      }
+
+      .small-content {
+        gap: clamp(32px, 6vw, 56px);
       }
     }
 
-    &__right {
-      img {
-        max-width: 400px;
-      }
+    &__right img {
+      max-width: 400px;
     }
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   LANDSCAPE ORIENTATION (Mobile & Tablet)
-   ───────────────────────────────────────────────────────────────────────────── */
+// ── Landscape (short viewports) ───────────────────────────────────────────────
 
 @media (max-height: 600px) and (orientation: landscape) {
   .landing {
@@ -415,11 +474,19 @@
     }
 
     &__left {
-      gap: clamp(12px, 3vh, 16px);
+      gap: clamp(8px, 2vh, 12px);
 
       .title {
         font-size: clamp(28px, 8vw, 64px);
         line-height: 0.9;
+        margin-bottom: clamp(0px, 1vh, 4px);
+      }
+
+      .small-content {
+        width: 100%;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: clamp(12px, 3vw, 20px);
       }
 
       .ai-input {
@@ -433,47 +500,42 @@
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   ULTRA-WIDE DISPLAYS (2560px+)
-   ───────────────────────────────────────────────────────────────────────────── */
+// ── Ultra-wide (2560px+) ──────────────────────────────────────────────────────
 
 @media (min-width: 2560px) {
   .landing {
     padding: 60px 120px;
 
     &__content {
-      max-width: 1600px;
       gap: 100px;
     }
 
     &__left {
+      gap: 32px;
+
       .title {
         font-size: 180px;
+        margin-bottom: 20px;
       }
 
       .subtitle {
         font-size: 20px;
       }
+
+      .small-content {
+        gap: 64px;
+      }
     }
 
-    &__right {
-      img {
-        max-width: 500px;
-      }
+    &__right img {
+      max-width: 500px;
     }
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   ANIMATIONS
-   ───────────────────────────────────────────────────────────────────────────── */
+// ── Animations ────────────────────────────────────────────────────────────────
 
 @keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
 }

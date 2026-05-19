@@ -1,28 +1,21 @@
-// ─── StickyFooter.scss ────────────────────────────────────────────────────────
-//
-// Implements the Olivier Larose sticky-footer reveal (Method 1).
-// Design language: editorial dark – charcoal canvas, warm ivory type,
-// chartreuse accent, Cormorant Garamond display + Syne body.
-//
-// Google Fonts import (add to your <head> or global CSS):
-// @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Syne:wght@400;500;600&display=swap');
+// ─────────────────────────────────────────────────────────────────────────────
+// StickyFooter.scss
+// Sticky-reveal footer (Olivier Larose / Method 1).
+// Design: editorial dark — charcoal canvas, warm ivory type, warm orange accent.
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Tokens ────────────────────────────────────────────────────────────────────
+// Footer keeps its own CSS custom properties so they can be read by JS.
 
 :root {
-  --sf-bg: #0c0c0c;
-  --sf-surface: #141414;
-  --sf-border: rgba(255, 255, 255, 0.08);
+  --sf-bg:           #0c0c0c;
+  --sf-surface:      #141414;
+  --sf-border:       rgba(255, 255, 255, 0.08);
   --sf-text-primary: #f0ece3;
-  --sf-text-muted: rgba(240, 236, 227, 0.45);
-  --sf-accent: #ff9500; // chartreuse – unexpected, unforgettable
-  --sf-accent-hover: #ff9500;
+  --sf-text-muted:   rgba(240, 236, 227, 0.45);
+  --sf-accent:       #ff9500; // warm orange
 
-  // --sf-font-display: "Cormorant Garamond", Georgia, serif;
-  // --sf-font-body:    "Syne", "Helvetica Neue", sans-serif;
-
-  --sf-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --sf-ease:     cubic-bezier(0.16, 1, 0.3, 1);
   --sf-duration: 0.35s;
 
   --sf-gutter: clamp(1.25rem, 4vw, 2.5rem);
@@ -30,33 +23,22 @@
 }
 
 // ── Sticky wrapper ─────────────────────────────────────────────────────────────
-// This div lives in normal flow. Its fixed height + clip-path are the entire
-// trick: the clip confines what can be seen to this element's bounding box,
-// so the fixed inner panel only becomes visible once this wrapper scrolls into
-// view.
 
 .sticky-footer {
   position: relative;
-  // height is set inline from the footerHeight prop
   width: 100%;
-
-  // clip-path is set inline but we confirm it here for reference:
-  // clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
 
 // ── Fixed panel ───────────────────────────────────────────────────────────────
-// Pinned to the bottom of the viewport at all times; only visible through the
-// clip-path window of .sticky-footer above.
 
 .sticky-footer__panel {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  // height is set inline from the footerHeight prop
   background-color: var(--sf-bg);
   overflow: hidden;
-  will-change: transform; // promote to its own compositing layer
+  will-change: transform;
 }
 
 // ── Footer layout ─────────────────────────────────────────────────────────────
@@ -71,7 +53,7 @@
   color: var(--sf-text-primary);
   position: relative;
 
-  // Subtle noise texture overlay – depth without visual weight
+  // Subtle noise texture — depth without visual weight
   &::before {
     content: "";
     position: absolute;
@@ -96,7 +78,7 @@
   }
 }
 
-// Brand / tagline ──────────────────────────────────────────────────────────────
+// ── Brand / tagline ───────────────────────────────────────────────────────────
 
 .footer__brand {
   display: flex;
@@ -107,12 +89,11 @@
 .footer__logo {
   font-family: "PPNeueMontreal-Regular", sans-serif;
   font-size: clamp(2.25rem, 5vw, 3.75rem);
-  // font-size: 5rem;
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1;
   color: var(--sf-text-primary);
-  // Accent dot
+
   &::after {
     content: ".";
     color: var(--sf-accent);
@@ -129,7 +110,7 @@
   margin: 0;
 }
 
-// Navigation ───────────────────────────────────────────────────────────────────
+// ── Navigation ────────────────────────────────────────────────────────────────
 
 .footer__nav {
   display: grid;
@@ -176,7 +157,6 @@
   display: inline-block;
   transition: color var(--sf-duration) var(--sf-ease);
 
-  // Underline slide-in on hover
   &::after {
     content: "";
     position: absolute;
@@ -239,7 +219,7 @@
   }
 }
 
-// Contact ──────────────────────────────────────────────────────────────────────
+// ── Contact ───────────────────────────────────────────────────────────────────
 
 .footer__contact {
   display: flex;
@@ -270,12 +250,11 @@
 
 .footer__address {
   font-size: 0.82rem;
-  // color: var(--sf-text-muted);
   color: rgba(240, 236, 227, 0.857);
   letter-spacing: 0.01em;
 }
 
-// Socials ──────────────────────────────────────────────────────────────────────
+// ── Socials ───────────────────────────────────────────────────────────────────
 
 .footer__social-list {
   list-style: none;
@@ -323,7 +302,7 @@
   }
 }
 
-// Copyright ────────────────────────────────────────────────────────────────────
+// ── Copyright ─────────────────────────────────────────────────────────────────
 
 .footer__copyright {
   font-size: 0.82rem;

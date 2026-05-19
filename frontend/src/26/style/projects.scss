@@ -1,24 +1,29 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap");
+@use './variables' as *;
 
-/* ── Root ─────────────────────────────────────────────────────────────────── */
+// ─────────────────────────────────────────────────────────────────────────────
+// PROJECTS — orbital / circle-field layout
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Root ──────────────────────────────────────────────────────────────────────
+
 .wkmb-root {
-//   font-family: "DM Sans", system-ui, sans-serif;
-  overflow-x: hidden; // Prevents horizontal scroll if a preview rect overflows at edges
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  max-width: 1350px;
+  max-width: $max-width;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 0;
 }
 
-/* ── Header ───────────────────────────────────────────────────────────────── */
+// ── Header ────────────────────────────────────────────────────────────────────
+
 .wkmb-header {
   display: flex;
   align-items: flex-end;
   flex-wrap: wrap;
   gap: 0.5rem 1.5rem;
-  padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem) 0.75rem;
+  padding: $section-padding;
 }
 
 .wkmb-title-block {
@@ -28,22 +33,22 @@
 }
 
 .wkmb-title {
-  font-family: "PPNeueMontreal-Regular", sans-serif;
-  font-size: clamp(3.2rem, 6.5vw, 5.4rem);
-  line-height: 0.92;
-  letter-spacing: 0.015em;
-  color: #111;
+  font-family: $font-display;
+  font-size: $heading-size;
+  line-height: $heading-lh;
+  letter-spacing: $heading-ls;
+  color: $color-text;
   margin: 0;
-  font-weight: 500;
+  font-weight: $heading-weight;
 }
 
 .wkmb-page-num {
-  font-family: "PPNeueMontreal-Light", sans-serif;
+  font-family: $font-light;
   display: inline;
-  font-size: clamp(14px, 3vw, 20px);
-  font-weight: 200;
-  color: rgba(87, 79, 71, 0.5);
-  letter-spacing: 1px;
+  font-size: $num-size;
+  font-weight: $num-weight;
+  color: $color-muted;
+  letter-spacing: $num-ls;
   margin-left: clamp(8px, 2vw, 16px);
   white-space: nowrap;
 }
@@ -64,10 +69,10 @@
   display: flex;
   align-items: center;
   gap: 2px;
-  transition: color 0.2s ease;
+  transition: color $dur-fast ease;
 
   &:hover {
-    color: #111;
+    color: $color-text;
   }
 }
 
@@ -78,20 +83,19 @@
   transform: translateY(-1px);
 }
 
-/* ── Circle field ─────────────────────────────────────────────────────────── */
+// ── Circle field ──────────────────────────────────────────────────────────────
+
 .wkmb-field {
   position: relative;
   width: 100%;
-
   // Desktop: landscape 16:11 keeps the concentric rings circular in px-space.
-  // No flex: 1 here — flex stretching in a column container overrides
-  // aspect-ratio and turns the rings into ovals on tablet viewports.
   aspect-ratio: 16 / 11;
   min-height: 480px;
-  overflow: visible; // Allows preview rects to float above/below the field boundary
+  overflow: visible;
 }
 
-/* ── Satellite circles ────────────────────────────────────────────────────── */
+// ── Satellite circles ─────────────────────────────────────────────────────────
+
 .wkmb-sat {
   position: absolute;
   width: clamp(52px, 7.2%, 88px);
@@ -106,10 +110,10 @@
   align-items: center;
   justify-content: center;
   transition:
-    border-color  0.22s ease,
-    border-style  0.22s ease,
-    transform     0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
-    background    0.22s ease;
+    border-color  $dur-fast ease,
+    border-style  $dur-fast ease,
+    transform     $dur-base $ease-spring,
+    background    $dur-fast ease;
 
   &:hover,
   &:focus-visible,
@@ -121,7 +125,6 @@
   }
 }
 
-// Label rendered inside the satellite — hidden by default, fades in on hover
 .wkmb-sat-label {
   opacity: 0;
   padding: 0 0.35rem;
@@ -130,20 +133,21 @@
   letter-spacing: 0.04em;
   text-align: center;
   color: #4a4744;
-  font-weight: 400;
+  font-weight: $body-weight;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   pointer-events: none;
-  transition: opacity 0.2s ease 0.05s;
+  transition: opacity $dur-fast ease 0.05s;
 
   .wkmb-sat--active & {
     opacity: 1;
   }
 }
 
-/* ── Center circle ────────────────────────────────────────────────────────── */
+// ── Center circle ─────────────────────────────────────────────────────────────
+
 .wkmb-center {
   position: absolute;
   width: clamp(130px, 15.5%, 195px);
@@ -177,11 +181,8 @@
   }
 }
 
-/* ── Preview rectangle ────────────────────────────────────────────────────── */
+// ── Preview rectangle ─────────────────────────────────────────────────────────
 
-// Wrapper — owns the above/below static positioning transform.
-// Kept separate from the inner element so the floating animation
-// doesn't clobber the placement transform.
 .wkmb-preview {
   position: absolute;
   width: clamp(150px, 25%, 250px);
@@ -190,34 +191,30 @@
   z-index: 20;
 }
 
-// Appears above the satellite (default for circles in the lower 58 % of field)
+// Renders above the satellite (default for circles in the lower 58% of field)
 .wkmb-preview--above {
-  // translate -50 % centres horizontally; calc(-100% - 46px) places the
-  // preview bottom ~10 px above the satellite top edge.
   transform: translate(-50%, calc(-100% - 46px));
 }
 
-// Flipped for circles whose y < 42 % — renders below so it stays on screen.
+// Flipped for circles whose y < 42% — renders below so it stays on screen
 .wkmb-preview--below {
   transform: translate(-50%, 46px);
 }
 
-// Inner element — runs enter + float animations without disturbing the wrapper.
 .wkmb-preview-inner {
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 7px;
+  border-radius: $radius-md - 1px; // 7px
   overflow: hidden;
   box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.10),
     0 12px 40px rgba(0, 0, 0, 0.08);
   animation:
-    wkmb-preview-enter 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+    wkmb-preview-enter 0.38s $ease-spring both,
     wkmb-preview-float  2.8s ease-in-out 0.38s infinite;
 }
 
-// Fills the rectangle when bg is an image or video URL
 .wkmb-preview-media {
   position: absolute;
   inset: 0;
@@ -226,13 +223,11 @@
   object-fit: cover;
 }
 
-// Fills the rectangle when bg is a plain hex colour
 .wkmb-preview-fill {
   position: absolute;
   inset: 0;
 }
 
-// Label strip pinned to the bottom — frosted glass finish
 .wkmb-preview-label {
   position: absolute;
   bottom: 0;
@@ -246,40 +241,24 @@
   font-size: clamp(0.48rem, 0.82vw, 0.65rem);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-weight: 400;
+  font-weight: $body-weight;
   line-height: 1.3;
 }
 
-/* ── Bottom accent bar ────────────────────────────────────────────────────── */
-// .wkmb-baseline {
-//   height: 3px;
-//   background: #4ecdc4;
-//   flex-shrink: 0;
-// }
+// ── Animations ────────────────────────────────────────────────────────────────
 
-/* ── Animations ───────────────────────────────────────────────────────────── */
-
-// Preview entrance: spring up from slightly below with a fade
 @keyframes wkmb-preview-enter {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.94);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(10px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-// Continuous gentle float — runs on the inner element so it adds on top of
-// whatever the wrapper's positioning transform does.
 @keyframes wkmb-preview-float {
   0%, 100% { transform: translateY(0px);  }
   50%       { transform: translateY(-9px); }
 }
 
+// ── Mobile — portrait layout (≤ 640px) ───────────────────────────────────────
 
-/* ── Mobile — vertical rectangle layout (≤ 640 px) ───────────────────────── */
 @media (max-width: 640px) {
   .wkmb-header {
     flex-direction: column;
@@ -291,32 +270,28 @@
     margin-left: 0;
   }
 
-  // Switch field to portrait: 2:3 ratio gives ~562 px height on a 375 px screen.
-  // The 4×6 satellite grid (rows at 6 / 18 / 30 % and 62 / 74 / 86 %) leaves
-  // a clear vertical gap from ~30 % to ~62 % for the center circle at (51 %, 47 %).
+  // Portrait: 2:3 ratio gives ~562px height on a 375px screen.
   .wkmb-field {
     aspect-ratio: 2 / 3;
     min-height: 520px;
   }
 
-  // Satellites are slightly smaller so the grid breathes in portrait view
   .wkmb-sat {
     width: clamp(40px, 9.5%, 62px);
   }
 
-  // Center circle shrinks proportionally to stay readable in portrait
   .wkmb-center {
     width: clamp(82px, 14%, 110px);
   }
 
-  // Idle / active text scales for the smaller circle
   .wkmb-center-idle,
   .wkmb-center-project {
     font-size: clamp(0.55rem, 2.8vw, 0.72rem);
   }
 }
 
-/* ── Reduced-motion ───────────────────────────────────────────────────────── */
+// ── Reduced motion ────────────────────────────────────────────────────────────
+
 @media (prefers-reduced-motion: reduce) {
   .wkmb-sat,
   .wkmb-center {

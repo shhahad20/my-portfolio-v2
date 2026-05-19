@@ -355,7 +355,7 @@ const Nav: React.FC<NavProps> = ({
 // ─────────────────────────────────────────────
 
 const NavigationMenu: React.FC<NavigationMenuProps> = ({
-  brand = "Studio",
+  brand = "Shahad Portfolio",
   navLinks = DEFAULT_NAV_LINKS,
   footerColumns = DEFAULT_FOOTER_COLUMNS,
   imageBasePath = "/images/",

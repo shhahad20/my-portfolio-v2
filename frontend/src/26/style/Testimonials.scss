@@ -1,95 +1,103 @@
-@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@200;300;400;500;600&family=Barlow+Condensed:wght@100;200;300&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Stack+Sans+Notch:wght@200..700&display=swap");
+@use './variables' as *;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TESTIMONIALS SECTION
+// ─────────────────────────────────────────────────────────────────────────────
 
 .testimonials-section {
   min-height: 100vh;
-  // font-family: 'Barlow', sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-width: 1350px;
+  max-width: $max-width;
   margin-left: auto;
   margin-right: auto;
-//   padding: clamp(48px, 8vw, 100px) clamp(24px, 6vw, 100px);
-padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem) 0.75rem;
-
+  padding: $section-padding;
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
 }
 
+// ── Heading ───────────────────────────────────────────────────────────────────
+
 .testimonials-heading {
   margin-bottom: clamp(48px, 7vw, 90px);
 }
+
 .testimonials-heading-row {
   display: flex;
   align-items: flex-end;
   gap: 16px;
   flex-wrap: wrap;
 }
+
 .testimonials-title {
-  font-family: "PPNeueMontreal-Regular", sans-serif;
-  font-size: clamp(3.2rem, 6.5vw, 5.4rem);
-  line-height: 0.92;
-  letter-spacing: 0.015em;
-  color: #111;
+  font-family: $font-display;
+  font-size: $heading-size;
+  line-height: $heading-lh;
+  letter-spacing: $heading-ls;
+  color: $color-text;
   margin: 0;
-  font-weight: 500;
+  font-weight: $heading-weight;
 }
-.testimonials-count-header {
-  font-family: "PPNeueMontreal-Light", sans-serif;
+
+// Both classes share the same styles — one is the section index badge,
+// the other is the live testimonial count rendered inline.
+.testimonials-count-header,
+.testimonials-count {
+  font-family: $font-light;
   display: inline;
-  font-size: clamp(14px, 3vw, 20px);
-  font-weight: 200;
-  color: rgba(87, 79, 71, 0.5);
-  letter-spacing: 1px;
+  font-size: $num-size;
+  font-weight: $num-weight;
+  color: $color-muted;
+  letter-spacing: $num-ls;
   margin-left: clamp(8px, 2vw, 16px);
   white-space: nowrap;
 }
-.testimonials-count {
-  font-family: "PPNeueMontreal-Light", sans-serif;
-  display: inline;
-  font-size: clamp(14px, 3vw, 20px);
-  font-weight: 200;
-  color: rgba(87, 79, 71, 0.5);
-  letter-spacing: 1px;
-  white-space: nowrap;
-}
+
+// ── Quote layout ──────────────────────────────────────────────────────────────
+
 .testimonial-layout {
   display: flex;
   align-items: flex-start;
   gap: clamp(32px, 5vw, 80px);
 }
+
 .author-col {
   min-width: clamp(160px, 22vw, 260px);
-  padding-top: 8px;
+  padding-top: $sp-2;
 }
+
 .author-accent-line {
   width: 28px;
   height: 1.5px;
   background: #9a9890;
-  margin-bottom: 16px;
+  margin-bottom: $sp-4;
 }
+
 .author-name {
   margin: 0;
-  margin-top: 6px;
-  font-weight: 400;
+  margin-top: $sp-2 - 0.125rem; // 6px
+  font-weight: $body-weight;
   font-size: clamp(13px, 1.6vw, 15px);
   color: #3a3831;
   letter-spacing: 0.01em;
   line-height: 1.4;
 }
+
 .author-role {
-  margin: 6px 0 0;
+  margin: $sp-2 - 0.125rem 0 0; // 6px
   font-weight: 300;
   font-size: clamp(11px, 1.3vw, 13px);
   color: #9a9890;
   letter-spacing: 0.03em;
 }
+
 .quote-col {
   flex: 1;
   position: relative;
 }
+
 .quote-marks {
   position: absolute;
   top: -20px;
@@ -101,6 +109,7 @@ padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem) 0.75rem;
   pointer-events: none;
   font-weight: 700;
 }
+
 .quote-text {
   margin: 0;
   font-weight: 300;
@@ -110,70 +119,46 @@ padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem) 0.75rem;
   direction: rtl;
   text-align: right;
   max-width: 680px;
-  padding-top: 8px;
+  padding-top: $sp-2;
 }
 
-// Animations
-.slide-enter-next {
-  animation: slideInRight 0.38s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-.slide-enter-prev {
-  animation: slideInLeft 0.38s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-.slide-exit-next {
-  animation: slideOutLeft 0.38s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-.slide-exit-prev {
-  animation: slideOutRight 0.38s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
+// ── Slide animations ──────────────────────────────────────────────────────────
+
+.slide-enter-next { animation: slideInRight  0.38s $ease-out forwards; }
+.slide-enter-prev { animation: slideInLeft   0.38s $ease-out forwards; }
+.slide-exit-next  { animation: slideOutLeft  0.38s $ease-out forwards; }
+.slide-exit-prev  { animation: slideOutRight 0.38s $ease-out forwards; }
+
 @keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
+
 @keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
+
 @keyframes slideOutLeft {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-40px); }
 }
+
 @keyframes slideOutRight {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(40px);
-  }
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(40px); }
 }
+
+// ── Navigation controls ───────────────────────────────────────────────────────
 
 .testimonials-nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: $sp-4;
   margin-top: clamp(56px, 8vw, 96px);
 }
+
 .testimonials-nav-wrap {
   display: flex;
   align-items: center;
@@ -182,6 +167,7 @@ padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem) 0.75rem;
   width: fit-content;
   border-radius: 32px;
 }
+
 .nav-btn {
   border: none;
   background: transparent;
@@ -190,46 +176,53 @@ padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem) 0.75rem;
   justify-content: center;
   cursor: pointer;
   transition:
-    background 0.2s,
-    border-color 0.2s,
-    transform 0.15s;
+    background $dur-fast ease,
+    border-color $dur-fast ease,
+    transform 0.15s ease;
   color: #6b6860;
+
+  &:active {
+    transform: scale(0.96);
+  }
 }
 
-.nav-btn:active {
-  transform: scale(0.96);
-}
 .testimonials-dots {
   display: flex;
-  gap: 8px;
+  gap: $sp-2;
   align-items: center;
 }
+
 .dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: #b5b2aa;
   transition:
-    background 0.25s,
-    transform 0.25s;
+    background $dur-base ease,
+    transform  $dur-base ease;
   cursor: pointer;
+
+  &.active {
+    background: #3a3831;
+    transform: scale(1.4);
+  }
 }
-.dot.active {
-  background: #3a3831;
-  transform: scale(1.4);
-}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
 
 @media (max-width: 768px) {
   .testimonial-layout {
-    flex-direction: column !important;
-    gap: 32px !important;
+    flex-direction: column;
+    gap: 32px;
   }
+
   .author-col {
-    min-width: unset !important;
-    width: 100% !important;
+    min-width: unset;
+    width: 100%;
   }
+
   .quote-text {
-    font-size: clamp(15px, 4vw, 18px) !important;
-    line-height: 2.1 !important;
+    font-size: clamp(15px, 4vw, 18px);
+    line-height: 2.1;
   }
 }
