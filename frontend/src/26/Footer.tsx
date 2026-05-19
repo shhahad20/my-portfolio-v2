@@ -39,7 +39,7 @@ const DEFAULT_NAV: FooterNavColumn[] = [
     heading: "Work",
     links: [
       { label: "Projects", href: "#projects" },
-      { label: "Case Studies", href: "#case-studies" },
+      { label: "Experience", href: "#experience" },
       { label: "Archive", href: "#archive" },
     ],
   },
@@ -48,39 +48,38 @@ const DEFAULT_NAV: FooterNavColumn[] = [
     links: [
       { label: "About", href: "#about" },
       { label: "Process", href: "#process" },
-      { label: "Careers", href: "#careers" },
+      { label: "Services", href: "#services" },
     ],
   },
   {
     heading: "Connect",
     links: [
-      { label: "Contact", href: "#contact" },
-      { label: "Press", href: "#press" },
-      { label: "Newsletter", href: "#newsletter" },
+      { label: "CV", href:"/CV_ Shahad_Altharwa_Software_Engineer2025v2.pdf" },
+      { label: "Blog", href: "#blog" },
     ],
   },
 ];
 
 const DEFAULT_SOCIALS: SocialLink[] = [
   {
-    platform: "Twitter / X ↗",
-    href: "https://twitter.com",
-    ariaLabel: "Follow us on Twitter",
-  },
-  {
     platform: "Instagram ↗",
-    href: "https://instagram.com",
+    href: "https://www.instagram.com/shahad.th.designer/",
     ariaLabel: "Follow us on Instagram",
   },
   {
     platform: "LinkedIn ↗",
-    href: "https://linkedin.com",
+    href: "https://www.linkedin.com/in/shahadaltharwa/",
     ariaLabel: "Connect on LinkedIn",
   },
   {
-    platform: "Dribbble ↗",
-    href: "https://dribbble.com",
-    ariaLabel: "See our work on Dribbble",
+    platform: "Behance ↗",
+    href: "https://www.behance.net/shhahad20",
+    ariaLabel: "See our work on Behance",
+  },
+    {
+    platform: "Codepen ↗",
+    href: "https://codepen.io/shhahad20",
+    ariaLabel: "Connect on Codepen",
   },
 ];
 

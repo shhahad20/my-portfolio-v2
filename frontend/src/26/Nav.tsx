@@ -14,9 +14,14 @@ export interface NavLink {
   src?: string; // optional preview image path
 }
 
+export interface FooterLink {
+  label: string;
+  href: string;
+}
+
 export interface FooterColumn {
   label?: string;
-  links: string[];
+  links: FooterLink[];
 }
 
 export interface NavigationMenuProps {
@@ -43,15 +48,28 @@ interface SelectedLink {
 
 const DEFAULT_NAV_LINKS: NavLink[] = [
   { title: "Home", href: "/", src: "home.jpg" },
-  { title: "Work", href: "/work", src: "work.jpg" },
   { title: "About", href: "/about", src: "about.jpg" },
-  { title: "Journal", href: "/journal", src: "journal.jpg" },
+  { title: "Work", href: "#projects", src: "work.jpg" },
+  { title: "Designs", href: "/designs", src: "design.jpg" },
   { title: "Contact", href: "/contact", src: "contact.jpg" },
 ];
 
 const DEFAULT_FOOTER_COLUMNS: FooterColumn[] = [
-  { label: "Social", links: ["Twitter", "Instagram", "LinkedIn"] },
-  { label: "Legal", links: ["Privacy Policy", "Terms & Conditions"] },
+  {
+    label: "Social",
+    links: [
+      { label: "GitHub", href: "https://github.com/shhahad20" },
+      { label: "Instagram", href: "https://www.instagram.com/shahad.th.designer/" },
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/shahadaltharwa/" },
+    ],
+  },
+  {
+    label: "Legal",
+    links: [
+      { label: "Privacy Policy", href: "/privacy-policy" },
+      { label: "Terms & Conditions", href: "/terms-and-conditions" },
+    ],
+  },
 ];
 
 // ─────────────────────────────────────────────
@@ -292,7 +310,15 @@ const NavFooter: React.FC<NavFooterProps> = ({ columns }) => (
             animate="enter"
             exit="exit"
           >
-            <a href="#">{link}</a>
+            <a
+              href={link.href}
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel={
+                link.href.startsWith("http") ? "noopener noreferrer" : undefined
+              }
+            >
+              {link.label}
+            </a>
           </motion.li>
         ))}
       </ul>

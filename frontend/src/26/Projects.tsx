@@ -123,7 +123,7 @@ export default function WhatKeepsMeBusy() {
   };
 
   return (
-    <div className="wkmb-root">
+    <div className="wkmb-root" id="projects">
 
       {/* ── Header ───────────────────────────────────────────── */}
       <header className="wkmb-header">
