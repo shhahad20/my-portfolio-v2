@@ -21,7 +21,7 @@ $widget-radius-panel: 22px;
 $widget-radius-input: 14px;
 $widget-radius-btn  : 10px;
 $widget-radius-avatar: 11px;
-$widget-w           : 390px;
+$widget-w           : 520px;
 $widget-h           : 580px;
 $widget-z           : 1000;
 
@@ -382,12 +382,16 @@ $widget-z           : 1000;
     padding: 14px 16px;
     background: $widget-bg-surface;
     flex-shrink: 0;
+    width: 100%;
+      box-sizing: border-box;
+
   }
 
   &__input-wrapper {
     display: flex;
     align-items: flex-end;
     gap: 10px;
+    width: 100%;
     background: $widget-bg;
     border: 1px solid $widget-border-mid;
     border-radius: $widget-radius-input;
@@ -516,7 +520,7 @@ $widget-z           : 1000;
 
   // Compact tablet portrait
   @media (min-width: 481px) and (max-width: 768px) {
-    width: 340px;
+    width: 460px;
     height: 520px;
     bottom: 88px;
     right: 20px;
