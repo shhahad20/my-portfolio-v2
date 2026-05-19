@@ -15,8 +15,7 @@ interface Props {
 
 const LandingPage: React.FC<Props> = () => {
   const [isButtonHovered, setIsButtonHovered] = React.useState(false);
-  const [isWidgetOpen, setIsWidgetOpen] = React.useState(false); // [ADD] ← widget open state
-
+  const [isWidgetOpen, setIsWidgetOpen] = React.useState(false);
   // Handle AI input submission
   // const handleAISubmit = (e: React.FormEvent<HTMLFormElement>) => {
   //   e.preventDefault();
@@ -230,7 +229,6 @@ const LandingPage: React.FC<Props> = () => {
         onClose={() => setIsWidgetOpen(false)}
         assistantName="AI Assistant"
         assistantTagline="Ask me about Shahad's work"
-        systemPrompt="You are an AI assistant for Shahad Altharwa's personal portfolio website. Shahad is a Software Engineer & Designer based in Saudi Arabia. Answer questions about their work, skills, and experience in a concise, professional, and friendly way."
         quickPrompts={[
           "What's your tech stack?",
           "Tell me about your projects",

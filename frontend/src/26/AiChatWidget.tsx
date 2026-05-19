@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./style/aichatwidget.scss";
+import { sendChatMessage, type ChatMessage } from "../api/ChatService";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types & Interfaces
@@ -29,8 +30,6 @@ export interface AIChatWidgetProps {
   assistantName?: string;
   /** Short description shown while idle */
   assistantTagline?: string;
-  /** System prompt sent to the API */
-  systemPrompt?: string;
   /** Pre-populated quick-action prompts shown in the welcome state */
   quickPrompts?: string[];
   /** Additional CSS class on the root element */
@@ -41,13 +40,7 @@ export interface AIChatWidgetProps {
 // Constants
 // ─────────────────────────────────────────────────────────────────────────────
 
-const DEFAULT_SYSTEM_PROMPT =
-  "You are an AI assistant for Shahad Altharwa's personal portfolio website. " +
-  "Shahad is a Software Engineer & Designer based in Saudi Arabia. " +
-  "Answer questions about their work, skills, and experience in a concise, " +
-  "professional, and friendly way. Keep responses brief and helpful.";
-
-const DEFAULT_QUICK_PROMPTS = [
+const DEFAULT_QUICK_PROMPTS: string[] = [
   "What's your tech stack?",
   "Tell me about your projects",
   "What are your skills?",
@@ -55,7 +48,7 @@ const DEFAULT_QUICK_PROMPTS = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Small helpers
+// Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
 function formatTime(date: Date): string {
@@ -76,7 +69,7 @@ function formatContent(text: string): React.ReactNode {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Sub-components
+// Icon sub-components
 // ─────────────────────────────────────────────────────────────────────────────
 
 const SparkleIcon: React.FC<{ size?: number }> = ({ size = 18 }) => (
@@ -153,7 +146,6 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
   onClose,
   assistantName = "Shahad AI Assistant",
   assistantTagline,
-  systemPrompt = DEFAULT_SYSTEM_PROMPT,
   quickPrompts = DEFAULT_QUICK_PROMPTS,
   className = "",
 }) => {
@@ -165,8 +157,12 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
   const [input, setInput] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  /** Stored as parallel array to avoid re-building on every render */
-  const apiHistoryRef = useRef<{ role: string; content: string }[]>([]);
+  /**
+   * Mirrors the UI message list in the shape the backend expects.
+   * Kept in a ref so it never triggers re-renders and is always
+   * up-to-date inside async callbacks without stale closure issues.
+   */
+  const apiHistoryRef = useRef<ChatMessage[]>([]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -174,19 +170,16 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
 
   // ── Effects ────────────────────────────────────────────────────────────────
 
-  /** Scroll to latest message */
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
-  /** Focus management on open */
   useEffect(() => {
     if (!isOpen) return;
     const timer = setTimeout(() => textareaRef.current?.focus(), 80);
     return () => clearTimeout(timer);
   }, [isOpen]);
 
-  /** Escape key handler */
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e: KeyboardEvent) => {
@@ -196,13 +189,13 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
     return () => document.removeEventListener("keydown", handler);
   }, [isOpen, onClose]);
 
-  /** Focus trap */
+  // ── Focus trap ─────────────────────────────────────────────────────────────
+
   const handleFocusTrap = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key !== "Tab") return;
-      const widget = e.currentTarget;
       const focusable = Array.from(
-        widget.querySelectorAll<HTMLElement>(
+        e.currentTarget.querySelectorAll<HTMLElement>(
           "button:not([disabled]), textarea:not([disabled]), [tabindex='0']"
         )
       );
@@ -220,14 +213,14 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
     []
   );
 
-  // ── Core send logic ────────────────────────────────────────────────────────
+  // ── Send logic ─────────────────────────────────────────────────────────────
 
   const sendMessage = useCallback(
     async (overrideText?: string) => {
       const text = (overrideText ?? input).trim();
       if (!text || isLoading) return;
 
-      // Optimistically add the user message
+      // 1. Append user message to UI immediately (optimistic)
       const userMsg: Message = {
         id: `${Date.now()}-user`,
         role: "user",
@@ -236,10 +229,10 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
       };
       setMessages((prev) => [...prev, userMsg]);
       setInput("");
-      if (textareaRef.current) {
-        textareaRef.current.style.height = "auto";
-      }
+      if (textareaRef.current) textareaRef.current.style.height = "auto";
 
+      // 2. Build the updated history and persist to the ref before the
+      //    async call so it's never stale inside the try block.
       apiHistoryRef.current = [
         ...apiHistoryRef.current,
         { role: "user", content: text },
@@ -248,47 +241,27 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
       setIsLoading(true);
 
       try {
-        const response = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            model: "claude-sonnet-4-20250514",
-            max_tokens: 1000,
-            system: systemPrompt,
-            messages: apiHistoryRef.current,
-          }),
-        });
+        // 3. Delegate the network call to the service — no fetch/axios here
+        const reply = await sendChatMessage(apiHistoryRef.current);
 
-        if (!response.ok) {
-          const errBody = await response.json().catch(() => ({}));
-          throw new Error(
-            (errBody as { error?: { message?: string } }).error?.message ??
-              `API error ${response.status}`
-          );
-        }
-
-        const data = await response.json() as {
-          content?: Array<{ text?: string }>;
-        };
-        const replyText =
-          data.content?.[0]?.text ?? "Sorry, I couldn't generate a response.";
-
+        // 4. Append the assistant reply to the UI
         const assistantMsg: Message = {
           id: `${Date.now()}-assistant`,
           role: "assistant",
-          content: replyText,
+          content: reply,
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, assistantMsg]);
+
+        // 5. Keep the history in sync with the successful round-trip
         apiHistoryRef.current = [
           ...apiHistoryRef.current,
-          { role: "assistant", content: replyText },
+          { role: "assistant", content: reply },
         ];
       } catch (err: unknown) {
+        // 6. Surface a user-facing error bubble
         const errorText =
-          err instanceof Error && err.message.includes("Failed to fetch")
-            ? "Unable to connect. Please check your internet connection."
-            : err instanceof Error
+          err instanceof Error
             ? err.message
             : "Something went wrong. Please try again.";
 
@@ -302,14 +275,17 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
             isError: true,
           },
         ]);
-        // Roll back the API history for the failed turn
+
+        // 7. Roll back the user turn so the history stays consistent
+        //    and the user can resend without duplicating their message.
         apiHistoryRef.current = apiHistoryRef.current.slice(0, -1);
       } finally {
         setIsLoading(false);
         textareaRef.current?.focus();
       }
     },
-    [input, isLoading, systemPrompt]
+    [input, isLoading]
+    // systemPrompt intentionally omitted — the backend owns that via systemPrompt.ts
   );
 
   // ── Input handlers ─────────────────────────────────────────────────────────
@@ -338,17 +314,13 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
 
   const showWelcome = messages.length === 0;
   const canSend = input.trim().length > 0 && !isLoading;
-  const statusLabel = isLoading ? "Thinking…" : (assistantTagline ?? "Online · Ready to help");
+  const statusLabel =
+    isLoading ? "Thinking…" : (assistantTagline ?? "Online · Ready to help");
 
   // ── Animation variants ─────────────────────────────────────────────────────
 
   const widgetVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 0.91,
-      y: 18,
-      transformOrigin: "bottom right",
-    },
+    hidden: { opacity: 0, scale: 0.91, y: 18, transformOrigin: "bottom right" },
     visible: {
       opacity: 1,
       scale: 1,
@@ -402,7 +374,7 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
             aria-modal="true"
             onKeyDown={handleFocusTrap}
           >
-            {/* ── HEADER ─────────────────────────────────────────────────── */}
+            {/* ── HEADER ──────────────────────────────────────────────── */}
             <header className="ai-widget__header">
               <div className="ai-widget__avatar" aria-hidden="true">
                 <SparkleIcon size={17} />
@@ -443,14 +415,13 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
               </div>
             </header>
 
-            {/* ── MESSAGES ───────────────────────────────────────────────── */}
+            {/* ── MESSAGES ────────────────────────────────────────────── */}
             <div
               className="ai-widget__messages"
               role="log"
               aria-live="polite"
               aria-label="Conversation history"
             >
-              {/* Welcome card */}
               {showWelcome && (
                 <motion.div
                   className="ai-widget__welcome"
@@ -486,7 +457,6 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
                 </motion.div>
               )}
 
-              {/* Message list */}
               <AnimatePresence initial={false}>
                 {messages.map((msg) => (
                   <motion.div
@@ -517,7 +487,6 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
                 ))}
               </AnimatePresence>
 
-              {/* Typing indicator */}
               <AnimatePresence>
                 {isLoading && (
                   <motion.div
@@ -537,11 +506,10 @@ const AIChatWidget: React.FC<AIChatWidgetProps> = ({
                 )}
               </AnimatePresence>
 
-              {/* Scroll anchor */}
               <div ref={messagesEndRef} aria-hidden="true" />
             </div>
 
-            {/* ── INPUT AREA ─────────────────────────────────────────────── */}
+            {/* ── INPUT AREA ───────────────────────────────────────────── */}
             <footer className="ai-widget__input-area">
               <div className="ai-widget__input-wrapper">
                 <textarea
