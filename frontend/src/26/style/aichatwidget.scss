@@ -1,0 +1,554 @@
+// Adjust this path to match your project structure.
+// Common layouts: '../style/variables', '../../styles/variables', './variables'
+@use '../style/variables' as *;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AI CHAT WIDGET
+// Light-mode floating assistant panel — matches landing page design system.
+// BEM: .ai-widget  /  .ai-widget__[element]  /  .ai-widget__[element]--[mod]
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Local tokens (derived from site variables) ────────────────────────────────
+
+$widget-bg          : #ffffff;
+$widget-bg-surface  : #faf9f7;      // warm off-white, matches page bg hint
+$widget-bg-bubble-ai: #f3f0eb;      // warm cream — same family as page bg
+$widget-border      : rgba(87, 79, 71, 0.10);   // $color-muted-alt at low alpha
+$widget-border-mid  : rgba(87, 79, 71, 0.18);
+$widget-border-focus: rgba(87, 79, 71, 0.35);
+$widget-muted       : rgba(87, 79, 71, 0.38);   // placeholder / secondary text
+$widget-radius-panel: 22px;
+$widget-radius-input: 14px;
+$widget-radius-btn  : 10px;
+$widget-radius-avatar: 11px;
+$widget-w           : 390px;
+$widget-h           : 580px;
+$widget-z           : 1000;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// OVERLAY (mobile backdrop)
+// ─────────────────────────────────────────────────────────────────────────────
+
+.ai-widget__overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: $widget-z - 1;
+
+  @media (max-width: 480px) {
+    display: block;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WIDGET PANEL
+// ─────────────────────────────────────────────────────────────────────────────
+
+.ai-widget {
+  position: fixed;
+  bottom: 100px;
+  right: 28px;
+  z-index: $widget-z;
+
+  width: $widget-w;
+  height: $widget-h;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  background: $widget-bg;
+  border: 1px solid $widget-border;
+  border-radius: $widget-radius-panel;
+
+  // Multi-layer shadow: ambient depth + tight lift + top edge highlight
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.11),
+    0 16px 32px rgba(0, 0, 0, 0.07),
+    0 4px 12px  rgba(0, 0, 0, 0.05),
+    0  1px  0   rgba(255, 255, 255, 0.90) inset;
+
+  // Subtle vertical-line grid — mirrors the ::before overlay on .landing
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='20'%3E%3Cline x1='0.5' y1='0' x2='0.5' y2='20' stroke='%23574f47' stroke-opacity='0.03' stroke-width='1' stroke-dasharray='3 10'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 100px 20px;
+  }
+
+  // All direct children sit above the grid texture
+  > * { position: relative; z-index: 1; }
+
+  // ── Header ────────────────────────────────────────────────────────────────
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+    border-bottom: 1px solid $widget-border;
+    background: $widget-bg-surface;
+    flex-shrink: 0;
+  }
+
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: $widget-radius-avatar;
+    background: rgba(21, 21, 21, 0.055);
+    border: 1px solid rgba(21, 21, 21, 0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #151515;
+
+    // Tiny "online" dot
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #3ecf8e;
+      border: 2px solid $widget-bg-surface;
+    }
+  }
+
+  &__header-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__header-name {
+    font-family: $font-display;
+    font-size: 13px;
+    font-weight: 600;
+    color: #151515;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+  }
+
+  &__header-status {
+    font-size: 11px;
+    color: $color-muted;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+  }
+
+  &__header-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  // Shared icon button used for clear + close
+  &__icon-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    color: $color-muted;
+    cursor: pointer;
+    border-radius: $radius-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background $dur-fast ease,
+      color      $dur-fast ease;
+    outline: none;
+
+    &:hover {
+      background: rgba(87, 79, 71, 0.08);
+      color: #151515;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #151515;
+      outline-offset: -2px;
+      border-radius: $radius-sm;
+    }
+  }
+
+  // ── Messages area ─────────────────────────────────────────────────────────
+
+  &__messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    scroll-behavior: smooth;
+    background: $widget-bg;
+
+    // Thin warm scrollbar
+    scrollbar-width: thin;
+    scrollbar-color: rgba(87, 79, 71, 0.18) transparent;
+
+    &::-webkit-scrollbar       { width: 4px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(87, 79, 71, 0.16);
+      border-radius: 2px;
+    }
+  }
+
+  // ── Welcome card ──────────────────────────────────────────────────────────
+
+  &__welcome {
+    text-align: center;
+    padding: 4px 0 6px;
+  }
+
+  &__welcome-icon {
+    width: 46px;
+    height: 46px;
+    margin: 0 auto 14px;
+    border-radius: 14px;
+    background: rgba(21, 21, 21, 0.05);
+    border: 1px solid rgba(21, 21, 21, 0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #151515;
+  }
+
+  &__welcome-title {
+    font-family: $font-body;
+    font-size: 15px;
+    font-weight: 700;
+    color: #151515;
+    letter-spacing: -0.015em;
+    margin: 0 0 8px;
+  }
+
+  &__welcome-desc {
+    font-size: 13px;
+    color: $color-muted-alt;
+    line-height: 1.65;
+    margin: 0 0 18px;
+  }
+
+  &__quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    justify-content: center;
+  }
+
+  // Quick prompt pills — inherit the site's pill pattern, lighter variant
+  &__quick-btn {
+    font-family: $font-body;
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: $radius-pill;
+    background: #f3f0eb;
+    border: 1px solid rgba(87, 79, 71, 0.15);
+    color: $color-muted-alt;
+    cursor: pointer;
+    white-space: nowrap;
+    outline: none;
+    transition:
+      background $dur-fast ease,
+      border-color $dur-fast ease,
+      color $dur-fast ease,
+      transform $dur-fast ease,
+      box-shadow $dur-fast ease;
+
+    &:hover {
+      background: #151515;
+      border-color: #151515;
+      color: #eee;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #151515;
+      outline-offset: 2px;
+    }
+  }
+
+  // ── Message bubbles ───────────────────────────────────────────────────────
+
+  &__message {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    &--user      { align-items: flex-end; }
+    &--assistant { align-items: flex-start; }
+  }
+
+  &__bubble {
+    max-width: 78%;
+    padding: 11px 15px;
+    font-size: 13.5px;
+    line-height: 1.68;
+    word-break: break-word;
+
+    // Shared inline code style
+    code {
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      background: rgba(87, 79, 71, 0.10);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    strong { font-weight: 700; }
+
+    // ── User bubble — mirrors the .button style (dark pill)
+    &--user {
+      background: #151515;
+      color: #eeeeee;
+      border-radius: 16px 16px 4px 16px;
+      font-family: $font-body;
+    }
+
+    // ── Assistant bubble — warm cream card
+    &--assistant {
+      background: $widget-bg-bubble-ai;
+      color: #1a1a1a;
+      border: 1px solid rgba(87, 79, 71, 0.10);
+      border-radius: 16px 16px 16px 4px;
+      font-family: $font-body;
+    }
+
+    // ── Error state
+    &--error {
+      background: rgba(180, 50, 50, 0.07) !important;
+      border: 1px solid rgba(180, 50, 50, 0.18) !important;
+      color: #b43232 !important;
+    }
+  }
+
+  &__msg-time {
+    font-size: 10px;
+    color: $color-muted;
+    padding: 0 4px;
+    letter-spacing: 0.01em;
+  }
+
+  // ── Typing indicator ──────────────────────────────────────────────────────
+
+  &__typing {
+    background: $widget-bg-bubble-ai;
+    border: 1px solid rgba(87, 79, 71, 0.10);
+    border-radius: 16px 16px 16px 4px;
+    padding: 14px 18px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+    span {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: $color-muted;
+      animation: ai-widget-dot-bounce 1.4s ease-in-out infinite;
+
+      &:nth-child(2) { animation-delay: 0.2s; }
+      &:nth-child(3) { animation-delay: 0.4s; }
+    }
+  }
+
+  // ── Input area ────────────────────────────────────────────────────────────
+
+  &__input-area {
+    border-top: 1px solid $widget-border;
+    padding: 14px 16px;
+    background: $widget-bg-surface;
+    flex-shrink: 0;
+  }
+
+  &__input-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    background: $widget-bg;
+    border: 1px solid $widget-border-mid;
+    border-radius: $widget-radius-input;
+    padding: 10px 12px;
+    transition:
+      border-color $dur-fast ease,
+      box-shadow   $dur-fast ease;
+
+    &:focus-within {
+      border-color: $widget-border-focus;
+      box-shadow: 0 0 0 3px rgba(87, 79, 71, 0.06);
+    }
+  }
+
+  &__textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+    color: #151515;
+    font-family: $font-body;
+    font-size: 13.5px;
+    line-height: 1.55;
+    min-height: 22px;
+    max-height: 120px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    caret-color: #151515;
+
+    &::-webkit-scrollbar { display: none; }
+
+    &::placeholder { color: $widget-muted; }
+
+    &:disabled { opacity: 0.45; }
+
+    // Prevent iOS auto-zoom (font must be ≥ 16px on mobile)
+    @media (max-width: 480px) { font-size: 16px; }
+  }
+
+  &__send-btn {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    align-self: flex-end;
+    border: none;
+    border-radius: $widget-radius-btn;
+    background: #151515;
+    color: #eee;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    transition:
+      background $dur-fast ease,
+      transform  $dur-fast ease,
+      box-shadow $dur-fast ease,
+      opacity    $dur-fast ease;
+
+    &:hover:not(:disabled) {
+      background: #2a2a2a;
+      transform: scale(1.06);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.95);
+      box-shadow: none;
+    }
+
+    &:disabled {
+      opacity: 0.28;
+      cursor: default;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #151515;
+      outline-offset: 2px;
+    }
+
+    &--loading { cursor: default; }
+  }
+
+  &__spinner {
+    display: block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(238, 238, 238, 0.28);
+    border-top-color: #eee;
+    border-radius: 50%;
+    animation: ai-widget-spin 0.7s linear infinite;
+  }
+
+  &__input-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding: 0 2px;
+  }
+
+  &__char-count {
+    font-size: 10px;
+    color: $color-muted;
+  }
+
+  &__input-hint {
+    font-size: 10px;
+    color: $color-muted;
+    letter-spacing: 0.01em;
+
+    kbd {
+      display: inline-block;
+      padding: 1px 5px;
+      background: rgba(87, 79, 71, 0.07);
+      border: 1px solid rgba(87, 79, 71, 0.14);
+      border-radius: 4px;
+      font-family: "Courier New", monospace;
+      font-size: 10px;
+      color: $color-muted-alt;
+    }
+  }
+
+  // ── Responsive ────────────────────────────────────────────────────────────
+
+  // Compact tablet portrait
+  @media (min-width: 481px) and (max-width: 768px) {
+    width: 340px;
+    height: 520px;
+    bottom: 88px;
+    right: 20px;
+  }
+
+  // Mobile — full-width bottom sheet
+  @media (max-width: 480px) {
+    width: 100%;
+    height: 82dvh;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    border-radius: 22px 22px 0 0;
+    border-bottom: none;
+  }
+
+  // Landscape / short viewports
+  @media (max-height: 600px) and (orientation: landscape) {
+    height: 90dvh;
+    bottom: 0;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// KEYFRAMES
+// ─────────────────────────────────────────────────────────────────────────────
+
+@keyframes ai-widget-dot-bounce {
+  0%, 60%, 100% { transform: translateY(0);    opacity: 0.4; }
+  30%            { transform: translateY(-6px); opacity: 1;   }
+}
+
+@keyframes ai-widget-spin {
+  to { transform: rotate(360deg); }
+}

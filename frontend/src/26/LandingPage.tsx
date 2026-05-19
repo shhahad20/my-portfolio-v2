@@ -5,6 +5,7 @@ import "./style/LandingPage.scss";
 import AnimatedLink from "../components/AnimatedLink";
 import Shuffle from "../components/Shuffle";
 import DecryptedText from "../components/DecryptedText";
+import AIChatWidget from "./AiChatWidget";
 // import AuroraBackground from "./Aurorabackground";
 // import AIInput from "./Aiinput";
 
@@ -14,6 +15,7 @@ interface Props {
 
 const LandingPage: React.FC<Props> = () => {
   const [isButtonHovered, setIsButtonHovered] = React.useState(false);
+  const [isWidgetOpen, setIsWidgetOpen] = React.useState(false); // [ADD] ← widget open state
 
   // Handle AI input submission
   // const handleAISubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -199,6 +201,9 @@ const LandingPage: React.FC<Props> = () => {
           className="button"
           onMouseEnter={() => setIsButtonHovered(true)}
           onMouseLeave={() => setIsButtonHovered(false)}
+          onClick={() => setIsWidgetOpen(true)} // [ADD] ← open the widget
+          aria-expanded={isWidgetOpen} // [ADD] ← ARIA state
+          aria-controls="ai-widget-dialog" // [ADD] ← ARIA linkage
         >
           <DecryptedText
             text="ASK ME ANYTHING"
@@ -211,7 +216,6 @@ const LandingPage: React.FC<Props> = () => {
         </button>
       </div>
 
-
       {/* Scroll Indicator */}
       <motion.div
         className="scroll"
@@ -220,6 +224,20 @@ const LandingPage: React.FC<Props> = () => {
       >
         scroll for more
       </motion.div>
+
+      <AIChatWidget
+        isOpen={isWidgetOpen}
+        onClose={() => setIsWidgetOpen(false)}
+        assistantName="AI Assistant"
+        assistantTagline="Ask me about Shahad's work"
+        systemPrompt="You are an AI assistant for Shahad Altharwa's personal portfolio website. Shahad is a Software Engineer & Designer based in Saudi Arabia. Answer questions about their work, skills, and experience in a concise, professional, and friendly way."
+        quickPrompts={[
+          "What's your tech stack?",
+          "Tell me about your projects",
+          "What are your skills?",
+          "Let's collaborate",
+        ]}
+      />
     </div>
   );
 };
