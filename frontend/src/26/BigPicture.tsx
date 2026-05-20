@@ -1,3 +1,4 @@
+import AnimatedCounter from "../components/AnimationCounter";
 import "./style/BigPicture.scss";
 /* ─── Animated People Icon ─────────────────────────────────────────────── */
 const PeopleIcon = () => (
@@ -131,28 +132,43 @@ const stats = [
   {
     id: "people",
     Icon: PeopleIcon,
-    lines: ["105 + Client", "160 + Students"],
+    value: 105,
+    suffix: "+",
+    lines: ["Client", "160 + Students"],
     row: 0,
     col: 0,
   },
   {
     id: "projects",
     Icon: ProjectIcon,
-    lines: ["272 + Projects", "& Designs"],
+    value: 272,
+    suffix: "+",
+    lines: ["Projects", "& Designs"],
     row: 0,
     col: 1,
   },
-  { id: "git", Icon: GitIcon, lines: ["71 + Github Repos"], row: 1, col: 0 },
+  {
+    id: "git",
+    Icon: GitIcon,
+    value: 71,
+    suffix: "+",
+    lines: ["Github Repos"],
+    row: 1,
+    col: 0,
+  },
   {
     id: "coffee",
     Icon: CoffeeIcon,
-    lines: ["∞ + Cup of", "Coffee"],
+    value: null,
+    prefix: "∞",
+    lines: ["Cup of", "Coffee"],
     row: 1,
     col: 1,
   },
 ];
 
 export default function BigPictureStats() {
+
   return (
     <div className="big-picture-section">
       {/* ── Heading ── */}
@@ -174,7 +190,24 @@ export default function BigPictureStats() {
 
             {/* Text lines */}
             <div className="stat-lines">
-              {stat.lines.map((line, li) => (
+              <div className="stat-line">
+                {stat.value !== null ? (
+                  <>
+                    <AnimatedCounter
+                      target={stat.value}
+                      duration={2.5}
+                      suffix={stat.suffix ?? ""}
+                    />{" "}
+                    {stat.lines[0]}
+                  </>
+                ) : (
+                  <>
+                    {stat.prefix} {stat.lines[0]}
+                  </>
+                )}
+              </div>
+
+              {stat.lines.slice(1).map((line, li) => (
                 <div key={li} className="stat-line">
                   {line}
                 </div>
