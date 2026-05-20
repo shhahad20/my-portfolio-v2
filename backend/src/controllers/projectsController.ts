@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { fetchData,  fetchProjectDataById } from "../services/fetchData.js";
+import { fetchData,  fetchDataById,  fetchProjectDataById } from "../services/fetchData.js";
 
 export const projects = (
   req: Request,

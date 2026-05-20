@@ -6,5 +6,4 @@ const router = Router();
 router.get('/projects', projects);
 router.get("/projects/:id", getProjectById);
 
-
 export default router;

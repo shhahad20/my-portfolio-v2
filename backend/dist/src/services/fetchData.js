@@ -99,11 +99,12 @@ export const fetchProjectDataById = async (table, req, res, next, idColumn = "id
         if (!id) {
             throw ApiError.badRequest("ID parameter is required");
         }
-        // For projects, include all related media ordered by sort_order.
+        // Explicit FK hint (project_media_project_id_fkey) ensures PostgREST
+        // resolves the relationship even if the FK isn't named conventionally.
         const selectQuery = table === "projects"
             ? `
             *,
-            project_media (
+            project_media!project_media_project_id_fkey (
               id,
               media_url,
               media_type,
@@ -117,7 +118,6 @@ export const fetchProjectDataById = async (table, req, res, next, idColumn = "id
             .from(table)
             .select(selectQuery)
             .eq(idColumn, id);
-        // Order nested media by sort_order.
         if (table === "projects") {
             query = query.order("sort_order", {
                 foreignTable: "project_media",
@@ -126,22 +126,24 @@ export const fetchProjectDataById = async (table, req, res, next, idColumn = "id
         }
         const { data, error } = await query.single();
         if (error) {
-            // PGRST116 = no rows returned
             if (error.code === "PGRST116") {
                 throw ApiError.notFound(`Record with ${idColumn} "${id}" not found in ${table}`);
             }
             console.error(`Supabase error fetching ${table}:`, error);
             throw ApiError.internal(`Error fetching record from ${table}`);
         }
-        // Normalize project_media -> media[] for frontend compatibility
+        // Normalize project_media -> media[] and strip the raw join key.
         if (table === "projects" &&
             data &&
             Array.isArray(data.project_media)) {
             const project = data;
-            project.media = project.project_media.map((item) => item.media_url);
+            // Preserve full media objects instead of just URLs for frontend flexibility.
+            project.media = project.project_media;
+            // Remove raw join key so the response shape is clean.
+            delete project.project_media;
         }
-        res.json(data);
         console.log(`Fetched record from ${table} where ${idColumn} = ${id}`);
+        res.json(data);
     }
     catch (error) {
         next(error);

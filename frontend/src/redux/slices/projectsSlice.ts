@@ -22,7 +22,7 @@ export type Project = {
   mobile_y?: number;
   created_at: string;
   updated_at: string;
-// New optional detail fields
+  // New optional detail fields
   slug?: string;
   subtitle?: string;
   category?: string;
@@ -68,6 +68,7 @@ export const fetchProjects = createAsyncThunk<
     }
 
     const data: Project[] = await res.json();
+
     return data;
   } catch (err) {
     return rejectWithValue(
@@ -91,6 +92,7 @@ export const fetchProjectById = createAsyncThunk<
     }
 
     const data: Project = await res.json();
+
     return data;
   } catch (err) {
     return rejectWithValue(
