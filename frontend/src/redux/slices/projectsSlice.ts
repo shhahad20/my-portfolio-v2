@@ -2,7 +2,14 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { API_URL } from "../../api/api";
 
 /* ─── Types ──────────────────────────────────────────────────────────────── */
-
+export type ProjectMedia = {
+  id: string;
+  media_url: string;
+  media_type: "image" | "video";
+  alt_text?: string;
+  sort_order: number;
+  created_at: string;
+};
 export type Project = {
   id: string;
   label: string;
@@ -15,6 +22,25 @@ export type Project = {
   mobile_y?: number;
   created_at: string;
   updated_at: string;
+// New optional detail fields
+  slug?: string;
+  subtitle?: string;
+  category?: string;
+  description?: string;
+  client?: string;
+  year?: number;
+  external_link?: string;
+
+  // PostgreSQL array columns
+  services?: string[];
+  technologies?: string[];
+  tags?: string[];
+
+  // Normalized array created by the backend for your existing gallery
+  media?: string[];
+
+  // Optional raw relation if you want metadata such as alt_text
+  project_media?: ProjectMedia[];
 };
 
 export interface ProjectsState {

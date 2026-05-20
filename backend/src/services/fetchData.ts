@@ -105,3 +105,94 @@ export const fetchDataById = async (
     next(error);
   }
 };
+
+/**
+ * Fetch a single record by its ID from a given table.
+ *
+ * Supports nested relations for the `projects` table by automatically
+ * including all related rows from `project_media`, ordered by `sort_order`.
+ *
+ * @param table - The table name in Supabase.
+ * @param req - Express Request containing `req.params.id`.
+ * @param res - Express Response to send the record.
+ * @param next - Express NextFunction for error handling.
+ * @param idColumn - Optional column name to use as the identifier (default: "id").
+ */
+export const fetchProjectDataById = async (
+  table: string,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  idColumn: string = "id"
+) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      throw ApiError.badRequest("ID parameter is required");
+    }
+
+    // For projects, include all related media ordered by sort_order.
+    const selectQuery =
+      table === "projects"
+        ? `
+            *,
+            project_media (
+              id,
+              media_url,
+              media_type,
+              alt_text,
+              sort_order,
+              created_at
+            )
+          `
+        : "*";
+
+    let query = supabase
+      .from(table)
+      .select(selectQuery)
+      .eq(idColumn, id);
+
+    // Order nested media by sort_order.
+    if (table === "projects") {
+      query = query.order("sort_order", {
+        foreignTable: "project_media",
+        ascending: true,
+      });
+    }
+
+    const { data, error } = await query.single();
+
+    if (error) {
+      // PGRST116 = no rows returned
+      if (error.code === "PGRST116") {
+        throw ApiError.notFound(
+          `Record with ${idColumn} "${id}" not found in ${table}`
+        );
+      }
+
+      console.error(`Supabase error fetching ${table}:`, error);
+
+      throw ApiError.internal(`Error fetching record from ${table}`);
+    }
+
+    // Normalize project_media -> media[] for frontend compatibility
+    if (
+      table === "projects" &&
+      data &&
+      Array.isArray((data as any).project_media)
+    ) {
+      const project = data as any;
+
+      project.media = project.project_media.map(
+        (item: { media_url: string }) => item.media_url
+      );
+    }
+
+    res.json(data);
+
+    console.log(`Fetched record from ${table} where ${idColumn} = ${id}`);
+  } catch (error) {
+    next(error);
+  }
+};
