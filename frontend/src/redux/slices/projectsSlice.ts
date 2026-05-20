@@ -20,6 +20,7 @@ export type Project = {
 export interface ProjectsState {
   projects: Project[];
   selectedProjectId: string | null;
+  selectedProject: Project | null;
   loading: boolean;
   error: string | null;
 }
@@ -27,8 +28,8 @@ export interface ProjectsState {
 /* ─── Thunk ──────────────────────────────────────────────────────────────── */
 
 export const fetchProjects = createAsyncThunk<
-  Project[],          // fulfilled payload
-  void,               // no argument needed
+  Project[], // fulfilled payload
+  void, // no argument needed
   { rejectValue: string }
 >("projects/fetchAll", async (_, { rejectWithValue }) => {
   try {
@@ -36,7 +37,7 @@ export const fetchProjects = createAsyncThunk<
 
     if (!res.ok) {
       return rejectWithValue(
-        `Failed to fetch projects: ${res.status} ${res.statusText}`
+        `Failed to fetch projects: ${res.status} ${res.statusText}`,
       );
     }
 
@@ -44,7 +45,30 @@ export const fetchProjects = createAsyncThunk<
     return data;
   } catch (err) {
     return rejectWithValue(
-      err instanceof Error ? err.message : "Unknown error"
+      err instanceof Error ? err.message : "Unknown error",
+    );
+  }
+});
+
+export const fetchProjectById = createAsyncThunk<
+  Project,
+  string,
+  { rejectValue: string }
+>("projects/fetchById", async (id, { rejectWithValue }) => {
+  try {
+    const res = await fetch(`${API_URL}/projects/${id}`);
+
+    if (!res.ok) {
+      return rejectWithValue(
+        `Failed to fetch project: ${res.status} ${res.statusText}`,
+      );
+    }
+
+    const data: Project = await res.json();
+    return data;
+  } catch (err) {
+    return rejectWithValue(
+      err instanceof Error ? err.message : "Unknown error",
     );
   }
 });
@@ -54,6 +78,7 @@ export const fetchProjects = createAsyncThunk<
 const initialState: ProjectsState = {
   projects: [],
   selectedProjectId: null,
+  selectedProject: null,
   loading: false,
   error: null,
 };
@@ -72,7 +97,7 @@ const projectsSlice = createSlice({
     },
     updateProject: (state, action: PayloadAction<Project>) => {
       const index = state.projects.findIndex(
-        (project) => project.id === action.payload.id
+        (project) => project.id === action.payload.id,
       );
       if (index !== -1) {
         state.projects[index] = action.payload;
@@ -80,7 +105,7 @@ const projectsSlice = createSlice({
     },
     removeProject: (state, action: PayloadAction<string>) => {
       state.projects = state.projects.filter(
-        (project) => project.id !== action.payload
+        (project) => project.id !== action.payload,
       );
     },
     selectProject: (state, action: PayloadAction<string | null>) => {
@@ -100,6 +125,31 @@ const projectsSlice = createSlice({
       .addCase(fetchProjects.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Failed to fetch projects";
+      })
+      .addCase(fetchProjectById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchProjectById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedProject = action.payload;
+        state.selectedProjectId = action.payload.id;
+
+        // Update the project in the list if it already exists
+        const index = state.projects.findIndex(
+          (project) => project.id === action.payload.id,
+        );
+
+        if (index !== -1) {
+          state.projects[index] = action.payload;
+        } else {
+          state.projects.push(action.payload);
+        }
+      })
+      .addCase(fetchProjectById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? "Failed to fetch project";
+        state.selectedProject = null;
       });
   },
 });
