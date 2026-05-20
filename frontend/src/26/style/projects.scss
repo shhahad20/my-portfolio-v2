@@ -304,31 +304,23 @@
     transform: none;
   }
 }
+
 // ─────────────────────────────────────────────────────────────────────────────
-// LOADING INDICATOR — append this block to the bottom of projects.scss
-// Covers:
-//   1. Skeleton pulse on satellite circles while fetching
-//   2. Animated dots inside the center circle
+// LOADING INDICATOR — satellite skeleton + center dots
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── 1. Satellite skeleton state ───────────────────────────────────────────────
-//
-// .wkmb-sat--skeleton is already applied in the JSX when loading === true.
-// The pulse fades the circles in and out so the layout stays intact while
-// data is on the way — no layout shift, no blank holes.
 
 .wkmb-sat--skeleton {
-  pointer-events: none;        // block hover/focus while loading
+  pointer-events: none;
   cursor: default;
   animation: wkmb-skeleton-pulse 1.6s ease-in-out infinite;
 
-  // Hide the text label so only the circle silhouette shows
   .wkmb-sat-label {
     opacity: 0;
     transition: none;
   }
 
-  // Stagger each satellite slightly so the pulse ripples outward
   @for $i from 0 through 23 {
     &:nth-child(#{$i + 1}) {
       animation-delay: #{$i * 0.045}s;
@@ -342,9 +334,6 @@
 }
 
 // ── 2. Center circle loading dots ────────────────────────────────────────────
-//
-// Three dots replace the idle "Choose a circle" text.
-// They bounce independently with a short stagger for a classic typing feel.
 
 .wkmb-center-loading {
   display: flex;
@@ -357,7 +346,6 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  // Inherits color from .wkmb-center so it matches whatever text color is set there
   background: currentColor;
   opacity: 0.35;
   animation: wkmb-dot-bounce 1.4s ease-in-out infinite;
@@ -369,4 +357,94 @@
 @keyframes wkmb-dot-bounce {
   0%, 55%, 100% { transform: translateY(0);    opacity: 0.30; }
   27%            { transform: translateY(-5px); opacity: 0.85; }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PREVIEW MEDIA LOADER
+// Sits as an absolute overlay inside .wkmb-preview-inner.
+// Visible while the image / video is still fetching; fades out on load.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Overlay container ─────────────────────────────────────────────────────────
+//
+// Covers the full preview area with a warm neutral wash that matches the
+// fallback palette. The `pointer-events: none` ensures it never interferes
+// with underlying interactions.
+
+.wkmb-preview-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 10;                         // sits above media, below the label bar
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0eeeb;                 // warm off-white — cohesive with the site palette
+  border-radius: inherit;              // respects .wkmb-preview-inner's border-radius
+  pointer-events: none;
+
+  // Smooth fade-out transition triggered by the --hidden modifier class
+  opacity: 1;
+  transition: opacity 0.32s ease;
+
+  &.wkmb-preview-loader--hidden {
+    opacity: 0;
+    // Once fully transparent, pull it out of the stacking context so
+    // the underlying media receives pointer events (in case any are needed).
+    pointer-events: none;
+  }
+}
+
+// ── Spinner ───────────────────────────────────────────────────────────────────
+//
+// A clean arc spinner: thin, refined, and in keeping with the light-mode
+// aesthetic. Implemented with a single pseudo-element so no extra DOM nodes
+// are needed beyond the <span>.
+//
+// Design rationale:
+//   • Thin 1.5 px stroke → premium, editorial feel
+//   • Muted warm gray (#b5b1a9) matches the dashed circle borders
+//   • Translucent track (#b5b1a940) provides depth without visual noise
+//   • 0.9 s duration — quick enough to read as responsive, slow enough to
+//     remain graceful
+
+.wkmb-preview-spinner {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+
+  // Track (full circle, very low opacity)
+  border: 1.5px solid rgba(#b5b1a9, 0.30);
+
+  // Arc (single quarter-circle, visible segment)
+  border-top-color: #7a756e;
+
+  animation: wkmb-spinner-rotate 0.9s linear infinite;
+
+  // Responsive: scale down slightly inside small previews on mobile
+  @media (max-width: 640px) {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@keyframes wkmb-spinner-rotate {
+  to { transform: rotate(360deg); }
+}
+
+// ── Reduced motion override ───────────────────────────────────────────────────
+//
+// Replace the spinning animation with a gentle pulse so something still
+// communicates "loading" without triggering vestibular discomfort.
+
+@media (prefers-reduced-motion: reduce) {
+  .wkmb-preview-spinner {
+    animation: wkmb-spinner-pulse-reduced 1.4s ease-in-out infinite;
+    border-top-color: #b5b1a9; // uniform color — no spinning arc needed
+  }
+
+  @keyframes wkmb-spinner-pulse-reduced {
+    0%, 100% { opacity: 0.25; }
+    50%       { opacity: 0.75; }
+  }
 }

@@ -299,7 +299,8 @@ const MOBILE_BREAKPOINT = 640;
 const isMedia = (src: string) =>
   typeof src === "string" && (src.startsWith("http") || src.startsWith("/"));
 
-const isVideo = (src: string) => isMedia(src) && /\.(mp4|webm|ogg)$/i.test(src);
+const isVideo = (src: string) =>
+  isMedia(src) && /\.(mp4|webm|ogg)$/i.test(src);
 
 /* ─── Component ──────────────────────────────────────────────────────────── */
 
@@ -310,14 +311,30 @@ export default function WhatKeepsMeBusy() {
     (state: RootState) => state.projects,
   );
 
-  // Fetch on mount — dispatching again is safe; add a loaded guard in the
-  // slice's extraReducers if you want to prevent duplicate requests.
   useEffect(() => {
     dispatch(fetchProjects());
   }, [dispatch]);
 
   const [hoverId, setHoverId] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ── Media loading state ──────────────────────────────────────────────────
+  // Tracks whether the image/video inside the current preview has finished
+  // loading. Resets whenever hoverId changes so the loader re-appears for
+  // each new satellite. For solid-color backgrounds (non-URL) it starts as
+  // `true` immediately — no network fetch needed.
+  const [mediaLoaded, setMediaLoaded] = useState(false);
+
+  useEffect(() => {
+    if (hoverId === null) {
+      setMediaLoaded(false);
+      return;
+    }
+    const project =
+      (projects.length > 0 ? projects : FALLBACK_PROJECTS)[hoverId];
+    // Color fill → nothing to fetch, mark as loaded right away
+    setMediaLoaded(project ? !isMedia(project.bg) : false);
+  }, [hoverId, projects]);
 
   // Show fallback data while loading or on error so the layout is never empty
   const displayProjects = projects.length > 0 ? projects : FALLBACK_PROJECTS;
@@ -336,7 +353,6 @@ export default function WhatKeepsMeBusy() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Slice satellite positions to match however many projects are actually shown
   const satellites = (isMobile ? SATELLITES_MOBILE : SATELLITES_DESKTOP).slice(
     0,
     visibleProjects.length,
@@ -369,16 +385,6 @@ export default function WhatKeepsMeBusy() {
         </div>
         <nav className="wkmb-nav" aria-label="External links">
           {NAV_LINKS.map(({ label, href }) => (
-            // <a
-            //   key={label}
-            //   href={href}
-            //   className="wkmb-nav-link"
-            //   target="_blank"
-            //   rel="noopener noreferrer"
-            // >
-            //   {label}
-            //   <span className="wkmb-arrow" aria-hidden="true">↗</span>
-            // </a>
             <AnimatedLink linkText={label} hoverText={label} href={href} />
           ))}
         </nav>
@@ -390,7 +396,6 @@ export default function WhatKeepsMeBusy() {
         aria-label="Portfolio projects"
         aria-busy={loading}
       >
-        {/* Error banner — rendered in-field so the layout doesn't shift */}
         {error && (
           <p className="wkmb-error" role="alert">
             {error}
@@ -432,10 +437,6 @@ export default function WhatKeepsMeBusy() {
           style={{ left: `${CENTER_X}%`, top: `${CENTER_Y}%` }}
         >
           <div className="wkmb-center-label">
-            {/* <span className="wkmb-center-idle">
-              Choose a circle<br />to <em>Explore</em>
-            </span> */}
-
             {loading ? (
               <span
                 className="wkmb-center-loading"
@@ -455,9 +456,7 @@ export default function WhatKeepsMeBusy() {
           </div>
         </div>
 
-        {/* Floating preview rectangle — appears above/below the hovered satellite.
-            key={preview-${project.id}} re-mounts on each new hover so the
-            entrance animation always plays from scratch. */}
+        {/* Floating preview rectangle */}
         {hoverId !== null &&
           visibleProjects[hoverId] &&
           (() => {
@@ -474,6 +473,18 @@ export default function WhatKeepsMeBusy() {
                 aria-atomic="true"
               >
                 <div className="wkmb-preview-inner">
+                  {/* ── Media loading indicator ──────────────────────────
+                      Sits as an absolute overlay on top of the media area.
+                      Fades out smoothly once onLoad / onLoadedData fires.
+                      The `wkmb-preview-loader--hidden` class triggers the
+                      fade-out transition defined in SCSS.             ── */}
+                  <div
+                    className={`wkmb-preview-loader${mediaLoaded ? " wkmb-preview-loader--hidden" : ""}`}
+                    aria-hidden="true"
+                  >
+                    <span className="wkmb-preview-spinner" />
+                  </div>
+
                   {isVideo(project.bg) ? (
                     <video
                       className="wkmb-preview-media"
@@ -482,12 +493,16 @@ export default function WhatKeepsMeBusy() {
                       muted
                       loop
                       playsInline
+                      onLoadedData={() => setMediaLoaded(true)}
+                      onError={() => setMediaLoaded(true)}
                     />
                   ) : isMedia(project.bg) ? (
                     <img
                       className="wkmb-preview-media"
                       src={project.bg}
                       alt={project.label}
+                      onLoad={() => setMediaLoaded(true)}
+                      onError={() => setMediaLoaded(true)}
                     />
                   ) : (
                     <div
@@ -496,8 +511,6 @@ export default function WhatKeepsMeBusy() {
                     />
                   )}
 
-                  {/* Uses project_name (the full DB title) rather than the
-                    short display label shown inside the satellite circle */}
                   <div className="wkmb-preview-label">
                     <span style={{ color: project.accent }}>
                       {project.project_name}
@@ -508,9 +521,6 @@ export default function WhatKeepsMeBusy() {
             );
           })()}
       </main>
-
-      {/* Bottom accent line */}
-      {/* <div className="wkmb-baseline" /> */}
     </div>
   );
 }
