@@ -1,9 +1,22 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import { fetchProjects, fetchProjectById } from "../redux/slices/projectsSlice";
 import "./style/ProjectDetails.scss";
+
+// ─── Disable browser scroll restoration ─────────────────────────────────────
+// Without this, the browser replays the previous page's scroll offset after
+// every client-side navigation, overriding our manual scrollTo call.
+if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
+  window.history.scrollRestoration = "manual";
+}
 
 // ─── Types ──────────────────────────────────────────────────────────────────────
 
@@ -20,12 +33,11 @@ export interface ProjectMedia {
 const isMediaUrl = (src?: string | null): src is string =>
   typeof src === "string" && (src.startsWith("http") || src.startsWith("/"));
 
-const isVideoUrl = (src: string): boolean =>
-  /\.(mp4|webm|ogg)$/i.test(src);
+const isVideoUrl = (src: string): boolean => /\.(mp4|webm|ogg)$/i.test(src);
 
 const toMediaItem = (
   url: string,
-  overrides: Partial<ProjectMedia> = {}
+  overrides: Partial<ProjectMedia> = {},
 ): ProjectMedia => ({
   id: `fallback-${url}`,
   media_url: url,
@@ -42,7 +54,7 @@ const toMediaItem = (
  */
 const buildMediaItems = (
   bg?: string | null,
-  media?: ProjectMedia[] | null
+  media?: ProjectMedia[] | null,
 ): ProjectMedia[] => {
   const rows: ProjectMedia[] = Array.isArray(media) ? [...media] : [];
 
@@ -54,7 +66,7 @@ const buildMediaItems = (
 
   if (isMediaUrl(bg) && !bgAlreadyPresent) {
     items.push(
-      toMediaItem(bg, { id: "bg-hero", sort_order: -1, alt_text: "Hero" })
+      toMediaItem(bg, { id: "bg-hero", sort_order: -1, alt_text: "Hero" }),
     );
   }
 
@@ -222,9 +234,7 @@ function InfiniteGallery({ items, projectName }: InfiniteGalleryProps) {
         const raw = Math.round(posRef.current / itemW) % singleLen;
         setActiveIndex(raw < 0 ? 0 : raw);
         const maxPos = stripW - (track.parentElement?.clientWidth ?? 0);
-        setScrollProgress(
-          maxPos > 0 ? (posRef.current % stripW) / stripW : 0
-        );
+        setScrollProgress(maxPos > 0 ? (posRef.current % stripW) / stripW : 0);
       }
     }
 
@@ -247,8 +257,12 @@ function InfiniteGallery({ items, projectName }: InfiniteGalleryProps) {
     }
   }, [projectName]);
 
-  const pause = () => { pausedRef.current = true; };
-  const resume = () => { pausedRef.current = false; };
+  const pause = () => {
+    pausedRef.current = true;
+  };
+  const resume = () => {
+    pausedRef.current = false;
+  };
 
   // Dot click: jump to item position
   const jumpTo = (i: number) => {
@@ -335,21 +349,48 @@ export default function ProjectDetail() {
   const dispatch = useDispatch<AppDispatch>();
 
   const { projects, selectedProject, loading, error } = useSelector(
-    (state: RootState) => state.projects
+    (state: RootState) => state.projects,
   );
 
   // Always re-fetch by ID on mount / id change
-  useEffect(() => {
-    if (!id) return;
-    dispatch(fetchProjectById(id));
-    if (projects.length === 0) dispatch(fetchProjects());
-  }, [dispatch, id]); // eslint-disable-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   if (!id) return;
+  //   window.scrollTo({ top: 0, behavior: "instant" });
+  //   dispatch(fetchProjectById(id));
+  //   if (projects.length === 0) dispatch(fetchProjects());
+  // }, [dispatch, id]);
+
+// Lock #1 — synchronous, before paint
+useLayoutEffect(() => {
+  if (!id) return;
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+}, [id]);
+
+// Lock #2 — catches anything that tries to scroll after the first render
+useEffect(() => {
+  if (!id) return;
+  const raf = requestAnimationFrame(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  });
+  return () => cancelAnimationFrame(raf);
+}, [id]);
+
+// Keep data fetching in its own effect as before:
+useEffect(() => {
+  if (!id) return;
+  dispatch(fetchProjectById(id));
+  if (projects.length === 0) dispatch(fetchProjects());
+}, [dispatch, id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Prefer the individually-fetched project; fall back to list entry
   const project =
     selectedProject?.id === id
       ? selectedProject
-      : projects.find((p) => p.id === id) ?? null;
+      : (projects.find((p) => p.id === id) ?? null);
 
   const currentIndex = project
     ? projects.findIndex((p) => p.id === project.id)
@@ -381,7 +422,7 @@ export default function ProjectDetail() {
           obs.disconnect();
         }
       },
-      { threshold: 0.05 }
+      { threshold: 0.05 },
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -439,7 +480,9 @@ export default function ProjectDetail() {
           className="pd-back-link"
           aria-label="Back to all projects"
         >
-          <span className="pd-back-arrow" aria-hidden="true">←</span>
+          <span className="pd-back-arrow" aria-hidden="true">
+            ←
+          </span>
           <span className="pd-back-text">All Projects</span>
         </Link>
 
@@ -448,17 +491,17 @@ export default function ProjectDetail() {
         </span>
 
         {mediaItems.length > 1 && (
-          <span className="pd-topbar-count" aria-label={`${mediaItems.length} media items`}>
+          <span
+            className="pd-topbar-count"
+            aria-label={`${mediaItems.length} media items`}
+          >
             {mediaItems.length} items
           </span>
         )}
       </header>
 
       {/* ── Infinite gallery ────────────────────────────────────────────────── */}
-      <InfiniteGallery
-        items={mediaItems}
-        projectName={p.project_name}
-      />
+      <InfiniteGallery items={mediaItems} projectName={p.project_name} />
 
       {/* Colour swatch fallback when no media at all */}
       {mediaItems.length === 0 && (
@@ -493,16 +536,28 @@ export default function ProjectDetail() {
 
               <dl className="pd-meta-list">
                 {(p as any).client && (
-                  <><dt>Client</dt><dd>{(p as any).client}</dd></>
+                  <>
+                    <dt>Client</dt>
+                    <dd>{(p as any).client}</dd>
+                  </>
                 )}
                 {(p as any).year && (
-                  <><dt>Year</dt><dd>{(p as any).year}</dd></>
+                  <>
+                    <dt>Year</dt>
+                    <dd>{(p as any).year}</dd>
+                  </>
                 )}
                 {(p as any).services?.length > 0 && (
-                  <><dt>Services</dt><dd>{(p as any).services.join(", ")}</dd></>
+                  <>
+                    <dt>Services</dt>
+                    <dd>{(p as any).services.join(", ")}</dd>
+                  </>
                 )}
                 {(p as any).technologies?.length > 0 && (
-                  <><dt>Made with</dt><dd>{(p as any).technologies.join(", ")}</dd></>
+                  <>
+                    <dt>Made with</dt>
+                    <dd>{(p as any).technologies.join(", ")}</dd>
+                  </>
                 )}
               </dl>
 
@@ -514,7 +569,9 @@ export default function ProjectDetail() {
                   rel="noopener noreferrer"
                 >
                   View Live
-                  <span className="pd-ext-arrow" aria-hidden="true">↗</span>
+                  <span className="pd-ext-arrow" aria-hidden="true">
+                    ↗
+                  </span>
                 </a>
               )}
             </div>
@@ -533,7 +590,9 @@ export default function ProjectDetail() {
             {(p as any).tags?.length > 0 && (
               <ul className="pd-tags" aria-label="Tags">
                 {(p as any).tags.map((tag: string) => (
-                  <li key={tag} className="pd-tag">{tag}</li>
+                  <li key={tag} className="pd-tag">
+                    {tag}
+                  </li>
                 ))}
               </ul>
             )}
@@ -552,7 +611,9 @@ export default function ProjectDetail() {
           <ProjectNavCard
             project={prevProject}
             direction="prev"
-            onClick={() => prevProject && navigate(`/projects/${prevProject.id}`)}
+            onClick={() =>
+              prevProject && navigate(`/projects/${prevProject.id}`)
+            }
           />
 
           <Link
@@ -571,7 +632,9 @@ export default function ProjectDetail() {
           <ProjectNavCard
             project={nextProject}
             direction="next"
-            onClick={() => nextProject && navigate(`/projects/${nextProject.id}`)}
+            onClick={() =>
+              nextProject && navigate(`/projects/${nextProject.id}`)
+            }
           />
         </div>
       </nav>
