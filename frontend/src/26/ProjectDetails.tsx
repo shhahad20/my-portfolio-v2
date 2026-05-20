@@ -1,13 +1,12 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-} from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
-import { fetchProjects, Project } from "../redux/slices/projectsSlice";
+import {
+  fetchProjects,
+  fetchProjectById,
+  Project,
+} from "../redux/slices/projectsSlice";
 import "./style/ProjectDetails.scss";
 
 // ─── Extended project type ────────────────────────────────────────────────────
@@ -64,7 +63,7 @@ function MediaItem({ src, alt, index, totalCount }: MediaItemProps) {
       ([entry]) => {
         if (entry.isIntersecting) setInView(true);
       },
-      { rootMargin: "40%" }
+      { rootMargin: "40%" },
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -119,25 +118,37 @@ export default function ProjectDetail() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { projects, loading: listLoading } = useSelector(
-    (state: RootState) => state.projects
-  );
+  const {
+    projects,
+    selectedProject,
+    loading: listLoading,
+  } = useSelector((state: RootState) => state.projects);
 
-  // Populate store if the user lands directly on this URL
+  // Always fetch the current project by ID.
+  // Also fetch all projects if needed so previous/next navigation works.
   useEffect(() => {
-    if (projects.length === 0) dispatch(fetchProjects());
-  }, [dispatch, projects.length]);
+    if (!id) return;
 
-  // Resolve the current project and its neighbours
-  const currentIndex = projects.findIndex((p) => p.id === id);
-  const project = (
-    currentIndex !== -1 ? projects[currentIndex] : undefined
-  ) as ProjectDetailData | undefined;
+    dispatch(fetchProjectById(id));
+
+    if (projects.length === 0) {
+      dispatch(fetchProjects());
+    }
+  }, [dispatch, id, projects.length]);
+
+  // Use the dedicated selectedProject fetched by ID.
+  // Fall back to the projects array if available.
+  const project = (selectedProject ?? projects.find((p) => p.id === id)) as
+    | ProjectDetailData
+    | undefined;
+
+  // Resolve current index for previous/next navigation.
+  const currentIndex = project
+    ? projects.findIndex((p) => p.id === project.id)
+    : -1;
 
   const prevProject =
-    currentIndex > 0
-      ? (projects[currentIndex - 1] as ProjectDetailData)
-      : null;
+    currentIndex > 0 ? (projects[currentIndex - 1] as ProjectDetailData) : null;
   const nextProject =
     currentIndex < projects.length - 1
       ? (projects[currentIndex + 1] as ProjectDetailData)
@@ -149,8 +160,8 @@ export default function ProjectDetail() {
     ? project.media && project.media.length > 0
       ? project.media
       : isMediaUrl(project.bg)
-      ? [project.bg]
-      : []
+        ? [project.bg]
+        : []
     : [];
 
   // ── Gallery refs and scroll state ─────────────────────────────────────────
@@ -164,9 +175,8 @@ export default function ProjectDetail() {
     const el = galleryRef.current;
     if (!el) return;
     e.preventDefault();
-    el.scrollLeft += Math.abs(e.deltaX) > Math.abs(e.deltaY)
-      ? e.deltaX
-      : e.deltaY;
+    el.scrollLeft +=
+      Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
   }, []);
 
   useEffect(() => {
@@ -190,7 +200,9 @@ export default function ProjectDetail() {
     let closest = 0;
     let minDist = Infinity;
     items.forEach((item, i) => {
-      const dist = Math.abs(item.offsetLeft + item.offsetWidth / 2 - viewCentre);
+      const dist = Math.abs(
+        item.offsetLeft + item.offsetWidth / 2 - viewCentre,
+      );
       if (dist < minDist) {
         minDist = dist;
         closest = i;
@@ -214,7 +226,7 @@ export default function ProjectDetail() {
           obs.disconnect();
         }
       },
-      { threshold: 0.06 }
+      { threshold: 0.06 },
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -256,11 +268,16 @@ export default function ProjectDetail() {
 
   return (
     <div className="pd-root">
-
       {/* ── Fixed top bar ─────────────────────────────────────────────────── */}
       <header className="pd-topbar">
-        <Link to="/#projects" className="pd-back-link" aria-label="Back to all projects">
-          <span className="pd-back-arrow" aria-hidden="true">←</span>
+        <Link
+          to="/#projects"
+          className="pd-back-link"
+          aria-label="Back to all projects"
+        >
+          <span className="pd-back-arrow" aria-hidden="true">
+            ←
+          </span>
           <span className="pd-back-text">All Projects</span>
         </Link>
 
@@ -282,10 +299,7 @@ export default function ProjectDetail() {
       </header>
 
       {/* ── Horizontal media gallery ──────────────────────────────────────── */}
-      <section
-        className="pd-gallery-wrap"
-        aria-label="Project media gallery"
-      >
+      <section className="pd-gallery-wrap" aria-label="Project media gallery">
         {mediaItems.length > 0 ? (
           <>
             <div
@@ -323,9 +337,10 @@ export default function ProjectDetail() {
                     key={i}
                     className={`pd-gallery-dot${i === activeIndex ? " pd-gallery-dot--active" : ""}`}
                     onClick={() => {
-                      const items = galleryRef.current?.querySelectorAll<HTMLElement>(
-                        ".pd-gallery-item"
-                      );
+                      const items =
+                        galleryRef.current?.querySelectorAll<HTMLElement>(
+                          ".pd-gallery-item",
+                        );
                       items?.[i]?.scrollIntoView({
                         behavior: "smooth",
                         block: "nearest",
@@ -356,7 +371,6 @@ export default function ProjectDetail() {
         aria-label="Project information"
       >
         <div className="pd-details-grid">
-
           {/* ── Left: sticky metadata column ────────────────────────────── */}
           <aside className="pd-meta">
             <div className="pd-meta-inner">
@@ -408,7 +422,9 @@ export default function ProjectDetail() {
                   rel="noopener noreferrer"
                 >
                   View Live
-                  <span className="pd-ext-arrow" aria-hidden="true">↗</span>
+                  <span className="pd-ext-arrow" aria-hidden="true">
+                    ↗
+                  </span>
                 </a>
               )}
             </div>
@@ -427,7 +443,9 @@ export default function ProjectDetail() {
             {p.tags && p.tags.length > 0 && (
               <ul className="pd-tags" aria-label="Tags">
                 {p.tags.map((tag) => (
-                  <li key={tag} className="pd-tag">{tag}</li>
+                  <li key={tag} className="pd-tag">
+                    {tag}
+                  </li>
                 ))}
               </ul>
             )}
@@ -451,7 +469,9 @@ export default function ProjectDetail() {
               aria-label={`Previous project: ${prevProject.project_name}`}
             >
               <span className="pd-nav-dir">
-                <span className="pd-nav-arrow" aria-hidden="true">←</span>
+                <span className="pd-nav-arrow" aria-hidden="true">
+                  ←
+                </span>
                 Previous
               </span>
               <span className="pd-nav-name">{prevProject.project_name}</span>
@@ -460,7 +480,11 @@ export default function ProjectDetail() {
             <span />
           )}
 
-          <Link to="/#projects" className="pd-nav-all" aria-label="All projects">
+          <Link
+            to="/#projects"
+            className="pd-nav-all"
+            aria-label="All projects"
+          >
             <span className="pd-nav-all-grid" aria-hidden="true">
               {Array.from({ length: 9 }).map((_, i) => (
                 <span key={i} className="pd-nav-all-dot" />
@@ -477,7 +501,9 @@ export default function ProjectDetail() {
             >
               <span className="pd-nav-dir">
                 Next
-                <span className="pd-nav-arrow" aria-hidden="true">→</span>
+                <span className="pd-nav-arrow" aria-hidden="true">
+                  →
+                </span>
               </span>
               <span className="pd-nav-name">{nextProject.project_name}</span>
             </button>
@@ -486,7 +512,6 @@ export default function ProjectDetail() {
           )}
         </div>
       </nav>
-
     </div>
   );
 }
