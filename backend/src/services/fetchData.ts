@@ -58,3 +58,50 @@ export const fetchData = async (
     next(error);
   }
 };
+/**
+ * Fetch a single record by its ID from a given table.
+ *
+ * @param table - The table name in Supabase.
+ * @param req - Express Request containing `req.params.id`.
+ * @param res - Express Response to send the record.
+ * @param next - Express NextFunction for error handling.
+ * @param idColumn - Optional column name to use as the identifier (default: "id").
+ */
+export const fetchDataById = async (
+  table: string,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  idColumn: string = "id"
+) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      throw ApiError.badRequest("ID parameter is required");
+    }
+
+    const { data, error } = await supabase
+      .from(table)
+      .select("*")
+      .eq(idColumn, id)
+      .single();
+
+    if (error) {
+      // PGRST116 = No rows returned
+      if (error.code === "PGRST116") {
+        throw ApiError.notFound(
+          `Record with ${idColumn} "${id}" not found in ${table}`
+        );
+      }
+
+      throw ApiError.internal(`Error fetching record from ${table}`);
+    }
+
+    res.json(data);
+
+    console.log(`Fetched record from ${table} where ${idColumn} = ${id}`);
+  } catch (error) {
+    next(error);
+  }
+};

@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { projects } from "../controllers/projectsController.js";
+import { getProjectById, projects } from "../controllers/projectsController.js";
 const router = Router();
 router.get('/projects', projects);
+router.get("/:id", getProjectById);
 export default router;

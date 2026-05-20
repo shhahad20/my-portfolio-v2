@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import "./style/projects.scss";
 import { Project, fetchProjects } from "../redux/slices/projectsSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../redux/store";
 import AnimatedLink from "../components/AnimatedLink";
 
@@ -306,6 +307,7 @@ const isVideo = (src: string) =>
 
 export default function WhatKeepsMeBusy() {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const { projects, loading, error } = useSelector(
     (state: RootState) => state.projects,
@@ -420,9 +422,14 @@ export default function WhatKeepsMeBusy() {
               tabIndex={loading ? -1 : 0}
               aria-label={project.label}
               aria-disabled={loading}
-              onKeyDown={(e) =>
-                !loading && e.key === "Enter" && handleEnter(index)
-              }
+              onClick={() => !loading && navigate(`/projects/${project.id}`)}
+              onKeyDown={(e) => {
+                if (loading) return;
+                if (e.key === "Enter") {
+                  handleEnter(index);
+                  navigate(`/projects/${project.id}`);
+                }
+              }}
               onFocus={() => !loading && handleEnter(index)}
               onBlur={handleLeave}
             >
@@ -468,9 +475,13 @@ export default function WhatKeepsMeBusy() {
               <div
                 key={`preview-${project.id}`}
                 className={`wkmb-preview wkmb-preview--${dir}`}
-                style={{ left: `${sat.x}%`, top: `${sat.y}%` }}
+                style={{ left: `${sat.x}%`, top: `${sat.y}%`, cursor: "pointer", pointerEvents: "auto" }}
                 aria-live="polite"
                 aria-atomic="true"
+                role="link"
+                tabIndex={0}
+                onClick={() => navigate(`/projects/${project.id}`)}
+                onKeyDown={(e) => e.key === "Enter" && navigate(`/projects/${project.id}`)}
               >
                 <div className="wkmb-preview-inner">
                   {/* ── Media loading indicator ──────────────────────────
