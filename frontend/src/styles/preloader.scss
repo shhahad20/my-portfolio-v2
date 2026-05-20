@@ -1,0 +1,92 @@
+@use '../26/style/variables' as *;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PRELOADER — full-viewport cover, dark surface, slide-up exit
+// ─────────────────────────────────────────────────────────────────────────────
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #0d0d0d;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  // ── Brand text ────────────────────────────────────────────────────────────
+  &__brand {
+    display: flex;
+    // flex-direction: column;
+    align-items: center;
+    gap: 0.04em;
+    font-family: $font-display;
+    font-size: clamp(20px, 4.5vw, 48px);
+    color: $color-text-inv;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+    line-height: 1;
+    text-align: center;
+    user-select: none;
+  }
+
+  // Clip wrapper — hides the text until it slides into view
+  &__line-clip {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.06em; // prevent descender clipping
+  }
+
+  &__line {
+    display: block;
+    line-height: 1.1;
+  }
+
+  // ── Footer — progress bar + counter ──────────────────────────────────────
+  &__footer {
+    position: absolute;
+    bottom: clamp(24px, 5vw, 48px);
+    left: clamp(24px, 5vw, 60px);
+    right: clamp(24px, 5vw, 60px);
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 3vw, 20px);
+  }
+
+  &__track {
+    flex: 1;
+    height: 1px;
+    background: rgba(240, 236, 227, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__fill {
+    position: absolute;
+    inset: 0;
+    background: $color-text-inv;
+    will-change: transform;
+  }
+
+  &__count {
+    font-family: $font-display;
+    font-size: clamp(11px, 1.8vw, 13px);
+    color: rgba(240, 236, 227, 0.4);
+    letter-spacing: 0.08em;
+    font-weight: 400;
+    min-width: 3.5ch;
+    text-align: right;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// ── Landscape / short viewports ───────────────────────────────────────────────
+@media (max-height: 500px) and (orientation: landscape) {
+  .preloader {
+    &__brand {
+      font-size: clamp(22px, 6vh, 40px);
+    }
+  }
+}
