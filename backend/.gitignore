@@ -10,3 +10,4 @@ dist/src/config/systemPrompt.js
 .vercel
 api/local.ts
 dist/api/local.js
+backend/dist/
