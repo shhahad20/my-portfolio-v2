@@ -2,17 +2,25 @@
 @import 'variables';
  
 #about-section{
-    padding: 2rem 2rem;
+    padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem);
     display: flex;
-    justify-content: space-evenly ;
+    justify-content: space-evenly;
     align-items: center;
     flex-wrap: wrap;
-    // margin-bottom: 8rem;
+    gap: 2rem;
+    margin-bottom: clamp(2rem, 8vw, 6rem);
+    margin-top: clamp(1rem, 4vw, 2rem);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
     #about-paragraph{
         // width: 40%;
         // width: 600px;
         max-width: 600px;
+        flex: 1 1 clamp(300px, 80vw, 600px);
+        min-width: 300px;
         .between-lines{
             position: relative;
             display: flex;
@@ -111,48 +119,71 @@
 
   @media (max-width: 768px) {
     #about-section{
+        padding: clamp(1.5rem, 4vw, 2rem);
         #about-paragraph{
-            width: 1000px;
+            width: 100%;
+            max-width: 100%;
+            flex: 1 1 100%;
             p{
                 color: $primary-white-color;
-                font-size: 16px;
+                font-size: clamp(14px, 3.5vw, 16px);
             }
             #keywords-container{
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
                 padding: 1rem 0;
-                gap: 0.7rem; 
+                gap: clamp(0.5rem, 2vw, 0.7rem); 
                 text-align: center;
                 a{
                     padding: 3px 3px;
-                    font-size: 14px;
+                    font-size: clamp(12px, 2.5vw, 14px);
                 }
             }
         }
     }
   }
-@media (max-width: 480px) {
+
+  @media (max-width: 480px) {
     #about-section{
-        padding: 2rem 1.5rem;
+        padding: clamp(1rem, 3vw, 1.5rem);
+        flex-direction: column;
         #about-paragraph{
             padding: 0;
+            width: 100%;
+            max-width: 100%;
             .second-header{
                 padding: 1rem 0;
-                font-size: 2rem;
+                font-size: clamp(1.5rem, 5vw, 2rem);
             }
             p{
                 color: $primary-white-color;
-                font-size: 16px;
+                font-size: clamp(14px, 3vw, 16px);
                 
             }
             #keywords-container{
                 padding: 1rem 0;
-                gap: 1rem; 
+                gap: clamp(0.5rem, 1.5vw, 1rem); 
                 flex: 25%;
                 a{
-                    font-size: 14px;
+                    font-size: clamp(12px, 2vw, 14px);
+                    padding: 5px 8px;
                 }
             }
         }
+    }
+  }
+
+  @media (max-width: 360px) {
+    #about-section {
+      padding: 1rem;
+      #about-paragraph {
+        .between-lines {
+          font-size: 12px;
+        }
+        p {
+          font-size: 13px;
+          line-height: 1.4;
+        }
+      }
     }
   }

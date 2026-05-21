@@ -1,6 +1,5 @@
 @charset "UTF-8";
 /* ─── Cards ─────────────────────────────────────────────────────────────────── */
-/* ─── Cards ─────────────────────────────────────────────────────────────────── */
 .card {
   position: absolute;
   width: 280px;
@@ -155,8 +154,14 @@
 .experience-section {
   position: relative;
   background: #070707;
-  margin-top: -15vh;
-  margin-bottom: -15vh;
+  margin-top: clamp(0, 2vw, -10vh);
+  margin-bottom: clamp(1rem, 6vw, 0);
+  padding-bottom: clamp(4vh, 8vw, 10vh);
+  width: 100%;
+  max-width: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* Sticky container */
@@ -372,91 +377,131 @@
 
 /* ─── Responsive overrides ────────────────────────────────────────────────── */
 @media (max-width: 1490px) {
-  .experience-section {
-    padding-bottom: 40vh;
-  }
-  .experience-sticky {
-    -webkit-box-pack: start;
-        -ms-flex-pack: start;
-            justify-content: flex-start;
-    padding-top: 2rem;
-    gap: 1rem;
-    overflow: visible;
-  }
   .experience-header {
-    gap: 0.6rem;
-    padding-top: 10rem;
+    padding-top: clamp(2rem, 4vw, 3rem);
   }
-  .experience-header__quote {
-    width: 90vw;
-    max-width: 340px;
-    font-size: 0.82rem;
+  .experience-center {
+    -webkit-transform: none;
+            transform: none;
+  }
+  .experience-section {
+    padding-bottom: 10vh;
   }
 }
 
 @media (max-width: 1024px) {
   .experience-section {
-    padding-bottom: 5vh;
+    padding-bottom: 8vh;
   }
   .experience-header__subtitle {
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 500;
-    padding: 0 15px;
-    background: -webkit-gradient(linear, left bottom, left top, from(#f5f5f5), to(#deddda));
-    background: linear-gradient(0deg, #f5f5f5, #deddda);
-    background-clip: text;
-    color: transparent;
-    display: block;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
-    margin: 0;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+  .card {
+    width: clamp(250px, 90vw, 280px);
+    height: auto;
+    min-height: 280px;
   }
 }
 
 @media (max-width: 768px) {
   .experience-section {
-    padding-bottom: 30vh;
+    padding-bottom: clamp(4vh, 6vw, 6vh);
+    margin-bottom: 0;
+  }
+  .experience-sticky {
+    height: auto;
+    min-height: auto;
+    position: relative;
+  }
+  .experience-header__subtitle {
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+  }
+  .experience-header__quote {
+    width: clamp(80vw, 90%, 350px);
+    font-size: clamp(13px, 3vw, 15px);
+  }
+  .card {
+    width: clamp(240px, 85vw, 270px);
+    height: auto;
+    min-height: 260px;
+    padding: clamp(1rem, 2vw, 1.5rem);
+  }
+  .card__title {
+    font-size: clamp(16px, 3.5vw, 19px);
+  }
+  .card__description {
+    font-size: clamp(11px, 2.5vw, 12.5px);
   }
 }
 
 @media (max-width: 480px) {
   .experience-section {
-    padding-bottom: 55vh;
+    padding-bottom: clamp(3vh, 5vw, 4vh);
     margin-top: 0;
-    margin-bottom: 5rem;
+    margin-bottom: 0;
   }
   .experience-sticky {
-    padding-top: 1.5rem;
-    gap: 1rem;
-    overflow: visible;
+    height: auto;
+    position: relative;
+  }
+  .experience-center {
+    -webkit-transform: none;
+            transform: none;
+    gap: clamp(1rem, 3vw, 1.5rem);
+  }
+  .experience-header {
+    padding-top: clamp(1.5rem, 3vw, 2rem);
   }
   .experience-header__subtitle {
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 500;
-    padding: 0 15px;
-    background: -webkit-gradient(linear, left bottom, left top, from(#f5f5f5), to(#deddda));
-    background: linear-gradient(0deg, #f5f5f5, #deddda);
-    background-clip: text;
-    color: transparent;
-    display: block;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 1px 5px rgba(174, 207, 242, 0.24);
-    margin: 0;
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
+  }
+  .experience-header__quote {
+    width: clamp(75vw, 90%, 280px);
+    font-size: clamp(12px, 2.5vw, 13px);
+    margin-bottom: clamp(0.5rem, 1vw, 1rem);
   }
   .experience-stage--vertical {
-    width: 260px;
+    width: clamp(75vw, 90%, 260px);
     height: auto;
-    /* ← no more magic pixel height */
     overflow: visible;
   }
   .experience-cards--vertical {
-    width: 260px;
+    width: 100%;
+    max-width: clamp(75vw, 90%, 260px);
   }
   .card--vertical {
-    width: 260px;
-    height: 295px;
+    width: 100% !important;
+    max-width: clamp(75vw, 90%, 260px) !important;
+    height: auto;
+    min-height: 240px;
+  }
+  .card {
+    width: 100%;
+    max-width: clamp(75vw, 90%, 260px);
+    height: auto;
+    min-height: 240px;
+    padding: clamp(0.9rem, 2vw, 1.3rem);
+    margin: clamp(0.5rem, 1.5vw, 1rem) 0;
+  }
+  .card__title {
+    font-size: clamp(15px, 3vw, 17px);
+  }
+  .card__description {
+    font-size: clamp(10px, 2vw, 11px);
+  }
+  .card__place {
+    font-size: clamp(9px, 2vw, 10.5px);
+  }
+}
+
+@media (max-width: 360px) {
+  .experience-section {
+    padding: 1rem;
+    padding-bottom: 3vh;
+  }
+  .card {
+    padding: 0.8rem;
+    min-height: 220px;
   }
 }
 /*# sourceMappingURL=experience.css.map */

@@ -1,0 +1,294 @@
+@use './variables' as *;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DESIGN TOKENS (local to this component)
+// ─────────────────────────────────────────────────────────────────────────────
+
+$ai-line-height:   22px;
+$ai-radius:        18px;   // ChatGPT-style rounded rect (not pill)
+$ai-radius-btn:    10px;
+$ai-pad-x:         16px;
+$ai-pad-top:       14px;
+$ai-pad-bottom:    10px;
+$ai-gap:           8px;
+$ai-send-size:     32px;
+$ai-send-size-sm:  28px;
+$ai-font:          clamp(13px, 2.4vw, 14.5px);
+$ai-hint-font:     clamp(10.5px, 1.8vw, 11.5px);
+$ai-brand-size:    clamp(13px, 2.2vw, 15px);
+$ai-brand-color:   #ff9500;
+
+// Surface tones — tuned to blend with the warm #f8f6f2 landing background
+$ai-bg-idle:       rgba(255, 255, 255, 0.60);
+$ai-bg-focus:      rgba(255, 255, 255, 0.92);
+$ai-border-idle:   rgba(87, 79, 71, 0.14);
+$ai-border-focus:  rgba(87, 79, 71, 0.28);
+$ai-shadow-idle:   0 1px 3px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.04);
+$ai-shadow-focus:  0 2px 8px rgba(0, 0, 0, 0.06), 0 6px 24px rgba(0, 0, 0, 0.07);
+$ai-glow-color:    rgba(87, 79, 71, 0.055);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WRAPPER — outer positioning shell
+// ─────────────────────────────────────────────────────────────────────────────
+
+.ai-input-premium {
+  position: relative;
+  width: 100%;
+  max-width: clamp(300px, 100%, 420px);
+
+  // ── Glow ring ──────────────────────────────────────────────────────────────
+  &__glow {
+    position: absolute;
+    inset: -3px;
+    border-radius: $ai-radius + 3px;
+    background: transparent;
+    box-shadow: 0 0 0 3px $ai-glow-color;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // ── Inner shell ────────────────────────────────────────────────────────────
+  &__shell {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $ai-gap;
+    padding: $ai-pad-top $ai-pad-x $ai-pad-bottom;
+    border-radius: $ai-radius;
+    border: 1px solid $ai-border-idle;
+    background: $ai-bg-idle;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: $ai-shadow-idle;
+    transition:
+      border-color  $dur-fast cubic-bezier(0.22, 1, 0.36, 1),
+      background    $dur-fast cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow    $dur-fast cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  // Focused state — applied on the wrapper, styles the shell
+  &--focused &__shell {
+    border-color: $ai-border-focus;
+    background:   $ai-bg-focus;
+    box-shadow:   $ai-shadow-focus;
+  }
+
+  // Disabled state
+  &--disabled &__shell {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  // ── Top row: brand icon + label ────────────────────────────────────────────
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $ai-brand-color;
+    opacity: 0.75;
+    transition: opacity $dur-fast ease;
+
+    svg {
+      width:  $ai-brand-size;
+      height: $ai-brand-size;
+    }
+  }
+
+  &--focused &__brand {
+    opacity: 1;
+  }
+
+  &__label {
+    font-size: clamp(10px, 1.8vw, 11px);
+    font-weight: 600;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    color: $color-muted;
+    transition: color $dur-fast ease;
+    user-select: none;
+  }
+
+  &--focused &__label {
+    color: $color-muted-alt;
+  }
+
+  // ── Textarea ───────────────────────────────────────────────────────────────
+  &__textarea {
+    width: 100%;
+    min-width: 0;
+    border: none;
+    outline: none;
+    resize: none;
+    overflow: hidden;   // no scrollbar until maxRows is hit (JS flips to auto)
+    background: transparent;
+    font-size:   $ai-font;
+    font-family: $font-body;
+    font-weight: 400;
+    line-height: $ai-line-height;
+    color: $color-body;
+    caret-color: $ai-brand-color;
+    padding: 0;
+
+    // Prevent iOS zoom — font size >= 16px on small screens
+    @media (max-width: 480px) {
+      font-size: 16px;
+    }
+
+    &::placeholder {
+      color: rgba(87, 79, 71, 0.36);
+      font-style: normal;
+    }
+
+    // Scrollbar styling for when content overflows
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(87, 79, 71, 0.18);
+      border-radius: 4px;
+    }
+  }
+
+  // ── Bottom actions row ─────────────────────────────────────────────────────
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  // Keyboard hint text
+  &__hint {
+    font-size: $ai-hint-font;
+    color: rgba(87, 79, 71, 0.32);
+    font-weight: 400;
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color $dur-fast ease;
+
+    .ai-input-premium--focused & {
+      color: rgba(87, 79, 71, 0.45);
+    }
+  }
+
+  // ── Send button ────────────────────────────────────────────────────────────
+  &__send {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:  $ai-send-size;
+    height: $ai-send-size;
+    border: 1px solid rgba(87, 79, 71, 0.16);
+    border-radius: $ai-radius-btn;
+    background: rgba(87, 79, 71, 0.05);
+    color: rgba(87, 79, 71, 0.30);
+    cursor: default;
+    transition:
+      background    $dur-fast cubic-bezier(0.22, 1, 0.36, 1),
+      border-color  $dur-fast cubic-bezier(0.22, 1, 0.36, 1),
+      color         $dur-fast cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow    $dur-fast cubic-bezier(0.22, 1, 0.36, 1);
+
+    svg {
+      width:  14px;
+      height: 14px;
+      transition: transform $dur-fast cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    // ── Active (has content) ─────────────────────────────────────────────────
+    &--active {
+      background:   rgba(87, 79, 71, 0.92);
+      border-color: rgba(87, 79, 71, 0.92);
+      color:        #fff;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(87, 79, 71, 0.18), 0 3px 8px rgba(87, 79, 71, 0.14);
+
+      &:hover {
+        background:   rgba(55, 50, 44, 0.95);
+        border-color: rgba(55, 50, 44, 0.95);
+        box-shadow: 0 2px 6px rgba(87, 79, 71, 0.22), 0 4px 14px rgba(87, 79, 71, 0.18);
+
+        svg {
+          transform: translateY(-1px);
+        }
+      }
+
+      &:active {
+        background: rgba(40, 36, 31, 0.95);
+      }
+    }
+
+    // Focus ring for keyboard navigation
+    &:focus-visible {
+      outline: 2px solid rgba(87, 79, 71, 0.42);
+      outline-offset: 2px;
+    }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RESPONSIVE OVERRIDES
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Small mobile (<480px) ─────────────────────────────────────────────────────
+@media (max-width: 480px) {
+  .ai-input-premium {
+    max-width: 100%;
+
+    &__shell {
+      padding: 12px 14px 10px;
+      border-radius: 16px;
+    }
+
+    &__send {
+      width:  $ai-send-size-sm;
+      height: $ai-send-size-sm;
+    }
+  }
+}
+
+// ── Tablet (768px+) ───────────────────────────────────────────────────────────
+@media (min-width: 768px) {
+  .ai-input-premium {
+    max-width: 380px;
+  }
+}
+
+// ── Desktop (1025px+) ─────────────────────────────────────────────────────────
+@media (min-width: 1025px) {
+  .ai-input-premium {
+    max-width: 420px;
+
+    &__shell {
+      padding: 15px 18px 11px;
+    }
+  }
+}
+
+// ── Landscape / short viewports ───────────────────────────────────────────────
+@media (max-height: 600px) and (orientation: landscape) {
+  .ai-input-premium {
+    max-width: clamp(260px, 70%, 380px);
+  }
+}
+
+// ── Reduced motion ────────────────────────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+  .ai-input-premium,
+  .ai-input-premium * {
+    transition-duration: 0ms !important;
+  }
+}

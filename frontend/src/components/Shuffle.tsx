@@ -44,7 +44,7 @@ const Shuffle: React.FC<ShuffleProps> = ({
   threshold = 0.1,
   rootMargin = '-100px',
   tag = 'p',
-  textAlign = 'center',
+  textAlign = 'center', 
   onShuffleComplete,
   shuffleTimes = 1,
   animationMode = 'evenodd',
@@ -411,4 +411,8 @@ const Shuffle: React.FC<ShuffleProps> = ({
   return React.createElement(Tag, { ref, className: classes, style: commonStyle }, text);
 };
 
+<<<<<<< HEAD
 export default Shuffle;
+=======
+export default Shuffle;
+>>>>>>> ui-redesign

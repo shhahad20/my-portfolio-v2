@@ -3,7 +3,7 @@ li {
 }
 
 #contact {
-  padding: 2rem 0;
+  padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem);
   text-align: center;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -15,7 +15,12 @@ li {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  margin-bottom: 8rem;
+  margin-bottom: clamp(2rem, 8vw, 6rem);
+  width: 100%;
+  max-width: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 #contact .header-content {
@@ -124,8 +129,10 @@ li {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  gap: 2rem;
-  margin: 3rem 0;
+  gap: clamp(1rem, 4vw, 2rem);
+  margin: clamp(2rem, 5vw, 3rem) 0;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 
 #contact .conatct-container .email-container {
@@ -194,22 +201,23 @@ li {
 /* Tablet styles */
 @media screen and (max-width: 768px) {
   #contact {
-    padding: 1.5rem 0;
+    padding: clamp(1.5rem, 4vw, 2rem);
   }
   #contact .conatct-container {
-    margin: 2rem 0;
+    gap: clamp(1rem, 3vw, 1.5rem);
+    margin: clamp(1.5rem, 4vw, 2rem) 0;
   }
   #contact .conatct-container .email-container .email {
-    padding: 0 3rem;
+    padding: 0 clamp(2rem, 4vw, 3rem);
   }
   #contact .conatct-container .email-container .email h3 {
-    font-size: 14px;
+    font-size: clamp(13px, 3vw, 14px);
   }
   #contact .conatct-container .soical-media ul {
-    gap: 1.5rem;
+    gap: clamp(1rem, 3vw, 1.5rem);
   }
   #contact .conatct-container .soical-media ul li img {
-    width: 24px;
+    width: clamp(20px, 4vw, 24px);
     height: auto;
   }
 }
@@ -217,17 +225,18 @@ li {
 /* Mobile styles */
 @media screen and (max-width: 480px) {
   #contact {
-    padding: 1rem 0;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    margin-bottom: clamp(1.5rem, 5vw, 3rem);
   }
   #contact .header-content .flip {
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
         -ms-flex-direction: row;
             flex-direction: row;
-    gap: 0;
+    gap: clamp(0.3rem, 1vw, 0.5rem);
   }
   #contact .conatct-container {
-    margin: 1.5rem 0 0 0;
+    margin: clamp(1rem, 3vw, 1.5rem) 0 0 0;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
         -ms-flex-direction: column;
@@ -238,19 +247,19 @@ li {
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
-    gap: 1rem;
+    gap: clamp(0.8rem, 2vw, 1rem);
   }
   #contact .conatct-container .email-container .email {
-    padding: 0 2rem;
+    padding: 0 clamp(1.5rem, 3vw, 2rem);
   }
   #contact .conatct-container .email-container .email h3 {
-    font-size: 12px;
+    font-size: clamp(11px, 2.5vw, 12px);
   }
   #contact .conatct-container .soical-media ul {
-    gap: 1.3rem;
+    gap: clamp(1rem, 2vw, 1.3rem);
   }
   #contact .conatct-container .soical-media ul li img {
-    width: 25px;
+    width: clamp(22px, 3.5vw, 25px);
   }
   #contact .conatct-container .soical-media ul li .behance, #contact .conatct-container .soical-media ul li .instagram {
     width: 30px;

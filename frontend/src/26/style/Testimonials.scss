@@ -1,0 +1,228 @@
+@use './variables' as *;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TESTIMONIALS SECTION
+// ─────────────────────────────────────────────────────────────────────────────
+
+.testimonials-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: $max-width;
+  margin-left: auto;
+  margin-right: auto;
+  padding: $section-padding;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+// ── Heading ───────────────────────────────────────────────────────────────────
+
+.testimonials-heading {
+  margin-bottom: clamp(48px, 7vw, 90px);
+}
+
+.testimonials-heading-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.testimonials-title {
+  font-family: $font-display;
+  font-size: $heading-size;
+  line-height: $heading-lh;
+  letter-spacing: $heading-ls;
+  color: $color-text;
+  margin: 0;
+  font-weight: $heading-weight;
+}
+
+// Both classes share the same styles — one is the section index badge,
+// the other is the live testimonial count rendered inline.
+.testimonials-count-header,
+.testimonials-count {
+  font-family: $font-light;
+  display: inline;
+  font-size: $num-size;
+  font-weight: $num-weight;
+  color: $color-muted;
+  letter-spacing: $num-ls;
+  margin-left: clamp(8px, 2vw, 16px);
+  white-space: nowrap;
+}
+
+// ── Quote layout ──────────────────────────────────────────────────────────────
+
+.testimonial-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(32px, 5vw, 80px);
+}
+
+.author-col {
+  min-width: clamp(160px, 22vw, 260px);
+  padding-top: $sp-2;
+}
+
+.author-accent-line {
+  width: 28px;
+  height: 1.5px;
+  background: #9a9890;
+  margin-bottom: $sp-4;
+}
+
+.author-name {
+  margin: 0;
+  margin-top: $sp-2 - 0.125rem; // 6px
+  font-weight: $body-weight;
+  font-size: clamp(13px, 1.6vw, 15px);
+  color: #3a3831;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+}
+
+.author-role {
+  margin: $sp-2 - 0.125rem 0 0; // 6px
+  font-weight: 300;
+  font-size: clamp(11px, 1.3vw, 13px);
+  color: #9a9890;
+  letter-spacing: 0.03em;
+}
+
+.quote-col {
+  flex: 1;
+  position: relative;
+}
+
+.quote-marks {
+  position: absolute;
+  top: -20px;
+  left: -10px;
+  font-size: clamp(80px, 12vw, 140px);
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.07);
+  user-select: none;
+  pointer-events: none;
+  font-weight: 700;
+}
+
+.quote-text {
+  margin: 0;
+  font-weight: 300;
+  font-size: clamp(16px, 2.2vw, 22px);
+  color: #3a3831;
+  line-height: 2.2;
+  direction: rtl;
+  text-align: right;
+  max-width: 680px;
+  padding-top: $sp-2;
+}
+
+// ── Slide animations ──────────────────────────────────────────────────────────
+
+.slide-enter-next { animation: slideInRight  0.38s $ease-out forwards; }
+.slide-enter-prev { animation: slideInLeft   0.38s $ease-out forwards; }
+.slide-exit-next  { animation: slideOutLeft  0.38s $ease-out forwards; }
+.slide-exit-prev  { animation: slideOutRight 0.38s $ease-out forwards; }
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOutLeft {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-40px); }
+}
+
+@keyframes slideOutRight {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(40px); }
+}
+
+// ── Navigation controls ───────────────────────────────────────────────────────
+
+.testimonials-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $sp-4;
+  margin-top: clamp(56px, 8vw, 96px);
+}
+
+.testimonials-nav-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #efece8;
+  width: fit-content;
+  border-radius: 32px;
+}
+
+.nav-btn {
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background $dur-fast ease,
+    border-color $dur-fast ease,
+    transform 0.15s ease;
+  color: #6b6860;
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.testimonials-dots {
+  display: flex;
+  gap: $sp-2;
+  align-items: center;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #b5b2aa;
+  transition:
+    background $dur-base ease,
+    transform  $dur-base ease;
+  cursor: pointer;
+
+  &.active {
+    background: #3a3831;
+    transform: scale(1.4);
+  }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+
+@media (max-width: 768px) {
+  .testimonial-layout {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .author-col {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .quote-text {
+    font-size: clamp(15px, 4vw, 18px);
+    line-height: 2.1;
+  }
+}

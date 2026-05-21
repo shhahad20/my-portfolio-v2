@@ -1,0 +1,365 @@
+@use './variables' as *;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ABOUT ME SECTION — mobile-first, fully responsive
+// ─────────────────────────────────────────────────────────────────────────────
+
+.about {
+  position: relative;
+  width: 100%;
+  min-height: auto;
+  background: $color-bg;
+  color: $color-text;
+  padding: $section-padding;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+
+  // ── Container ──────────────────────────────────────────────────────────────
+  &__container {
+    position: relative;
+    width: 100%;
+    max-width: $max-width;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  // ── Header ─────────────────────────────────────────────────────────────────
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  &__title {
+    font-size: clamp(42px, 10vw, 96px);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    font-family: $font-display;
+    text-transform: uppercase;
+    display: inline-block;
+
+    @media (max-width: 768px) {
+      letter-spacing: -0.01em;
+    }
+  }
+
+  &__number {
+    font-family: $font-light;
+    display: inline;
+    font-size: $num-size;
+    font-weight: $num-weight;
+    color: $color-muted;
+    letter-spacing: $num-ls;
+    margin-left: clamp(8px, 2vw, 16px);
+    white-space: nowrap;
+  }
+
+  // ── Navigation / Links ─────────────────────────────────────────────────────
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__nav-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 0;
+    border: 1px solid transparent;
+    background: transparent;
+    color: $color-muted-alt;
+    font-size: clamp(11px, 2vw, 14px);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: $radius-sm;
+    transition: all $dur-base $ease-out;
+    white-space: nowrap;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-muted-alt;
+      outline-offset: 4px;
+    }
+
+    &--active {
+      color: $color-text;
+      font-weight: 600;
+    }
+  }
+
+  &__nav-text {
+    display: inline-block;
+  }
+
+  // ── Content ────────────────────────────────────────────────────────────────
+  &__content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(8px, 2vw, 10px);
+    padding: 0;
+  }
+
+  &__paragraph {
+    font-size: $body-size;
+    line-height: $body-lh;
+    color: $color-body;
+    margin: 0;
+    font-weight: $body-weight;
+    letter-spacing: 0.2px;
+    max-width: 100%;
+    padding: clamp(16px, 3vw, 24px);
+    border-left: 3px solid transparent;
+    border-radius: $radius-sm;
+    transition: all $dur-slow $ease-out;
+
+    strong {
+      font-weight: 700;
+      color: $color-text;
+    }
+
+    &--highlighted {
+      background: rgba(129, 129, 129, 0.063);
+      color: #1a1713;
+      padding: clamp(16px, 3vw, 24px);
+
+      strong {
+        color: $color-text;
+        font-family: $font-bold;
+      }
+    }
+  }
+
+  // ── Responsive ─────────────────────────────────────────────────────────────
+
+  @media (max-width: 480px) {
+    padding: clamp(36px, 6vw, 48px) clamp(16px, 4vw, 24px);
+
+    &__container {
+      gap: 10px;
+    }
+
+    &__title {
+      font-size: clamp(32px, 9vw, 48px);
+      word-spacing: -0.1em;
+    }
+
+    &__nav-button {
+      font-size: clamp(10px, 1.8vw, 12px);
+      padding: 6px 10px;
+    }
+
+    &__paragraph {
+      font-size: clamp(14px, 2vw, 16px);
+      line-height: 1.7;
+      text-align: left;
+      padding: clamp(12px, 2vw, 16px);
+    }
+  }
+
+  @media (min-width: 481px) and (max-width: 640px) {
+    padding: 48px 24px;
+
+    &__title {
+      font-size: clamp(40px, 9vw, 64px);
+    }
+
+    &__nav-button {
+      font-size: 13px;
+    }
+
+    &__paragraph {
+      padding: 14px 16px;
+    }
+  }
+
+  @media (min-width: 641px) and (max-width: 768px) {
+    padding: 60px 40px;
+
+    &__container {
+      max-width: 850px;
+    }
+
+    &__title {
+      font-size: clamp(48px, 10vw, 80px);
+    }
+
+    &__nav {
+      gap: clamp(12px, 2.5vw, 20px);
+    }
+
+    &__paragraph {
+      max-width: 95%;
+      padding: 16px 20px;
+    }
+  }
+
+  @media (min-width: 769px) {
+    padding: 80px 60px;
+
+    &__title {
+      font-size: clamp(80px, 10vw, 96px);
+    }
+
+    &__nav {
+      gap: 28px;
+    }
+
+    &__nav-button {
+      font-size: 14px;
+      padding: 8px 14px;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      &--active {
+        transform: translateY(-2px);
+      }
+    }
+
+    &__paragraph {
+      max-width: 92%;
+      font-size: 18px;
+      line-height: $body-lh;
+      padding: 18px 24px;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    padding: 100px 80px;
+
+    &__container {
+      gap: 20px;
+      max-width: 950px;
+    }
+
+    &__title {
+      font-size: 96px;
+    }
+
+    &__nav-button {
+      transition: all $dur-slow $ease-out;
+      padding: 10px 16px;
+    }
+
+    &__paragraph {
+      max-width: 88%;
+      font-size: 18px;
+      line-height: 1.85;
+      padding: 20px 28px;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    padding: 120px 140px;
+
+    &__container {
+      max-width: 1100px;
+      gap: 100px;
+    }
+
+    &__title {
+      font-size: 120px;
+    }
+
+    &__number {
+      font-size: 28px;
+    }
+
+    &__nav-button {
+      font-size: 16px;
+      padding: 12px 20px;
+    }
+
+    &__paragraph {
+      font-size: 20px;
+      line-height: 1.9;
+      padding: 24px 32px;
+    }
+  }
+
+  @media (max-height: 800px) and (orientation: landscape) {
+    min-height: auto;
+    padding: clamp(24px, 3vh, 40px) clamp(20px, 5vw, 60px);
+
+    &__container {
+      gap: clamp(24px, 4vh, 40px);
+    }
+
+    &__title {
+      font-size: clamp(36px, 8vw, 64px);
+    }
+
+    &__paragraph {
+      font-size: clamp(14px, 2.2vh, 16px);
+      line-height: 1.6;
+      padding: clamp(12px, 2vh, 16px);
+    }
+  }
+}
+
+// ── Reduced motion ─────────────────────────────────────────────────────────────
+
+@media (prefers-reduced-motion: reduce) {
+  .about__nav-button,
+  .about__paragraph {
+    transition: none;
+  }
+
+  .about * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// ── Print ──────────────────────────────────────────────────────────────────────
+
+@media print {
+  .about {
+    background: white;
+    padding: 40px;
+
+    &__container {
+      max-width: 100%;
+    }
+
+    &__content {
+      break-inside: avoid;
+    }
+
+    &__paragraph {
+      page-break-inside: avoid;
+      orphans: 3;
+      widows: 3;
+      padding: 0;
+      border: none;
+      background: none;
+    }
+
+    &__nav-button {
+      display: none;
+    }
+  }
+}

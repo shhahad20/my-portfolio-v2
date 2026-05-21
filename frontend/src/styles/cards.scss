@@ -663,10 +663,498 @@ a{
 //   .cards-header__title {
 //     font-size: 28px;
 //   }
-// }
-// @media (max-width: 480px) {
-// .busy-card{
-//   // padding: 10px 10px;
-//   width: 260px;
-// }
-// }
+
+//   // For responsive design
+//   @media (max-width: 1024px) {
+//     .gradient-card {
+//       &__title {
+//         font-size: 36px;
+//       }
+//     }
+//   }
+
+//   @media (max-width: 768px) {
+//     .gradient-card {
+//       &__title {
+//         font-size: 30px;
+//       }
+//       &__recently {
+//         font-size: 12px;
+//       }
+//     }
+//   }
+
+//   @media (max-width: 480px) {
+//     .cards-container{
+//       .header-content{
+//         margin-bottom: 0;
+//         gap: 0;
+//       }
+//     }
+//     .gradient-card {
+//       &__grid {
+//         // Make the squares smaller on small screens
+//         background-size: 40px 40px;
+//       }
+//       &__star {
+//         // Reduce the size of the stars and blur less
+//         width: 2px;
+//         height: 2px;
+//         filter: blur(0.5px);
+//       }
+
+//       &__content{
+//         display: flex;
+//         flex-direction: column;
+//         justify-content: flex-start;
+
+//       }
+//       &__title {
+//         font-size: 28px;
+//         z-index: 3;
+//       }
+//       &__image{
+//         // z-index: 1;
+//         display: none;
+//       }
+//       &__label {
+//         font-size: 10px;
+//         margin-bottom: 3px;
+//       }
+//       &__bottom {
+//         margin-top: 6rem;
+//       }
+
+//     }
+//   }
+// ----------------------------------------------------------------------
+$bg: #0e0d0c;
+$bg-card: #141311;
+$bg-card-hover: #181614;
+$border: rgba(239, 238, 236, 0.07);
+$border-hover: rgba(239, 238, 236, 0.16);
+
+$text-primary: #efeeec;
+$text-secondary: rgba(239, 238, 236, 0.45);
+$text-tertiary: rgba(239, 238, 236, 0.22);
+
+$accent-orange: #f17625;
+
+$card-w: 280px;
+$card-h: 310px;
+$card-radius: 6px;
+
+@mixin mono {
+  font-family: "DM Mono", "Fira Mono", "Courier New", monospace;
+}
+
+@mixin display {
+  font-family: "Playfair Display", "Georgia", serif;
+}
+
+@mixin grain {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    opacity: 0.028;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+.cards-section {
+  position: relative;
+  min-height: 220vh;
+  // background: $bg;
+}
+
+.work-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+  // margin-top: 10rem;
+}
+
+.work-header__top {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgba(186, 214, 247, 0.32);
+}
+.work-header__top:before {
+  @include betweenLines;
+}
+.work-header__top:after {
+  @include betweenLines;
+  transform: rotate(180deg);
+}
+
+.work-header__title {
+  @include header-style(15px);
+}
+.work-header__flip {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 5rem;
+}
+.work-header__subtitle{
+  font-size: 2rem;
+  font-weight: 500;
+  background: linear-gradient(0deg, #f5f5f5, #deddda);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 3rem;
+}
+.cards-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0 clamp(1rem, 4vw, 24px);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+.cards-header {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-bottom: clamp(2rem, 6vw, 56px);
+
+  &__label {
+    @include mono;
+    font-size: clamp(8px, 1.5vw, 10px);
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: $text-tertiary;
+    margin: 0 0 clamp(0.8rem, 2vw, 14px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.5rem, 1vw, 10px);
+
+    &::before,
+    &::after {
+      content: "";
+      display: block;
+      width: clamp(20px, 3vw, 32px);
+      height: 1px;
+      background: $border-hover;
+    }
+  }
+
+  &__title {
+    font-size: clamp(1.8rem, 6vw, 52px);
+    font-weight: 400;
+    font-style: italic;
+    color: $text-primary;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin: 0;
+  }
+}
+/* ─── BLOBS ─── */
+.cards-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.cards-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  transform: translate(-50%, -50%);
+}
+
+
+.cards-stage {
+  position: relative;
+  width: clamp(80vw, 95%, 860px);
+  height: clamp(240px, 50vh, 340px);
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.busy-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: $card-w;
+  height: $card-h;
+  // padding: 24px 22px 20px;
+    padding: 1.5rem 1.6rem;
+
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  cursor: pointer;
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  // background: $bg-card;
+  // border-radius: $card-radius;
+  // border: 1px solid $border;
+    border: 1px solid #2c2c2c;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  // background-image: linear-gradient(
+  //   180deg,
+  //   rgba(239, 238, 236, 0.035) 0px,
+  //   transparent 60px
+  // );
+
+  // @include grain;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 5px;
+    height: 5px;
+    border-radius: 0 0 3px 0;
+    background: $accent-orange;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+
+  &:hover {
+    // background-color: $bg-card-hover;
+    // border-color: $border-hover;
+
+    &::after {
+      opacity: 1;
+    }
+
+    .busy-card__arrow {
+      transform: translateX(4px);
+    }
+
+    .busy-card__icon svg {
+      opacity: 1;
+    }
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__category {
+    // @include mono;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(239, 238, 236, 0.45);
+  }
+
+  &__icon {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 2px;
+
+    svg {
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+  }
+
+  &__num {
+    // @include mono;
+    font-size: 10px;
+    font-weight: 400;
+    color: $text-tertiary;
+    margin: 0 0 6px;
+    letter-spacing: 0.06em;
+  }
+
+  &__title {
+  font-size: 19px;
+  font-weight: 600;
+  color: #efeeec;
+  line-height: 1.22;
+  margin-bottom: 0.28rem;
+  letter-spacing: -0.015em;
+  }
+
+  &__divider {
+    width: 24px;
+    height: 2px;
+    border-radius: 1px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+
+  &__desc {
+    // font-family: "DM Sans", "Helvetica Neue", sans-serif;
+  font-size: 12.5px;
+  line-height: 1.68;
+  color: rgba(239, 238, 236, 0.7);
+  }
+
+  &__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-top: 1px solid rgba(152, 192, 239, 0.1);
+  padding-top: 0.85rem;
+  margin-top: 0.5rem;
+  }
+
+  &__cta {
+  font-size: 9px;
+  font-weight: 500;
+  color: #818180;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+
+  &:hover &__cta {
+    color: $text-secondary;
+  }
+
+  &__arrow {
+    display: inline-block;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@media (max-width: 768px) {
+  .cards-section {
+    min-height: auto;
+  }
+
+  .cards-sticky {
+    height: auto;
+    min-height: 100dvh;
+    position: relative;
+    padding: clamp(3rem, 8vw, 72px) clamp(1rem, 3vw, 20px) clamp(5rem, 10vw, 90px);
+  }
+
+  .cards-header {
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .cards-stage {
+    perspective: none;
+    flex-direction: column;
+    gap: clamp(1rem, 2vw, 16px);
+    height: auto;
+  }
+
+  .busy-card {
+    position: relative !important;
+    transform: none !important;
+    opacity: 1 !important;
+    width: 100%;
+    max-width: clamp(280px, 90vw, 340px);
+    height: auto;
+    min-height: clamp(200px, 50vh, 240px);
+    padding: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .cards-header__title {
+    font-size: clamp(1.5rem, 4vw, 28px);
+  }
+
+  .busy-card__title {
+    font-size: clamp(15px, 3vw, 19px);
+  }
+
+  .busy-card__desc {
+    font-size: clamp(11px, 2.5vw, 12.5px);
+  }
+}
+
+@media (max-width: 480px) {
+  .cards-sticky {
+    padding: clamp(2rem, 5vw, 3rem) clamp(0.75rem, 2vw, 1rem) clamp(3rem, 5vw, 4rem);
+    height: auto;
+    min-height: auto;
+  }
+
+  .busy-card {
+    width: clamp(85vw, 90%, 260px) !important;
+    max-width: clamp(85vw, 90%, 260px) !important;
+    min-height: clamp(180px, 45vh, 220px);
+    padding: clamp(0.9rem, 1.5vw, 1rem);
+    gap: clamp(0.3rem, 0.5vw, 0.5rem);
+  }
+
+  .busy-card__category {
+    font-size: clamp(7px, 1.5vw, 9px);
+  }
+
+  .busy-card__num {
+    font-size: clamp(8px, 1.5vw, 10px);
+  }
+
+  .busy-card__title {
+    font-size: clamp(14px, 2.8vw, 17px);
+    margin-bottom: clamp(0.2rem, 0.5vw, 0.3rem);
+  }
+
+  .busy-card__divider {
+    width: clamp(16px, 3vw, 24px);
+    margin-bottom: clamp(0.7rem, 1.5vw, 12px);
+  }
+
+  .busy-card__desc {
+    font-size: clamp(10px, 2vw, 11.5px);
+    line-height: 1.5;
+  }
+
+  .busy-card__cta {
+    font-size: clamp(7px, 1.3vw, 9px);
+  }
+
+  .cards-header__title {
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+  }
+}
+
+@media (max-width: 360px) {
+  .cards-sticky {
+    padding: 1.5rem 0.75rem 2rem;
+  }
+
+  .busy-card {
+    width: 85vw !important;
+    max-width: 85vw !important;
+    min-height: 180px;
+    padding: 0.8rem;
+  }
+}
