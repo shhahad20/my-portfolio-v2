@@ -178,7 +178,8 @@ const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
   const preset = THEME_PRESETS[theme];
   const resolvedBg = backgroundColor ?? preset.backgroundColor;
   const resolvedHue = baseHue ?? preset.baseHue;
-  const { compositeOp, rangeHue, rayLightness, maxAlpha } = preset;
+ const compositeOp = 'compositeOp' in preset ? preset.compositeOp : 'screen';
+const { rangeHue, rayLightness, maxAlpha } = preset;
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
 

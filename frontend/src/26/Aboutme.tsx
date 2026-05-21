@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import "./style/AboutMe.scss";
+import "./style/Aboutme.scss";
 import AnimatedLink from "../components/AnimatedLink";
 
 interface NavLink {

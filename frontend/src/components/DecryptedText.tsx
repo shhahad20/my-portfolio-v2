@@ -42,7 +42,7 @@ const DecryptedText: React.FC<DecryptedTextProps> = ({
   useEffect(() => {
     if (!isAnimating) return;
 
-    let animationFrameId: NodeJS.Timeout;
+let animationFrameId: ReturnType<typeof setTimeout>;
     let currentIndex = 0;
 
     const animate = () => {
