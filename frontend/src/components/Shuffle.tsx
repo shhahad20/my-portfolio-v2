@@ -411,8 +411,4 @@ const Shuffle: React.FC<ShuffleProps> = ({
   return React.createElement(Tag, { ref, className: classes, style: commonStyle }, text);
 };
 
-<<<<<<< HEAD
 export default Shuffle;
-=======
-export default Shuffle;
->>>>>>> ui-redesign
