@@ -81,7 +81,12 @@ const LandingPage: React.FC<Props> = () => {
             <AnimatedLink
               linkText="LINKEDIN ↗"
               hoverText="LINKEDIN ↗"
-              href="/"
+              href="https://www.linkedin.com/in/shahadaltharwa/"
+            />
+            <AnimatedLink
+              linkText="RESUME ↗"
+              hoverText="RESUME ↗"
+              href="/CV_ Shahad_Altharwa_Software_Engineer2025v2.pdf"
             />
           </motion.div>
 

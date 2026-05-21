@@ -71,7 +71,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior is intentionally omitted — Lenis handles all scroll easing */
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
@@ -99,9 +99,20 @@ body{
   }
 }
 
+/* When Lenis is active, html/body height must be auto so the page can scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
 html, body {
   height: 100%;
   margin: 0;
+}
+
+/* Scrollable sub-containers that should opt out of Lenis hijacking */
+[data-lenis-prevent] {
+  overscroll-behavior: contain;
 }
 
 .app-container {

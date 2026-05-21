@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
+import { useLenis } from "lenis/react";
 import "./style/Nav.scss";
 
 // ─────────────────────────────────────────────
@@ -48,9 +49,9 @@ interface SelectedLink {
 
 const DEFAULT_NAV_LINKS: NavLink[] = [
   { title: "Home", href: "/", src: "home.jpg" },
-  { title: "About", href: "/about", src: "about.jpg" },
-  { title: "Work", href: "#projects", src: "work.jpg" },
-  { title: "Designs", href: "/designs", src: "design.jpg" },
+  { title: "About", href: "/#about", src: "about.jpg" },
+  { title: "Work", href: "/#projects", src: "work.jpg" },
+  { title: "Designs", href: "/#projects", src: "design.jpg" },
   { title: "Contact", href: "/contact", src: "contact.jpg" },
 ];
 
@@ -380,6 +381,8 @@ const Nav: React.FC<NavProps> = ({
 // Root Component: NavigationMenu
 // ─────────────────────────────────────────────
 
+const SCROLL_EASING = (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
+
 const NavigationMenu: React.FC<NavigationMenuProps> = ({
   brand = "Shahad Portfolio",
   navLinks = DEFAULT_NAV_LINKS,
@@ -388,10 +391,30 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({
   onNavigate,
 }) => {
   const [isActive, setIsActive] = useState(false);
+  const lenis = useLenis();
 
   const handleToggle = () => setIsActive((prev) => !prev);
+
   const handleNavigate = (href: string) => {
     setIsActive(false);
+
+    if (!href.startsWith("/#")) {
+      window.location.href = href;
+      return;
+    }
+
+    const sectionId = href.replace("/#", "");
+
+    if (lenis) {
+      lenis.scrollTo(`#${sectionId}`, {
+        duration: 1.5,
+        easing: SCROLL_EASING,
+        offset: 0,
+      });
+    } else {
+      document.getElementById(sectionId)?.scrollIntoView({ block: "start" });
+    }
+
     onNavigate?.(href);
   };
 

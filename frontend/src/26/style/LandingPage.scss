@@ -64,10 +64,12 @@
       font-size: clamp(11px, 2.5vw, 14px);
       text-decoration: none;
       color: $color-muted-alt;
-      display: inline-block;
+      display: flex;
+      flex-direction: row;
       line-height: 1.4;
       font-weight: 500;
       letter-spacing: 0.5px;
+      gap: 10px;
     }
 
     .title {
