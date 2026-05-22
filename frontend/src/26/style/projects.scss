@@ -256,7 +256,64 @@
   0%, 100% { transform: translateY(0px);  }
   50%       { transform: translateY(-9px); }
 }
+// ── Tablet — landscape + portrait (641px – 1024px) ───────────────────────────
+//
+// Without this block, tablets inherit the desktop 16/11 ratio which produces
+// ~530–720px of field height on common tablet widths. The ranges below dial
+// the aspect-ratio and min-height back just enough to close that gap while
+// keeping the orbital layout intact.
 
+@media (min-width: 641px) and (max-width: 1024px) {
+
+  .wkmb-header {
+    // Tighten vertical padding on tablets — $section-padding is sized for
+    // desktop gutters and reads as over-spaced at mid widths.
+    padding-top:    clamp(1.25rem, 3vw, 1.75rem);
+    padding-bottom: clamp(0.75rem, 2vw, 1.25rem);
+  
+  }
+
+  // A 16/12 (= 4/3) ratio trims ~60–90px of excess height compared to 16/11
+  // across the 641–1024px range while keeping the rings comfortably circular.
+  .wkmb-field {
+    aspect-ratio: 4 / 3;
+    min-height: 420px;
+    margin-top: 2rem;
+  }
+
+  // Satellite size: split the difference between desktop and mobile clamps
+  // so circles read clearly without crowding at tablet densities.
+  .wkmb-sat {
+    width: clamp(48px, 8.2%, 78px);
+
+  }
+
+  // Center circle: step up from mobile but stay below the desktop cap so the
+  // visual hierarchy remains proportionate at mid-range widths.
+  .wkmb-center {
+    width: clamp(110px, 15%, 168px);
+  }
+
+  // Label text: mobile's 2.8vw reads too large at 800–900px; this curve
+  // keeps it legible without ballooning at the top of the tablet range.
+  .wkmb-center-idle,
+  .wkmb-center-project {
+    font-size: clamp(0.58rem, 1.3vw, 0.76rem);
+  }
+}
+
+// ── Mid-tablet refinement (768px – 900px) ────────────────────────────────────
+//
+// iPads in portrait (768px) and small landscape tablets (800–900px) sit in
+// an awkward zone where 4/3 still produces a taller field than feels balanced.
+// A 3/2 ratio at this narrow sub-range shaves another ~30–40px cleanly.
+
+@media (min-width: 768px) and (max-width: 900px) {
+  .wkmb-field {
+    aspect-ratio: 3 / 2;
+    min-height: 400px;
+  }
+}
 // ── Mobile — portrait layout (≤ 640px) ───────────────────────────────────────
 
 @media (max-width: 640px) {

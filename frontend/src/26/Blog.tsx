@@ -395,7 +395,7 @@ const BlogPage: React.FC = () => {
             animate="visible"
             aria-hidden="true"
           >
-            04
+            05
           </motion.span>
         </section>
 
