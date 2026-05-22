@@ -35,6 +35,8 @@ const Home: React.FC = () => {
     //   <Contact/>
     //   <Footer/>
     // </>
+    
+
     <div className="page-shell">
       <main className="page-shell-content">
         <NavigationMenu/>

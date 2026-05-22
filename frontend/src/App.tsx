@@ -22,7 +22,9 @@ function App() {
           }}
         />
       )}
+      <div className="page-background">
       <Home />
+      </div>
     </>
   );
 }
