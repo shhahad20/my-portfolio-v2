@@ -1,0 +1,694 @@
+@use './variables' as *;
+
+// ── Accessibility ─────────────────────────────────────────────────────────────
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+// ── Hero ──────────────────────────────────────────────────────────────────────
+
+.blog-hero {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: $section-padding;
+  padding-top: clamp(3.5rem, 10vw, 7rem);
+  padding-bottom: clamp(2rem, 5vw, 3.5rem);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid $color-border;
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.75rem, 2vw, 1.1rem);
+  }
+
+  &__eyebrow {
+    font-family: $font-light;
+    font-size: clamp(11px, 2.5vw, 13px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: $color-muted;
+    font-weight: 200;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: $heading-size;
+    line-height: $heading-lh;
+    letter-spacing: $heading-ls;
+    color: $color-text;
+    margin: 0;
+    font-weight: $heading-weight;
+  }
+
+  &__sub {
+    font-family: $font-light;
+    font-size: $body-size;
+    line-height: $body-lh;
+    color: $color-muted-alt;
+    margin: 0;
+    max-width: 52ch;
+  }
+
+  &__num {
+    font-family: $font-light;
+    font-size: $num-size;
+    font-weight: $num-weight;
+    color: $color-muted;
+    letter-spacing: $num-ls;
+    align-self: flex-start;
+    margin-top: 0.4rem;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    &__num { display: none; }
+  }
+}
+
+// ── Section wrapper ────────────────────────────────────────────────────────────
+
+.blog-section {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding-left: $section-pad-h;
+  padding-right: $section-pad-h;
+
+  &--featured {
+    padding-top: clamp(2rem, 5vw, 3.5rem);
+    padding-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  &--controls {
+    padding-top: clamp(0.85rem, 2.5vw, 1.25rem);
+    padding-bottom: clamp(0.85rem, 2.5vw, 1.25rem);
+    border-bottom: 1px solid $color-border;
+  }
+
+  &--grid {
+    padding-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding-bottom: clamp(5rem, 10vw, 8rem);
+  }
+}
+
+// ── Featured Card ──────────────────────────────────────────────────────────────
+
+.blog-featured {
+  border: 1px solid $color-border;
+  border-radius: $radius-md + 4px;
+  overflow: hidden;
+  background: #fff;
+  will-change: transform;
+  transition: box-shadow $dur-base $ease-out;
+
+  &:hover {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.07);
+  }
+
+  &__link {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-decoration: none;
+    color: inherit;
+    min-height: 380px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+  }
+
+  // Cover
+  &__cover {
+    position: relative;
+    overflow: hidden;
+    background: $color-bg;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s $ease-out;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  &:hover &__cover img {
+    transform: scale(1.04);
+  }
+
+  &__cover-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 149, 0, 0.08) 0%,
+      rgba(87, 79, 71, 0.05) 100%
+    );
+  }
+
+  &__cover-letter {
+    font-family: $font-display;
+    font-size: clamp(5rem, 12vw, 9rem);
+    font-weight: 500;
+    color: rgba(87, 79, 71, 0.15);
+    line-height: 1;
+    user-select: none;
+  }
+
+  &__badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-family: $font-display;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+    background: $color-accent;
+    padding: 4px 10px;
+    border-radius: $radius-pill;
+    font-weight: 500;
+    z-index: 1;
+  }
+
+  // Body
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.75rem, 2vw, 1rem);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    justify-content: center;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: $font-light;
+    font-size: clamp(11px, 2vw, 12px);
+    color: $color-muted;
+    flex-wrap: wrap;
+  }
+
+  &__category {
+    color: $color-accent;
+    font-family: $font-display;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 10px;
+  }
+
+  &__dot {
+    opacity: 0.35;
+    font-size: 10px;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+    color: $color-text;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  &__excerpt {
+    font-family: $font-light;
+    font-size: $body-size;
+    line-height: 1.72;
+    color: $color-muted-alt;
+    margin: 0;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid $color-border;
+  }
+
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  &__avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(87, 79, 71, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: $color-muted-alt;
+    font-family: $font-display;
+    flex-shrink: 0;
+    letter-spacing: 0;
+  }
+
+  &__author-name {
+    font-family: $font-light;
+    font-size: 13px;
+    color: $color-muted-alt;
+    line-height: 1;
+  }
+
+  &__cta {
+    font-family: $font-display;
+    font-size: 13px;
+    color: $color-body;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: color $dur-fast $ease-out, transform $dur-fast $ease-out;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &:hover &__cta {
+    color: $color-accent;
+    transform: translateX(3px);
+  }
+}
+
+// ── Controls ───────────────────────────────────────────────────────────────────
+
+.blog-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+
+  &__filters {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+// ── Category Pills ─────────────────────────────────────────────────────────────
+
+.blog-pill {
+  font-family: $font-display;
+  font-size: clamp(11px, 2vw, 12px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: $color-muted-alt;
+  background: transparent;
+  border: 1px solid $color-border;
+  border-radius: $radius-pill;
+  padding: 0.3rem 0.85rem;
+  cursor: pointer;
+  transition:
+    background $dur-fast $ease-out,
+    color $dur-fast $ease-out,
+    border-color $dur-fast $ease-out;
+  white-space: nowrap;
+
+  &:hover {
+    color: $color-text;
+    border-color: rgba(87, 79, 71, 0.3);
+    background: rgba(87, 79, 71, 0.04);
+  }
+
+  &--active {
+    background: $color-text;
+    color: $color-bg;
+    border-color: $color-text;
+
+    &:hover {
+      background: lighten(#111111, 10%);
+      color: $color-bg;
+    }
+  }
+}
+
+// ── Search ─────────────────────────────────────────────────────────────────────
+
+.blog-search {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid $color-border;
+  border-radius: $radius-pill;
+  padding: 0.3rem 0.85rem;
+  background: transparent;
+  transition:
+    border-color $dur-fast $ease-out,
+    box-shadow $dur-fast $ease-out;
+
+  &:focus-within {
+    border-color: rgba(87, 79, 71, 0.35);
+    box-shadow: 0 0 0 3px rgba(87, 79, 71, 0.06);
+  }
+
+  &__icon {
+    width: 14px;
+    height: 14px;
+    color: $color-muted;
+    flex-shrink: 0;
+  }
+
+  &__input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: $font-light;
+    font-size: clamp(12px, 2vw, 13px);
+    color: $color-body;
+    width: clamp(140px, 18vw, 200px);
+    padding: 0;
+
+    &::placeholder {
+      color: $color-muted;
+    }
+
+    // Prevent iOS zoom-on-focus
+    @media (max-width: 480px) {
+      font-size: 16px;
+      width: clamp(120px, 40vw, 180px);
+    }
+  }
+
+  &__clear {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: $color-muted;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background $dur-fast ease,
+      color $dur-fast ease;
+
+    &:hover {
+      background: rgba(87, 79, 71, 0.08);
+      color: $color-text;
+    }
+  }
+}
+
+// ── Blog Grid ──────────────────────────────────────────────────────────────────
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.85rem, 2.5vw, 1.25rem);
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Blog Card ──────────────────────────────────────────────────────────────────
+
+.blog-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid $color-border;
+  border-radius: $radius-md + 4px;
+  overflow: hidden;
+  background: #fff;
+  transition:
+    box-shadow $dur-base $ease-out,
+    border-color $dur-base $ease-out;
+  will-change: transform;
+
+  &:hover {
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
+    border-color: rgba(87, 79, 71, 0.22);
+  }
+
+  &__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  // Cover
+  &__cover {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background: $color-bg;
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s $ease-out;
+      display: block;
+    }
+  }
+
+  &:hover &__cover img {
+    transform: scale(1.05);
+  }
+
+  &__cover-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 149, 0, 0.06) 0%,
+      rgba(87, 79, 71, 0.04) 100%
+    );
+
+    span {
+      font-family: $font-display;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 500;
+      color: rgba(87, 79, 71, 0.18);
+      line-height: 1;
+      user-select: none;
+    }
+  }
+
+  // Body
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: clamp(1rem, 3vw, 1.35rem);
+    flex: 1;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__category {
+    font-family: $font-display;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $color-accent;
+    font-weight: 500;
+  }
+
+  &__time {
+    font-family: $font-light;
+    font-size: 11px;
+    color: $color-muted;
+    letter-spacing: 0.04em;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    line-height: 1.28;
+    letter-spacing: -0.01em;
+    color: $color-text;
+    margin: 0;
+    font-weight: 500;
+    transition: color $dur-fast $ease-out;
+  }
+
+  &:hover &__title {
+    color: rgba(17, 17, 17, 0.75);
+  }
+
+  &__excerpt {
+    font-family: $font-light;
+    font-size: clamp(13px, 1.8vw, 14px);
+    line-height: 1.65;
+    color: $color-muted-alt;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 0.7rem;
+    border-top: 1px solid $color-border;
+  }
+
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  &__avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(87, 79, 71, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 600;
+    color: $color-muted-alt;
+    font-family: $font-display;
+    flex-shrink: 0;
+    letter-spacing: 0;
+  }
+
+  &__date {
+    font-family: $font-light;
+    font-size: 12px;
+    color: $color-muted;
+    letter-spacing: 0.02em;
+  }
+
+  &__arrow {
+    font-size: 14px;
+    color: $color-muted;
+    transition:
+      transform $dur-fast $ease-out,
+      color $dur-fast $ease-out;
+  }
+
+  &:hover &__arrow {
+    transform: translateX(4px);
+    color: $color-text;
+  }
+}
+
+// ── Empty state ────────────────────────────────────────────────────────────────
+
+.blog-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: clamp(3.5rem, 8vw, 5.5rem) 0;
+  text-align: center;
+
+  &__icon {
+    font-size: 1.8rem;
+    color: $color-muted;
+    display: block;
+    line-height: 1;
+  }
+
+  &__text {
+    font-family: $font-light;
+    font-size: $body-size;
+    color: $color-muted-alt;
+    margin: 0;
+  }
+
+  &__reset {
+    font-family: $font-display;
+    font-size: 13px;
+    color: $color-text;
+    background: transparent;
+    border: 1px solid $color-border;
+    border-radius: $radius-pill;
+    padding: 0.5rem 1.25rem;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition:
+      background $dur-fast $ease-out,
+      color $dur-fast $ease-out,
+      border-color $dur-fast $ease-out;
+
+    &:hover {
+      background: $color-text;
+      color: $color-bg;
+      border-color: $color-text;
+    }
+  }
+}
+
+// ── Tags row (on cards, optional) ─────────────────────────────────────────────
+
+.blog-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-top: 0.2rem;
+}
+
+.blog-tag {
+  font-family: $font-light;
+  font-size: 11px;
+  color: $color-muted;
+  background: rgba(87, 79, 71, 0.06);
+  border-radius: $radius-sm;
+  padding: 2px 7px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}

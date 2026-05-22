@@ -52,6 +52,7 @@ const DEFAULT_NAV_LINKS: NavLink[] = [
   { title: "About", href: "/#about", src: "about.jpg" },
   { title: "Work", href: "/#projects", src: "work.jpg" },
   { title: "Designs", href: "/#projects", src: "design.jpg" },
+  { title: "Blog", href: "/blog", src: "blog.jpg" },
   { title: "Contact", href: "/contact", src: "contact.jpg" },
 ];
 

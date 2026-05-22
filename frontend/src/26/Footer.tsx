@@ -55,7 +55,7 @@ const DEFAULT_NAV: FooterNavColumn[] = [
     heading: "Connect",
     links: [
       { label: "CV", href:"/CV_ Shahad_Altharwa_Software_Engineer2025v2.pdf" },
-      { label: "Blog", href: "#blog" },
+      { label: "Blog", href: "/blog" },
     ],
   },
 ];
