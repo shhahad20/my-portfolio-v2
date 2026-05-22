@@ -1,4 +1,4 @@
-@use './variables' as *;
+@use "./variables" as *;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TESTIMONIALS SECTION
@@ -124,29 +124,61 @@
 
 // ── Slide animations ──────────────────────────────────────────────────────────
 
-.slide-enter-next { animation: slideInRight  0.38s $ease-out forwards; }
-.slide-enter-prev { animation: slideInLeft   0.38s $ease-out forwards; }
-.slide-exit-next  { animation: slideOutLeft  0.38s $ease-out forwards; }
-.slide-exit-prev  { animation: slideOutRight 0.38s $ease-out forwards; }
+.slide-enter-next {
+  animation: slideInRight 0.38s $ease-out forwards;
+}
+.slide-enter-prev {
+  animation: slideInLeft 0.38s $ease-out forwards;
+}
+.slide-exit-next {
+  animation: slideOutLeft 0.38s $ease-out forwards;
+}
+.slide-exit-prev {
+  animation: slideOutRight 0.38s $ease-out forwards;
+}
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(40px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-40px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideOutLeft {
-  from { opacity: 1; transform: translateX(0); }
-  to   { opacity: 0; transform: translateX(-40px); }
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
 }
 
 @keyframes slideOutRight {
-  from { opacity: 1; transform: translateX(0); }
-  to   { opacity: 0; transform: translateX(40px); }
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(40px);
+  }
 }
 
 // ── Navigation controls ───────────────────────────────────────────────────────
@@ -199,7 +231,7 @@
   background: #b5b2aa;
   transition:
     background $dur-base ease,
-    transform  $dur-base ease;
+    transform $dur-base ease;
   cursor: pointer;
 
   &.active {
@@ -209,6 +241,56 @@
 }
 
 // ── Responsive ────────────────────────────────────────────────────────────────
+
+// @media (max-width: 768px) {
+//   .testimonial-layout {
+//     flex-direction: column;
+//     gap: 32px;
+//   }
+
+//   .author-col {
+//     min-width: unset;
+//     width: 100%;
+//   }
+
+//   .quote-text {
+//     font-size: clamp(15px, 4vw, 18px);
+//     line-height: 2.1;
+//   }
+// }
+
+// ── Tablet (641px – 1024px) ───────────────────────────────────────────────────
+//
+// 100 vh on a landscape tablet is ~600–700 px of enforced height; the
+// section rarely needs that much. Collapsing to min-content and trimming
+// the heading and nav margins brings it in line with adjacent sections.
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .testimonials-section {
+    min-height: unset; // release the 100 vh lock
+    padding-top: clamp(4rem, 6vw, 5.25rem);
+    padding-bottom: clamp(6rem, 11vw, 7.5rem);
+  }
+
+  // 7 vw at 768 px = 54 px — already acceptable, but nudging to 5 vw
+  // keeps it visually consistent with the heading gaps in other sections.
+  .testimonials-heading {
+    margin-bottom: clamp(40px, 5.5vw, 72px);
+  }
+
+  // Nav margin-top: 8 vw at 768 px = 61 px → 5.5 vw = 42 px
+  .testimonials-nav {
+    margin-top: clamp(40px, 5.5vw, 72px);
+  }
+
+  // Quote marks: 12 vw at 900 px = 108 px; reign in the preferred value
+  // so they don't dominate the column on wider tablets.
+  .quote-marks {
+    font-size: clamp(72px, 9vw, 120px);
+  }
+}
+
+// ── Mobile (≤ 768px) — original rules, unchanged ─────────────────────────────
 
 @media (max-width: 768px) {
   .testimonial-layout {
