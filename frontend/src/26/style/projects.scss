@@ -277,11 +277,14 @@
   }
 
   .wkmb-sat {
-    width: clamp(40px, 9.5%, 62px);
+    // width: clamp(40px, 9.5%, 62px);
+    // width: clamp(46px, 10.5%, 68px);
+    width: clamp(52px, 12%, 76px);
   }
 
   .wkmb-center {
-    width: clamp(82px, 14%, 110px);
+    // width: clamp(82px, 14%, 110px);
+    width: clamp(92px, 15.5%, 120px);
   }
 
   .wkmb-center-idle,
