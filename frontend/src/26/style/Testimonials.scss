@@ -1,310 +1,577 @@
 @use "./variables" as *;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TESTIMONIALS SECTION
+// LOCAL TOKENS
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Animation — $anim-dur must equal ANIM_DURATION in TestimonialsSection.tsx
+$anim-dur: 500ms;
+$anim-ease: cubic-bezier(0.22, 1, 0.36, 1);
+$slide-dist: 56px;
+
+// Light card palette — premium clean white
+$card-bg: #ffffffc1;
+$card-bg-hover: #fafaf8;
+$card-border: rgba(0, 0, 0, 0.07);
+$card-border-hov: rgba(0, 0, 0, 0.13);
+$card-shadow:
+  0 2px 16px rgba(0, 0, 0, 0.06),
+  0 1px 3px rgba(0, 0, 0, 0.04);
+$card-shadow-hov:
+  0 8px 32px rgba(0, 0, 0, 0.1),
+  0 2px 8px rgba(0, 0, 0, 0.06);
+
+// Section / chrome palette
+$accent: #3a3831;
+$muted: #9a9890;
+$dot-idle: #ccc9c3;
+$dot-active: #3a3831;
+$card-radius: 20px;
+
+// Fixed card heights — keeps the stage stable regardless of text length
+$card-h-desk: clamp(200px, 24vw, 300px);
+$card-h-mob: clamp(220px, 62vw, 300px);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION WRAPPER
 // ─────────────────────────────────────────────────────────────────────────────
 
 .testimonials-section {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  position: relative;
   max-width: $max-width;
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
   padding: $section-padding;
   box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
-}
-
-// ── Heading ───────────────────────────────────────────────────────────────────
-
-.testimonials-heading {
-  margin-bottom: clamp(48px, 7vw, 90px);
-}
-
-.testimonials-heading-row {
   display: flex;
-  align-items: flex-end;
-  gap: 16px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: clamp(40px, 6vw, 72px);
+  outline: none;
+
+  &--loading,
+  &--empty {
+    min-height: 60vh;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
-.testimonials-title {
+// ─────────────────────────────────────────────────────────────────────────────
+// HEADER
+// ─────────────────────────────────────────────────────────────────────────────
+
+.testimonials-header {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2vw, 20px);
+}
+
+.testimonials-header__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.testimonials-header__label {
+  font-family: $font-light;
+  font-size: clamp(11px, 1.2vw, 13px);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $muted;
+}
+
+.testimonials-header__index {
+  font-family: $font-light;
+  font-size: clamp(11px, 1.3vw, 13px);
+  font-weight: 400;
+  color: $muted;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.testimonials-header__title {
   font-family: $font-display;
   font-size: $heading-size;
   line-height: $heading-lh;
   letter-spacing: $heading-ls;
+  font-weight: $heading-weight;
   color: $color-text;
   margin: 0;
-  font-weight: $heading-weight;
 }
 
-// Both classes share the same styles — one is the section index badge,
-// the other is the live testimonial count rendered inline.
-.testimonials-count-header,
-.testimonials-count {
-  font-family: $font-light;
-  display: inline;
-  font-size: $num-size;
-  font-weight: $num-weight;
-  color: $color-muted;
-  letter-spacing: $num-ls;
-  margin-left: clamp(8px, 2vw, 16px);
-  white-space: nowrap;
-}
+// ─────────────────────────────────────────────────────────────────────────────
+// STAGE
+// ─────────────────────────────────────────────────────────────────────────────
+//
+//   1. Ghost grid   — visibility:hidden in normal flow; drives the height.
+//   2. Exiting grid — position:absolute; animates OUT.
+//   3. Entering grid— position:absolute; animates IN (or idle).
+//
+// Because the ghost always occupies its natural height the stage never
+// reflows during animation. Zero layout shift.
 
-// ── Quote layout ──────────────────────────────────────────────────────────────
-
-.testimonial-layout {
-  display: flex;
-  align-items: flex-start;
-  gap: clamp(32px, 5vw, 80px);
-}
-
-.author-col {
-  min-width: clamp(160px, 22vw, 260px);
-  padding-top: $sp-2;
-}
-
-.author-accent-line {
-  width: 28px;
-  height: 1.5px;
-  background: #9a9890;
-  margin-bottom: $sp-4;
-}
-
-.author-name {
-  margin: 0;
-  margin-top: $sp-2 - 0.125rem; // 6px
-  font-weight: $body-weight;
-  font-size: clamp(13px, 1.6vw, 15px);
-  color: #3a3831;
-  letter-spacing: 0.01em;
-  line-height: 1.4;
-}
-
-.author-role {
-  margin: $sp-2 - 0.125rem 0 0; // 6px
-  font-weight: 300;
-  font-size: clamp(11px, 1.3vw, 13px);
-  color: #9a9890;
-  letter-spacing: 0.03em;
-}
-
-.quote-col {
-  flex: 1;
+.testimonials-stage {
   position: relative;
+  overflow: hidden;
+  // border-radius: $card-radius + 4px;
 }
 
-.quote-marks {
-  position: absolute;
-  top: -20px;
-  left: -10px;
-  font-size: clamp(80px, 12vw, 140px);
-  line-height: 1;
-  color: rgba(0, 0, 0, 0.07);
-  user-select: none;
+// ─────────────────────────────────────────────────────────────────────────────
+// GRID LAYER
+// ─────────────────────────────────────────────────────────────────────────────
+
+.stage__grid {
+  display: grid;
+  gap: clamp(16px, 2.5vw, 28px);
+  align-items: stretch;
+
+  &--cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  &--cols-1 {
+    grid-template-columns: 1fr;
+  }
+
+  &--ghost {
+    visibility: hidden;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &--overlay {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SLIDE ANIMATIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+.layer--enter-right {
+  animation: layerEnterRight $anim-dur $anim-ease both;
+}
+.layer--enter-left {
+  animation: layerEnterLeft $anim-dur $anim-ease both;
+}
+
+.layer--exit-left {
+  animation: layerExitLeft $anim-dur $anim-ease both;
   pointer-events: none;
-  font-weight: 700;
+}
+.layer--exit-right {
+  animation: layerExitRight $anim-dur $anim-ease both;
+  pointer-events: none;
 }
 
-.quote-text {
+@keyframes layerEnterRight {
+  from {
+    opacity: 0;
+    transform: translateX($slide-dist) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+@keyframes layerEnterLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-$slide-dist) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+@keyframes layerExitLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-$slide-dist) scale(0.98);
+  }
+}
+@keyframes layerExitRight {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX($slide-dist) scale(0.98);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CARD — premium light mode, fixed height
+// ─────────────────────────────────────────────────────────────────────────────
+
+.testimonial-card {
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: $radius-md;
+  // box-shadow: $card-shadow;
+
+  // Fixed height — every card in every group is identical in size.
+  // The ghost layer reflects this exact height, keeping the stage stable.
+  height: $card-h-desk;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.5vw, 18px);
+  padding: clamp(20px, 2.5vw, 30px);
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+
+  transition:
+    background $dur-base ease,
+    border-color $dur-base ease,
+    box-shadow $dur-base ease,
+    transform $dur-base ease;
+
+  // &:hover {
+  //   background: $card-bg-hover;
+  //   border-color: $card-border-hov;
+  //   box-shadow: $card-shadow-hov;
+  //   transform: translateY(-3px);
+  // }
+
+  // Subtle top-edge highlight (glass feel on light bg)
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.04) 50%,
+      transparent 100%
+    );
+    // border-radius: $card-radius $card-radius 0 0;
+    pointer-events: none;
+  }
+
+  // Warm accent glow in the top-right corner
+  &::after {
+    content: "";
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(200, 160, 80, 0.05) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+}
+
+// ── Quote mark ────────────────────────────────────────────────────────────────
+
+// .card__quote-mark {
+//   position: absolute;
+//   top: clamp(14px, 2vw, 20px);
+//   right: clamp(20px, 3vw, 36px);
+//   font-size: clamp(72px, 9vw, 120px);
+//   line-height: 1;
+//   color: rgba(0, 0, 0, 0.05);
+//   font-weight: 700;
+//   font-family: Georgia, serif;
+//   user-select: none;
+//   pointer-events: none;
+// }
+
+// ── Quote text ────────────────────────────────────────────────────────────────
+
+.card__text {
   margin: 0;
-  font-weight: 300;
-  font-size: clamp(16px, 2.2vw, 22px);
+  // flex:1 grows to fill remaining card height so the footer is always pinned.
+  // min-height:0 lets the flex item shrink below its content size, enabling
+  // overflow:hidden to clip long quotes without expanding the card.
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+
+  font-weight: 400;
+  font-size: clamp(14px, 1.75vw, 18px);
+  line-height: 1.95;
   color: #3a3831;
-  line-height: 2.2;
   direction: rtl;
   text-align: right;
-  max-width: 680px;
-  padding-top: $sp-2;
 }
 
-// ── Slide animations ──────────────────────────────────────────────────────────
+// ── Divider ───────────────────────────────────────────────────────────────────
 
-.slide-enter-next {
-  animation: slideInRight 0.38s $ease-out forwards;
-}
-.slide-enter-prev {
-  animation: slideInLeft 0.38s $ease-out forwards;
-}
-.slide-exit-next {
-  animation: slideOutLeft 0.38s $ease-out forwards;
-}
-.slide-exit-prev {
-  animation: slideOutRight 0.38s $ease-out forwards;
+.card__divider {
+  height: 1px;
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 1px;
 }
 
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+// ── Author footer ─────────────────────────────────────────────────────────────
+
+.card__author {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  flex-shrink: 0;
 }
 
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideOutLeft {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-}
-
-@keyframes slideOutRight {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(40px);
-  }
-}
-
-// ── Navigation controls ───────────────────────────────────────────────────────
-
-.testimonials-nav {
+.card__author-avatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  // background: linear-gradient(135deg, #e8e4df 0%, #d0cbc4 100%);
+  border: 1px solid $color-border;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: $sp-4;
-  margin-top: clamp(56px, 8vw, 96px);
+  font-family: $font-display;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(58, 56, 49, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0;
+  // box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
-.testimonials-nav-wrap {
+.card__author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card__author-name {
+  font-family: $font-display;
+  font-size: clamp(13px, 1.5vw, 15px);
+  font-weight: 500;
+  color: #2a2825;
+  letter-spacing: 0.01em;
+}
+
+.card__author-role {
+  font-size: clamp(11px, 1.2vw, 12.5px);
+  font-weight: 400;
+  color: #8a8680;
+  letter-spacing: 0.04em;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONTROLS ROW
+// ─────────────────────────────────────────────────────────────────────────────
+
+.testimonials-controls {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: #efece8;
-  width: fit-content;
-  border-radius: 32px;
+  justify-content: space-between;
 }
 
-.nav-btn {
+// ── Dots ──────────────────────────────────────────────────────────────────────
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dots__dot {
+  position: relative;
+  width: 10px;
+  height: 2px;
+  border-radius: 2px;
   border: none;
-  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  background: $dot-idle;
+  transition:
+    background $dur-base ease,
+    width $dur-base $anim-ease;
+  overflow: hidden;
+
+  &--active {
+    background: rgba($dot-active, 0.18);
+    width: 48px;
+  }
+}
+
+.dots__progress {
+  position: absolute;
+  inset: 0;
+  background: $dot-active;
+  border-radius: 2px;
+  transform-origin: left center;
+}
+
+// ── Arrow buttons ─────────────────────────────────────────────────────────────
+
+.testimonials-arrows {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arrow-btn {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  background: transparent;
+  color: $accent;
   cursor: pointer;
   transition:
     background $dur-fast ease,
     border-color $dur-fast ease,
-    transform 0.15s ease;
-  color: #6b6860;
+    color $dur-fast ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:hover {
+    background: $accent;
+    border-color: $accent;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(58, 56, 49, 0.25);
+  }
 
   &:active {
-    transform: scale(0.96);
+    transform: scale(0.93);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent;
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
   }
 }
 
-.testimonials-dots {
-  display: flex;
-  gap: $sp-2;
-  align-items: center;
-}
+// ─────────────────────────────────────────────────────────────────────────────
+// SKELETON LOADING STATE
+// ─────────────────────────────────────────────────────────────────────────────
 
-.dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #b5b2aa;
-  transition:
-    background $dur-base ease,
-    transform $dur-base ease;
-  cursor: pointer;
+.skeleton-grid {
+  display: grid;
+  gap: clamp(16px, 2.5vw, 28px);
+  width: 100%;
 
-  &.active {
-    background: #3a3831;
-    transform: scale(1.4);
+  &--cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  &--cols-1 {
+    grid-template-columns: 1fr;
   }
 }
 
-// ── Responsive ────────────────────────────────────────────────────────────────
+.skeleton-card {
+  height: $card-h-desk;
+  border-radius: $card-radius;
+  background: linear-gradient(90deg, #f0eeea 25%, #e6e2dc 50%, #f0eeea 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
 
-// @media (max-width: 768px) {
-//   .testimonial-layout {
-//     flex-direction: column;
-//     gap: 32px;
-//   }
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
 
-//   .author-col {
-//     min-width: unset;
-//     width: 100%;
-//   }
+.empty-message {
+  font-family: $font-light;
+  font-size: 15px;
+  color: $muted;
+  text-align: center;
+}
 
-//   .quote-text {
-//     font-size: clamp(15px, 4vw, 18px);
-//     line-height: 2.1;
-//   }
-// }
+// ─────────────────────────────────────────────────────────────────────────────
+// RESPONSIVE
+// ─────────────────────────────────────────────────────────────────────────────
 
-// ── Tablet (641px – 1024px) ───────────────────────────────────────────────────
-//
-// 100 vh on a landscape tablet is ~600–700 px of enforced height; the
-// section rarely needs that much. Collapsing to min-content and trimming
-// the heading and nav margins brings it in line with adjacent sections.
+// ── Tablet (641 – 1024 px) ────────────────────────────────────────────────────
 
 @media (min-width: 641px) and (max-width: 1024px) {
   .testimonials-section {
-    min-height: unset; // release the 100 vh lock
-    padding-top: clamp(4rem, 6vw, 5.25rem);
-    padding-bottom: clamp(6rem, 11vw, 7.5rem);
+    padding-top: clamp(3.5rem, 6vw, 5rem);
+    padding-bottom: clamp(5rem, 9vw, 7rem);
+    gap: clamp(32px, 5vw, 56px);
   }
 
-  // 7 vw at 768 px = 54 px — already acceptable, but nudging to 5 vw
-  // keeps it visually consistent with the heading gaps in other sections.
-  .testimonials-heading {
-    margin-bottom: clamp(40px, 5.5vw, 72px);
+  .stage__grid {
+    gap: clamp(12px, 2vw, 20px);
   }
 
-  // Nav margin-top: 8 vw at 768 px = 61 px → 5.5 vw = 42 px
-  .testimonials-nav {
-    margin-top: clamp(40px, 5.5vw, 72px);
-  }
-
-  // Quote marks: 12 vw at 900 px = 108 px; reign in the preferred value
-  // so they don't dominate the column on wider tablets.
-  .quote-marks {
-    font-size: clamp(72px, 9vw, 120px);
+  .card__text {
+    line-height: 1.9;
   }
 }
 
-// ── Mobile (≤ 768px) — original rules, unchanged ─────────────────────────────
+// ── Mobile (≤ 768 px) ─────────────────────────────────────────────────────────
 
 @media (max-width: 768px) {
-  .testimonial-layout {
-    flex-direction: column;
-    gap: 32px;
+  .testimonials-section {
+    gap: clamp(28px, 6vw, 44px);
   }
 
-  .author-col {
-    min-width: unset;
-    width: 100%;
+  .stage__grid {
+    grid-template-columns: 1fr !important;
   }
 
-  .quote-text {
-    font-size: clamp(15px, 4vw, 18px);
-    line-height: 2.1;
+  .skeleton-grid {
+    grid-template-columns: 1fr;
+  }
+  .skeleton-card:last-child {
+    display: none;
+  }
+  .skeleton-card {
+    height: $card-h-mob;
+  }
+
+  .testimonial-card {
+    height: $card-h-mob;
+    padding: clamp(22px, 6vw, 32px);
+  }
+
+  .card__text {
+    font-size: clamp(14px, 4.2vw, 17px);
+    line-height: 2;
+  }
+
+  .card__quote-mark {
+    font-size: clamp(56px, 14vw, 80px);
+  }
+
+  .dots__dot {
+    width: 22px;
+  }
+  .dots__dot--active {
+    width: 36px;
+  }
+
+  .arrow-btn {
+    width: 36px;
+    height: 36px;
   }
 }
