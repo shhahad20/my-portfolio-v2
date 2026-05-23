@@ -36,7 +36,7 @@ $bp-tablet: 1024px;  // > 640px → 2 cards (tablet + desktop)
 // Desktop / tablet: use viewport-aware clamp
 $card-h-desk: clamp(210px, 25vw, 310px);
 // Mobile: slightly taller to accommodate single-card layout
-$card-h-mob:  clamp(220px, 58vw, 290px);
+$card-h-mob:  clamp(240px, 58vw, 290px);
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SECTION WRAPPER
