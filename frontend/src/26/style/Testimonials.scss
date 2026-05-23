@@ -5,32 +5,38 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Animation — $anim-dur must equal ANIM_DURATION in TestimonialsSection.tsx
-$anim-dur: 500ms;
-$anim-ease: cubic-bezier(0.22, 1, 0.36, 1);
+$anim-dur:   500ms;
+$anim-ease:  cubic-bezier(0.22, 1, 0.36, 1);
 $slide-dist: 56px;
 
-// Light card palette — premium clean white
-$card-bg: #ffffffc1;
-$card-bg-hover: #fafaf8;
-$card-border: rgba(0, 0, 0, 0.07);
-$card-border-hov: rgba(0, 0, 0, 0.13);
+// Card palette — premium clean white
+$card-bg:          #ffffffc1;
+$card-bg-hover:    #fafaf8;
+$card-border:      rgba(0, 0, 0, 0.07);
+$card-border-hov:  rgba(0, 0, 0, 0.13);
 $card-shadow:
   0 2px 16px rgba(0, 0, 0, 0.06),
-  0 1px 3px rgba(0, 0, 0, 0.04);
+  0 1px 3px  rgba(0, 0, 0, 0.04);
 $card-shadow-hov:
   0 8px 32px rgba(0, 0, 0, 0.1),
-  0 2px 8px rgba(0, 0, 0, 0.06);
+  0 2px 8px  rgba(0, 0, 0, 0.06);
 
 // Section / chrome palette
-$accent: #3a3831;
-$muted: #9a9890;
-$dot-idle: #ccc9c3;
-$dot-active: #3a3831;
+$accent:      #3a3831;
+$muted:       #9a9890;
+$dot-idle:    #ccc9c3;
+$dot-active:  #3a3831;
 $card-radius: 20px;
 
+// Breakpoints — mirror MOBILE_BP constant in TestimonialsSection.tsx
+$bp-mobile: 640px;   // ≤ this  → 1 card
+$bp-tablet: 1024px;  // > 640px → 2 cards (tablet + desktop)
+
 // Fixed card heights — keeps the stage stable regardless of text length
-$card-h-desk: clamp(200px, 24vw, 300px);
-$card-h-mob: clamp(220px, 62vw, 300px);
+// Desktop / tablet: use viewport-aware clamp
+$card-h-desk: clamp(210px, 25vw, 310px);
+// Mobile: slightly taller to accommodate single-card layout
+$card-h-mob:  clamp(220px, 58vw, 290px);
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SECTION WRAPPER
@@ -103,17 +109,15 @@ $card-h-mob: clamp(220px, 62vw, 300px);
 // STAGE
 // ─────────────────────────────────────────────────────────────────────────────
 //
-//   1. Ghost grid   — visibility:hidden in normal flow; drives the height.
-//   2. Exiting grid — position:absolute; animates OUT.
-//   3. Entering grid— position:absolute; animates IN (or idle).
+//   1. Ghost grid    — visibility:hidden in normal flow; drives the height.
+//   2. Exiting grid  — position:absolute; animates OUT.
+//   3. Entering grid — position:absolute; animates IN (or idle).
 //
-// Because the ghost always occupies its natural height the stage never
-// reflows during animation. Zero layout shift.
+// The ghost is always in normal flow so the section never reflows.
 
 .testimonials-stage {
   position: relative;
   overflow: hidden;
-  // border-radius: $card-radius + 4px;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -125,12 +129,8 @@ $card-h-mob: clamp(220px, 62vw, 300px);
   gap: clamp(16px, 2.5vw, 28px);
   align-items: stretch;
 
-  &--cols-2 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  &--cols-1 {
-    grid-template-columns: 1fr;
-  }
+  &--cols-2 { grid-template-columns: repeat(2, 1fr); }
+  &--cols-1 { grid-template-columns: 1fr; }
 
   &--ghost {
     visibility: hidden;
@@ -149,61 +149,26 @@ $card-h-mob: clamp(220px, 62vw, 300px);
 // SLIDE ANIMATIONS
 // ─────────────────────────────────────────────────────────────────────────────
 
-.layer--enter-right {
-  animation: layerEnterRight $anim-dur $anim-ease both;
-}
-.layer--enter-left {
-  animation: layerEnterLeft $anim-dur $anim-ease both;
-}
-
-.layer--exit-left {
-  animation: layerExitLeft $anim-dur $anim-ease both;
-  pointer-events: none;
-}
-.layer--exit-right {
-  animation: layerExitRight $anim-dur $anim-ease both;
-  pointer-events: none;
-}
+.layer--enter-right { animation: layerEnterRight $anim-dur $anim-ease both; }
+.layer--enter-left  { animation: layerEnterLeft  $anim-dur $anim-ease both; }
+.layer--exit-left   { animation: layerExitLeft   $anim-dur $anim-ease both; pointer-events: none; }
+.layer--exit-right  { animation: layerExitRight  $anim-dur $anim-ease both; pointer-events: none; }
 
 @keyframes layerEnterRight {
-  from {
-    opacity: 0;
-    transform: translateX($slide-dist) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
+  from { opacity: 0; transform: translateX($slide-dist)  scale(0.98); }
+  to   { opacity: 1; transform: translateX(0)             scale(1);    }
 }
 @keyframes layerEnterLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-$slide-dist) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
+  from { opacity: 0; transform: translateX(-$slide-dist) scale(0.98); }
+  to   { opacity: 1; transform: translateX(0)             scale(1);    }
 }
 @keyframes layerExitLeft {
-  from {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(-$slide-dist) scale(0.98);
-  }
+  from { opacity: 1; transform: translateX(0)             scale(1);    }
+  to   { opacity: 0; transform: translateX(-$slide-dist) scale(0.98); }
 }
 @keyframes layerExitRight {
-  from {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateX($slide-dist) scale(0.98);
-  }
+  from { opacity: 1; transform: translateX(0)            scale(1);    }
+  to   { opacity: 0; transform: translateX($slide-dist) scale(0.98); }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -214,10 +179,6 @@ $card-h-mob: clamp(220px, 62vw, 300px);
   background: $card-bg;
   border: 1px solid $card-border;
   border-radius: $radius-md;
-  // box-shadow: $card-shadow;
-
-  // Fixed height — every card in every group is identical in size.
-  // The ghost layer reflects this exact height, keeping the stage stable.
   height: $card-h-desk;
   box-sizing: border-box;
 
@@ -230,17 +191,10 @@ $card-h-mob: clamp(220px, 62vw, 300px);
   cursor: default;
 
   transition:
-    background $dur-base ease,
+    background   $dur-base ease,
     border-color $dur-base ease,
-    box-shadow $dur-base ease,
-    transform $dur-base ease;
-
-  // &:hover {
-  //   background: $card-bg-hover;
-  //   border-color: $card-border-hov;
-  //   box-shadow: $card-shadow-hov;
-  //   transform: translateY(-3px);
-  // }
+    box-shadow   $dur-base ease,
+    transform    $dur-base ease;
 
   // Subtle top-edge highlight (glass feel on light bg)
   &::before {
@@ -254,7 +208,6 @@ $card-h-mob: clamp(220px, 62vw, 300px);
       rgba(0, 0, 0, 0.04) 50%,
       transparent 100%
     );
-    // border-radius: $card-radius $card-radius 0 0;
     pointer-events: none;
   }
 
@@ -276,34 +229,15 @@ $card-h-mob: clamp(220px, 62vw, 300px);
   }
 }
 
-// ── Quote mark ────────────────────────────────────────────────────────────────
-
-// .card__quote-mark {
-//   position: absolute;
-//   top: clamp(14px, 2vw, 20px);
-//   right: clamp(20px, 3vw, 36px);
-//   font-size: clamp(72px, 9vw, 120px);
-//   line-height: 1;
-//   color: rgba(0, 0, 0, 0.05);
-//   font-weight: 700;
-//   font-family: Georgia, serif;
-//   user-select: none;
-//   pointer-events: none;
-// }
-
 // ── Quote text ────────────────────────────────────────────────────────────────
 
 .card__text {
   margin: 0;
-  // flex:1 grows to fill remaining card height so the footer is always pinned.
-  // min-height:0 lets the flex item shrink below its content size, enabling
-  // overflow:hidden to clip long quotes without expanding the card.
   flex: 1;
   min-height: 0;
   overflow: hidden;
   position: relative;
   z-index: 1;
-
   font-weight: 400;
   font-size: clamp(14px, 1.75vw, 18px);
   line-height: 1.95;
@@ -335,7 +269,6 @@ $card-h-mob: clamp(220px, 62vw, 300px);
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  // background: linear-gradient(135deg, #e8e4df 0%, #d0cbc4 100%);
   border: 1px solid $color-border;
   display: flex;
   align-items: center;
@@ -346,7 +279,6 @@ $card-h-mob: clamp(220px, 62vw, 300px);
   color: rgba(58, 56, 49, 0.7);
   text-transform: uppercase;
   letter-spacing: 0;
-  // box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 .card__author-info {
@@ -378,6 +310,7 @@ $card-h-mob: clamp(220px, 62vw, 300px);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 }
 
 // ── Dots ──────────────────────────────────────────────────────────────────────
@@ -386,6 +319,8 @@ $card-h-mob: clamp(220px, 62vw, 300px);
   display: flex;
   align-items: center;
   gap: 5px;
+  // Ensure dots don't shrink when arrows are beside them
+  flex-shrink: 0;
 }
 
 .dots__dot {
@@ -395,11 +330,14 @@ $card-h-mob: clamp(220px, 62vw, 300px);
   border-radius: 2px;
   border: none;
   padding: 0;
+  // Expand tap target without changing visual size
+  margin-block: -8px;
+  padding-block: 2px;
   cursor: pointer;
   background: $dot-idle;
   transition:
     background $dur-base ease,
-    width $dur-base $anim-ease;
+    width      $dur-base $anim-ease;
   overflow: hidden;
 
   &--active {
@@ -411,6 +349,9 @@ $card-h-mob: clamp(220px, 62vw, 300px);
 .dots__progress {
   position: absolute;
   inset: 0;
+  // Align the filled bar with the visual dot strip, ignoring padding
+  top: 8px;
+  bottom: 8px;
   background: $dot-active;
   border-radius: 2px;
   transform-origin: left center;
@@ -422,6 +363,7 @@ $card-h-mob: clamp(220px, 62vw, 300px);
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .arrow-btn {
@@ -435,12 +377,15 @@ $card-h-mob: clamp(220px, 62vw, 300px);
   background: transparent;
   color: $accent;
   cursor: pointer;
+  // Prevent arrows from becoming too small on any screen
+  flex-shrink: 0;
+
   transition:
-    background $dur-fast ease,
-    border-color $dur-fast ease,
-    color $dur-fast ease,
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+    background    $dur-fast ease,
+    border-color  $dur-fast ease,
+    color         $dur-fast ease,
+    transform    0.15s ease,
+    box-shadow   0.15s ease;
 
   &:hover {
     background: $accent;
@@ -474,12 +419,8 @@ $card-h-mob: clamp(220px, 62vw, 300px);
   gap: clamp(16px, 2.5vw, 28px);
   width: 100%;
 
-  &--cols-2 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  &--cols-1 {
-    grid-template-columns: 1fr;
-  }
+  &--cols-2 { grid-template-columns: repeat(2, 1fr); }
+  &--cols-1 { grid-template-columns: 1fr; }
 }
 
 .skeleton-card {
@@ -491,12 +432,8 @@ $card-h-mob: clamp(220px, 62vw, 300px);
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+  0%   { background-position:  200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .empty-message {
@@ -510,9 +447,10 @@ $card-h-mob: clamp(220px, 62vw, 300px);
 // RESPONSIVE
 // ─────────────────────────────────────────────────────────────────────────────
 
-// ── Tablet (641 – 1024 px) ────────────────────────────────────────────────────
+// ── Tablet (641px – 1024px) ───────────────────────────────────────────────────
+// 2 cards, tightened section padding, moderate gaps
 
-@media (min-width: 641px) and (max-width: 1024px) {
+@media (min-width: 641px) and (max-width: $bp-tablet) {
   .testimonials-section {
     padding-top: clamp(3.5rem, 6vw, 5rem);
     padding-bottom: clamp(5rem, 9vw, 7rem);
@@ -528,30 +466,33 @@ $card-h-mob: clamp(220px, 62vw, 300px);
   }
 }
 
-// ── Mobile (≤ 768 px) ─────────────────────────────────────────────────────────
+// ── Mobile (≤ 640px) ──────────────────────────────────────────────────────────
+// 1 card; controls stack vertically for comfortable touch targets
 
-@media (max-width: 768px) {
+@media (max-width: $bp-mobile) {
   .testimonials-section {
-    gap: clamp(28px, 6vw, 44px);
+    gap: clamp(24px, 6vw, 36px);
   }
 
-  .stage__grid {
+  // Force single column for both stage grids and skeleton
+  .stage__grid,
+  .skeleton-grid {
     grid-template-columns: 1fr !important;
   }
 
-  .skeleton-grid {
-    grid-template-columns: 1fr;
-  }
+  // Hide the second skeleton card — only 1 visible on mobile
   .skeleton-card:last-child {
     display: none;
   }
+
   .skeleton-card {
     height: $card-h-mob;
   }
 
   .testimonial-card {
     height: $card-h-mob;
-    padding: clamp(22px, 6vw, 32px);
+    padding: clamp(20px, 6vw, 28px);
+    gap: clamp(10px, 3vw, 14px);
   }
 
   .card__text {
@@ -559,19 +500,33 @@ $card-h-mob: clamp(220px, 62vw, 300px);
     line-height: 2;
   }
 
-  .card__quote-mark {
-    font-size: clamp(56px, 14vw, 80px);
+  // ── Controls: stack dots above arrows, both centred ───────────────────────
+  // This keeps the navigation clear and tap targets comfortable on small screens.
+
+  .testimonials-controls {
+    flex-direction: column-reverse; // arrows on top, dots below
+    align-items: center;
+    gap: 16px;
   }
 
-  .dots__dot {
-    width: 22px;
-  }
-  .dots__dot--active {
-    width: 36px;
+  .testimonials-arrows {
+    gap: 12px;
   }
 
+  // Larger tap targets on touch screens
   .arrow-btn {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
+  }
+
+  // Slightly shorter active dot on mobile to keep the row compact
+  .dots__dot--active {
+    width: 40px;
+  }
+
+  // Bigger dot hit area on mobile
+  .dots__dot {
+    margin-block: -10px;
+    padding-block: 2px;
   }
 }

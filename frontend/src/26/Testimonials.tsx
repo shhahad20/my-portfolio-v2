@@ -18,8 +18,11 @@ interface Testimonial {
 // Constants  — ANIM_DURATION must equal $anim-dur in Testimonials.scss
 // ─────────────────────────────────────────────────────────────────────────────
 
-const AUTOPLAY_DELAY  = 5000;  // ms between auto-advances
-const ANIM_DURATION   = 500;   // ms — sync with $anim-dur in SCSS
+const AUTOPLAY_DELAY = 5000; // ms between auto-advances
+const ANIM_DURATION  = 500;  // ms — sync with $anim-dur in SCSS
+
+// Breakpoints must mirror SCSS
+const MOBILE_BP = 640; // px — ≤ this → 1 card; > this → 2 cards
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
@@ -27,7 +30,7 @@ const ANIM_DURATION   = 500;   // ms — sync with $anim-dur in SCSS
 
 function getVisibleCount(): number {
   if (typeof window === "undefined") return 2;
-  return window.innerWidth <= 768 ? 1 : 2;
+  return window.innerWidth <= MOBILE_BP ? 1 : 2;
 }
 
 function wrap(index: number, total: number): number {
@@ -53,8 +56,6 @@ function TestimonialCard({ testimonial, index }: CardProps) {
       style={staggerStyle}
       aria-label={`Testimonial from ${testimonial.name}`}
     >
-      {/* <span className="card__quote-mark" aria-hidden="true">"</span> */}
-
       <p className="card__text" dir="rtl" lang="ar">
         {testimonial.text}
       </p>
@@ -81,9 +82,7 @@ function TestimonialCard({ testimonial, index }: CardProps) {
 interface GridLayerProps {
   items: Testimonial[];
   cols: number;
-  /** CSS class applied to the wrapping grid div (drives the animation). */
   layerClass?: string;
-  /** aria-hidden when this layer is decorative / invisible. */
   hidden?: boolean;
 }
 
@@ -145,17 +144,17 @@ export default function TestimonialsSection() {
   const [visibleCount, setVisibleCount] = useState<number>(getVisibleCount());
 
   // Page state
-  const [currentPage, setCurrentPage]   = useState(0);
-  const [exitingPage, setExitingPage]   = useState<number | null>(null);
-  const [direction, setDirection]       = useState<"next" | "prev">("next");
-  const isTransitioning                 = exitingPage !== null;
+  const [currentPage, setCurrentPage] = useState(0);
+  const [exitingPage, setExitingPage] = useState<number | null>(null);
+  const [direction, setDirection]     = useState<"next" | "prev">("next");
+  const isTransitioning               = exitingPage !== null;
 
   // Autoplay
   const [progress, setProgress] = useState(0);
   const [paused, setPaused]     = useState(false);
 
-  const rafRef           = useRef<number>(0);
-  const progressStart    = useRef<number | null>(null);
+  const rafRef            = useRef<number>(0);
+  const progressStart     = useRef<number | null>(null);
   const transitionLockRef = useRef(false);
 
   // ── Fetch ────────────────────────────────────────────────────────────────
@@ -189,9 +188,8 @@ export default function TestimonialsSection() {
 
   // ── Derived ───────────────────────────────────────────────────────────────
 
-  const totalPages = testimonials.length > 0
-    ? Math.ceil(testimonials.length / visibleCount)
-    : 0;
+  const totalPages =
+    testimonials.length > 0 ? Math.ceil(testimonials.length / visibleCount) : 0;
 
   const getPageItems = useCallback(
     (p: number): Testimonial[] => {
@@ -202,17 +200,6 @@ export default function TestimonialsSection() {
   );
 
   // ── Navigation ────────────────────────────────────────────────────────────
-  //
-  // Layout-shift-free strategy:
-  //   1. A "ghost" grid (visibility:hidden) always renders the CURRENT page
-  //      items, so the stage container has a stable, content-driven height.
-  //   2. Two absolutely-positioned layers overlay the ghost:
-  //      • "exiting" layer  → the old page, animating out
-  //      • "entering" layer → the new page, animating in
-  //   3. After ANIM_DURATION ms the exiting layer is removed from the DOM
-  //      and we return to the idle (single layer) state.
-  //
-  // Because the ghost is always present the section never collapses/jumps.
 
   const goTo = useCallback(
     (target: number, dir: "next" | "prev") => {
@@ -221,15 +208,14 @@ export default function TestimonialsSection() {
 
       const nextPage = wrap(target, totalPages);
       setDirection(dir);
-      setExitingPage(currentPage);    // keep old page in DOM for exit anim
-      setCurrentPage(nextPage);       // ghost immediately reflects new page
+      setExitingPage(currentPage);
+      setCurrentPage(nextPage);
 
-      // Reset autoplay progress
       progressStart.current = null;
       setProgress(0);
 
       setTimeout(() => {
-        setExitingPage(null);          // remove exit layer
+        setExitingPage(null);
         transitionLockRef.current = false;
       }, ANIM_DURATION);
     },
@@ -265,7 +251,6 @@ export default function TestimonialsSection() {
       cancelled = true;
       cancelAnimationFrame(rafRef.current);
     };
-  // next changes identity when currentPage changes → re-run to reset progress
   }, [paused, totalPages, loading, currentPage, next]);
 
   const handleMouseEnter = () => {
@@ -281,7 +266,7 @@ export default function TestimonialsSection() {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowRight") next();
-    if (e.key === "ArrowLeft")  prev();
+    if (e.key === "ArrowLeft") prev();
   };
 
   // ── Loading ───────────────────────────────────────────────────────────────
@@ -290,7 +275,9 @@ export default function TestimonialsSection() {
     return (
       <div className="testimonials-section testimonials-section--loading">
         <div className={`skeleton-grid skeleton-grid--cols-${getVisibleCount()}`}>
-          {[0, 1].map((i) => <div key={i} className="skeleton-card" />)}
+          {[0, 1].map((i) => (
+            <div key={i} className="skeleton-card" />
+          ))}
         </div>
       </div>
     );
@@ -309,9 +296,8 @@ export default function TestimonialsSection() {
   const currentItems = getPageItems(currentPage);
   const exitingItems = exitingPage !== null ? getPageItems(exitingPage) : [];
 
-  // Direction-based animation class names
-  const exitClass  = direction === "next" ? "layer--exit-left"   : "layer--exit-right";
-  const enterClass = direction === "next" ? "layer--enter-right"  : "layer--enter-left";
+  const exitClass  = direction === "next" ? "layer--exit-left"  : "layer--exit-right";
+  const enterClass = direction === "next" ? "layer--enter-right" : "layer--enter-left";
 
   return (
     <section
@@ -339,19 +325,13 @@ export default function TestimonialsSection() {
       </header>
 
       {/* ── Stage ── */}
-      {/*
-        The stage uses three layers stacked via CSS:
-          [ghost]   — visibility:hidden, always in normal flow → pins height
-          [exiting] — position:absolute, animates OUT (only during transition)
-          [entering]— position:absolute, animates IN  (always present)
-      */}
       <div
         className="testimonials-stage"
         role="region"
         aria-live="polite"
         aria-atomic="true"
       >
-        {/* Ghost: determines the stage height, never visible */}
+        {/* Ghost: drives the stage height — never visible */}
         <GridLayer
           items={currentItems}
           cols={visibleCount}
@@ -359,7 +339,7 @@ export default function TestimonialsSection() {
           hidden
         />
 
-        {/* Exiting layer: old cards slide out */}
+        {/* Exiting layer: old cards animate out */}
         {isTransitioning && (
           <GridLayer
             items={exitingItems}
@@ -369,7 +349,7 @@ export default function TestimonialsSection() {
           />
         )}
 
-        {/* Entering / idle layer: new cards slide in (or sit idle) */}
+        {/* Entering / idle layer: new cards animate in or sit idle */}
         <GridLayer
           items={currentItems}
           cols={visibleCount}
@@ -393,9 +373,17 @@ export default function TestimonialsSection() {
             aria-label="Previous testimonials"
             disabled={isTransitioning}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="1.8"
-              strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <polyline points="15 18 9 12 15 6" />
             </svg>
           </button>
@@ -406,9 +394,17 @@ export default function TestimonialsSection() {
             aria-label="Next testimonials"
             disabled={isTransitioning}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="1.8"
-              strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <polyline points="9 18 15 12 9 6" />
             </svg>
           </button>
