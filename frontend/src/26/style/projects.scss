@@ -300,6 +300,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  
 }
 
 .wkmb-preview-label {
@@ -334,7 +336,58 @@
   0%, 100% { transform: translateY(0px);  }
   50%       { transform: translateY(-9px); }
 }
+// ── Keyframes ──────────────────────────────────────────────────────────────
 
+// Whole-illustration gentle drift
+@keyframes wkmb-fisher-body-float {
+  0%,
+  100% { transform: translateY(0px); }
+  50%  { transform: translateY(-5px); }
+}
+
+// Rod pivot from its grip end (bottom of the rod path)
+@keyframes wkmb-fisher-rod-sway {
+  0%,
+  100% { transform: rotate(0deg); }
+  35%  { transform: rotate(0.7deg); }
+  68%  { transform: rotate(-0.35deg); }
+}
+
+// Fishing line mirrors the rod swing, slightly lagged
+@keyframes wkmb-fisher-line-sway {
+  0%,
+  100% { transform: rotate(0deg) skewY(0deg); }
+  35%  { transform: rotate(0.5deg) skewY(0.2deg); }
+  68%  { transform: rotate(-0.25deg) skewY(-0.1deg); }
+}
+
+// Head — tiny organic micro-sway (breathing feel)
+@keyframes wkmb-fisher-head-bob {
+  0%,
+  100% { transform: rotate(0deg) translateY(0); }
+  40%  { transform: rotate(0.4deg) translateY(-1px); }
+  75%  { transform: rotate(-0.2deg) translateY(0.5px); }
+}
+
+// Float / bait dot bobbing on the water surface
+@keyframes wkmb-fisher-float-bob {
+  0%,
+  100% { transform: translateY(0px); }
+  50%  { transform: translateY(3px); }
+}
+
+// Ripple rings expand outward and fade
+@keyframes wkmb-ripple-out {
+  0%   { transform: scale(0.55); opacity: 0.5; }
+  80%  { opacity: 0.15; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+// Illustration entrance
+@keyframes wkmb-empty-state-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 // ── Tablet — landscape + portrait (641px – 1024px) ───────────────────────────
 
 @media (min-width: 641px) and (max-width: 1024px) {

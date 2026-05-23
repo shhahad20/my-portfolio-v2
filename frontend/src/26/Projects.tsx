@@ -392,13 +392,37 @@ export default function WhatKeepsMeBusy() {
     [displayProjects],
   );
 
+  // On mobile, evenly interleave projects that have real media across all
+  // satellite positions so populated circles are never clustered at the bottom.
+  const orderedVisibleProjects = useMemo(() => {
+    if (!isMobile) return visibleProjects;
+    const withMedia = visibleProjects.filter((p) => isMedia(p.bg));
+    const withoutMedia = visibleProjects.filter((p) => !isMedia(p.bg));
+    if (withMedia.length === 0 || withoutMedia.length === 0) return visibleProjects;
+    const total = visibleProjects.length;
+    const result: Project[] = [];
+    let mIdx = 0;
+    let eIdx = 0;
+    for (let i = 0; i < total; i++) {
+      const mediaExpected = Math.round(((i + 1) * withMedia.length) / total);
+      if (mIdx < mediaExpected && mIdx < withMedia.length) {
+        result.push(withMedia[mIdx++]);
+      } else if (eIdx < withoutMedia.length) {
+        result.push(withoutMedia[eIdx++]);
+      } else {
+        result.push(withMedia[mIdx++]);
+      }
+    }
+    return result;
+  }, [isMobile, visibleProjects]);
+
   const satellites = useMemo(
     () =>
       (isMobile ? SATELLITES_MOBILE : SATELLITES_DESKTOP).slice(
         0,
-        visibleProjects.length,
+        orderedVisibleProjects.length,
       ),
-    [isMobile, visibleProjects.length],
+    [isMobile, orderedVisibleProjects.length],
   );
 
   // ── Sync media-loaded state with activeId ─────────────────────────────────
@@ -407,7 +431,7 @@ export default function WhatKeepsMeBusy() {
       setMediaLoaded(false);
       return;
     }
-    const project = visibleProjects[activeId];
+    const project = orderedVisibleProjects[activeId];
     if (!project) return;
 
     // Colour fills never need a network fetch; cached items are already done.
@@ -416,7 +440,7 @@ export default function WhatKeepsMeBusy() {
     } else {
       setMediaLoaded(false);
     }
-  }, [activeId, visibleProjects]);
+  }, [activeId, orderedVisibleProjects]);
 
   // Stable callback so media elements never get a new function reference.
   const handleMediaLoaded = useCallback((projectId: string) => {
@@ -568,7 +592,7 @@ export default function WhatKeepsMeBusy() {
 
         {/* ── Satellite circles ──────────────────────────────────────────── */}
         {satellites.map((s, index) => {
-          const project = visibleProjects[index];
+          const project = orderedVisibleProjects[index];
           if (!project) return null;
           const isActive = activeId === index;
 
@@ -633,10 +657,10 @@ export default function WhatKeepsMeBusy() {
 
         {/* ── Floating preview rectangle ─────────────────────────────────── */}
         {activeId !== null &&
-          visibleProjects[activeId] &&
+          orderedVisibleProjects[activeId] &&
           (() => {
             const sat = satellites[activeId];
-            const project = visibleProjects[activeId];
+            const project = orderedVisibleProjects[activeId];
             const dir = sat.y >= 42 ? "above" : "below";
 
             return (
@@ -692,9 +716,9 @@ export default function WhatKeepsMeBusy() {
                       style={{ background: project.bg || "#c8cec5" }}
                     >
                       <span className="wkmb-preview-fallback-text">
-                        Data not available yet,
+                        Looks like this project
                         <br />
-                        choose another circle
+                        is still in progress.
                       </span>
                     </div> 
                   )}
