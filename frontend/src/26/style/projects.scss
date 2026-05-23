@@ -167,7 +167,43 @@
     opacity: 1;
   }
 }
+.wkmb-sat-slash {
+  position: absolute;
+  // Centred by the parent's flex layout; absolute keeps it from displacing the label.
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
+  font-size: clamp(0.7rem, 1.1vw, 0.95rem);
+  font-weight: 200;
+  font-style: normal;
+  font-family: $font-light;
+  color: #b5b1a9;               // matches the dashed border colour
+  line-height: 1;
+  letter-spacing: 0;
+
+  pointer-events: none;
+  user-select: none;
+
+  // Appears with the circle; fades away as the label fades in.
+  opacity: 1;
+  transition:
+    opacity  $dur-fast ease,
+    color    $dur-fast ease;
+
+  // Recede slightly when the satellite becomes active so the
+  // label takes full visual precedence without a hard cut.
+  .wkmb-sat--active & {
+    opacity: 0;
+  }
+}
+
+// Reduced-motion: instant show/hide instead of a cross-fade.
+@media (prefers-reduced-motion: reduce) {
+  .wkmb-sat-slash {
+    transition: none;
+  }
+}
 // ── Center circle ─────────────────────────────────────────────────────────────
 
 .wkmb-center {
@@ -261,6 +297,9 @@
 .wkmb-preview-fill {
   position: absolute;
   inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .wkmb-preview-label {
@@ -322,6 +361,9 @@
   .wkmb-center-project {
     font-size: clamp(0.58rem, 1.3vw, 0.76rem);
   }
+  .wkmb-sat-slash {
+    font-size: clamp(0.65rem, 1vw, 0.88rem);
+  }
 }
 
 // ── Mid-tablet refinement (768px – 900px) ────────────────────────────────────
@@ -365,6 +407,7 @@
     }
   }
 
+  
   .wkmb-center {
     width: clamp(92px, 15.5%, 120px);
   }
@@ -504,5 +547,55 @@
   @keyframes wkmb-spinner-pulse-reduced {
     0%, 100% { opacity: 0.25; }
     50%       { opacity: 0.75; }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FALLBACK MESSAGE — shown inside preview when project data is unavailable
+// ─────────────────────────────────────────────────────────────────────────────
+
+.wkmb-preview-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 9; // below loader (10) and label (11), above fill
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  pointer-events: none;
+
+  // Delay matches the loader's 0.32s fade-out so the message waits
+  // until the spinner has fully disappeared before appearing.
+  animation: wkmb-fallback-enter 0.45s ease-out 0.35s both;
+}
+
+.wkmb-preview-fallback-text {
+  display: block;
+  background: rgba(248, 246, 243, 0.55);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 3px;
+  padding: 0.45rem 0.6rem;
+font-size: clamp(0.55rem, 0.9vw, 0.75rem);
+  line-height: 1.75;
+  letter-spacing: 0.07em;
+  color: rgba(74, 71, 68, 0.68);
+  font-weight: 300;
+  text-align: center;
+  // font-style: italic;
+
+  @media (max-width: 640px) {
+    font-size: clamp(0.41rem, 2vw, 0.52rem);
+  }
+}
+
+@keyframes wkmb-fallback-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wkmb-preview-fallback {
+    animation: none;
   }
 }
