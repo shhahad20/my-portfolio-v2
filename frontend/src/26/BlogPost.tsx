@@ -718,6 +718,7 @@ const BlogPostPage: React.FC = () => {
       <div className="page-shell">
         <main className="page-shell-content">
           <NavigationMenu />
+          
           <div className="blogpost-notfound">
             <span className="blogpost-notfound__eyebrow" aria-hidden="true">
               404
