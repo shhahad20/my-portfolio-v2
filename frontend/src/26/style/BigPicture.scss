@@ -180,6 +180,7 @@
 .bigpicture-title {
   font-family: $font-display;
   font-size: $heading-size;
+  
   line-height: $heading-lh;
   letter-spacing: $heading-ls;
   color: $color-text;
@@ -209,7 +210,7 @@
   max-width: clamp(580px, 82%, 900px);
   margin-inline: auto;
 }
-
+ 
 .stat-item {
   display: flex;
   align-items: center;
@@ -262,6 +263,7 @@
 .stat-line {
   font-weight: $body-weight;
   font-size: clamp(14px, 1.8vw, 19px);
+  
   color: $color-body;
   line-height: 1.55;
   letter-spacing: 0.005em;

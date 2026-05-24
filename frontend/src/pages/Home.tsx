@@ -15,10 +15,12 @@ import AboutMe from "../26/Aboutme";
 import BigPictureStats from "../26/BigPicture";
 import StickyFooter from "../26/Footer";
 import LandingPage from "../26/LandingPage";
+// import MarqueeDemo from "../26/MTestimonials";
 import NavigationMenu from "../26/Nav";
 import WhatKeepsMeBusy from "../26/Projects";
-import TestimonialsSection from "../26/Testimonials";
+// import TestimonialsSection from "../26/Testimonials";
 import "../26/style/Footer.scss";
+import TestimonialsSection from "../26/Marquee";
 const Home: React.FC = () => {
   return (
     // <>
@@ -35,19 +37,19 @@ const Home: React.FC = () => {
     //   <Contact/>
     //   <Footer/>
     // </>
-    
 
     <div className="page-shell">
       <main className="page-shell-content">
-        <NavigationMenu/>
+        <NavigationMenu />
         <LandingPage imageSrc="../public/Landingill.svg" />
         <AboutMe />
         <WhatKeepsMeBusy />
-        <TestimonialsSection />
+        {/* <TestimonialsSection /> */}
         <BigPictureStats />
+        <img src={"../public/sectionImg.png"} width="100%" height="auto" />
+        <TestimonialsSection />
         <StickyFooter />
       </main>
-
     </div>
   );
 };

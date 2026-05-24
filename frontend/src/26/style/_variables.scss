@@ -17,7 +17,7 @@ $sp-10: 6rem;     // 96px
  
 // ── Layout ────────────────────────────────────────────────────────────────────
 $max-width:       1350px;
-$section-pad-v:   clamp(2.5rem, 4vw, 3.5rem);
+$section-pad-v:   clamp(10rem, 11.5vw, 11rem);
 $section-pad-h:   clamp(1.5rem, 4vw, 3rem);
 $section-padding: #{$section-pad-v} #{$section-pad-h} 0.75rem;
 

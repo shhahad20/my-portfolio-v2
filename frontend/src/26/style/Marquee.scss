@@ -1,0 +1,447 @@
+@use "./variables" as *;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 2. KEYFRAMES
+// ─────────────────────────────────────────────────────────────────────────────
+
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(-100% - var(--marquee-gap))); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(calc(-100% - var(--marquee-gap))); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(22px); filter: blur(5px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position:  200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 3. MARQUEE CORE
+// ─────────────────────────────────────────────────────────────────────────────
+
+.marquee {
+  --marquee-duration: 40s;
+  --marquee-gap:      1.25rem;
+
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  contain: layout style;
+}
+
+.marquee__viewport {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: var(--marquee-gap);
+  overflow: visible;
+  will-change: transform;
+}
+
+.marquee__track {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: var(--marquee-gap);
+  flex-shrink: 0;
+  will-change: transform;
+
+  &--left  { animation: marquee-left  var(--marquee-duration) linear infinite; }
+  &--right { animation: marquee-right var(--marquee-duration) linear infinite; }
+  &--paused { animation-play-state: paused !important; }
+
+  .marquee:hover &--pause-on-hover:not(&--paused) {
+    animation-play-state: paused;
+  }
+}
+
+// Fade edges
+// FIX: the previous clamp(180px, 18vw, 320px) made the min-width 180px —
+// on a 390px phone that's nearly half the screen, swallowing the cards.
+// New values: tiny on mobile, grows gracefully to desktop.
+.marquee__fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: clamp(32px, 8vw, 220px);   // ← was clamp(180px, 18vw, 320px)
+  pointer-events: none;
+
+  &--left {
+    left: 0;
+    background: linear-gradient(
+      to right,
+      $color-bg 0%,
+      rgba($color-bg, 0.96) 12%,
+      rgba($color-bg, 0.82) 28%,
+      rgba($color-bg, 0.45) 55%,
+      transparent 100%
+    );
+  }
+
+  &--right {
+    right: 0;
+    background: linear-gradient(
+      to left,
+      $color-bg 0%,
+      rgba($color-bg, 0.96) 12%,
+      rgba($color-bg, 0.82) 28%,
+      rgba($color-bg, 0.45) 55%,
+      transparent 100%
+    );
+  }
+}
+
+.marquee__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 4. TESTIMONIAL CARD
+// ─────────────────────────────────────────────────────────────────────────────
+
+.t-card {
+  // FIX: 20vw on mobile = ~78px, which hits the 200px floor — fine for marquee.
+  // But on very small phones (320px) we want cards to feel comfortably readable,
+  // so we widen the floor slightly and cap narrower so more cards are visible.
+  width: clamp(200px, 22vw, 280px);
+  flex-shrink: 0;
+  padding: $sp-4 $sp-5;
+  display: flex;
+  flex-direction: column;
+  gap: $sp-2;
+
+  background: #ffffff;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  position: relative;
+  overflow: hidden;
+
+  box-shadow: 0 1px 2px rgba(17, 17, 17, 0.04);
+  transition:
+    border-color $dur-base $ease-out,
+    box-shadow   $dur-base $ease-out;
+
+  &:hover {
+    cursor: pointer;
+
+    &::before { transform: scaleX(1); }
+  }
+}
+
+.t-card__quote {
+  margin: 0;
+
+  p {
+    margin: 0;
+    font-family: $font-body;
+    font-size: clamp(12px, 1.6vw, 14.5px);   // ← floor down from 13px for tiny screens
+    line-height: 1.55;
+    color: $color-body;
+    font-weight: $body-weight;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.t-card__author {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.t-card__name {
+  font-family: $font-display;
+  font-size: clamp(11px, 1.4vw, 13px);        // ← floor down from 11.5px
+  font-weight: 500;
+  color: $color-text;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.t-card__handle {
+  font-family: $font-body;
+  font-size: clamp(10px, 1.2vw, 12px);
+  color: $color-muted;
+}
+
+.t-card__sep {
+  color: $color-border;
+  font-size: 10px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.t-card__byline {
+  font-family: $font-body;
+  font-size: clamp(10px, 1.2vw, 12px);
+  color: $color-muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 5. SECTION LAYOUT
+// ─────────────────────────────────────────────────────────────────────────────
+
+.testimonials-section {
+  background: $color-bg;
+  padding: $section-pad-v $section-pad-h 0.75rem;
+  max-width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: clamp($sp-6, 5vw, $sp-8);
+}
+
+// ── Header ───────────────────────────────────────────────────────────────────
+
+.section-header {
+  max-width: $max-width;
+  margin-inline: auto;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: $sp-3;
+
+  // FIX: row layout on desktop, column on mobile so index + title don't squash
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: $sp-2;
+  }
+}
+
+.section-header__index {
+  font-family: $font-light;
+  font-size: $num-size;
+  font-weight: $num-weight;
+  letter-spacing: $num-ls;
+  color: $color-muted;
+  line-height: 1;
+  padding-left: clamp(10px, 2.2vw, 18px);
+
+  // On mobile the index sits above the title — remove left-pad to keep it flush
+  @media (max-width: 600px) {
+    padding-left: 0;
+  }
+}
+
+.section-header__title {
+  font-family: $font-display;
+  font-size: $heading-size;
+  font-weight: $heading-weight;
+  line-height: $heading-lh;
+  letter-spacing: $heading-ls;
+  color: $color-text;
+  margin: 0;
+
+  em {
+    font-style: italic;
+    font-family: $font-light;
+    color: $color-muted-alt;
+  }
+
+  // FIX: kill the manual line-break on narrow screens — let it wrap naturally
+  br {
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
+}
+
+// ── Rows ─────────────────────────────────────────────────────────────────────
+
+.testimonials-section__rows {
+  // FIX: 70% is fine on a wide desktop but collapses usability on tablet/mobile.
+  // Stepped approach: full-width → 85% → 70% as viewport widens.
+  width: 100%;
+
+  @media (min-width: 600px)  { width: 85%; }
+  @media (min-width: 1024px) { width: 70%; }
+
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp($sp-3, 2vw, $sp-4);
+  padding-block: $sp-2;
+  margin-bottom: 7rem;
+}
+
+// ── Skeleton ─────────────────────────────────────────────────────────────────
+
+.testimonials__skeleton {
+  display: flex;
+  gap: $sp-4;
+  overflow: hidden;
+}
+
+.skeleton-card {
+  width: clamp(200px, 22vw, 280px);
+  height: 88px;
+  flex-shrink: 0;
+  border-radius: $radius-md;
+  background: linear-gradient(
+    90deg,
+    rgba(87, 79, 71, 0.06) 25%,
+    rgba(87, 79, 71, 0.11) 50%,
+    rgba(87, 79, 71, 0.06) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+// ── Error ─────────────────────────────────────────────────────────────────────
+
+.testimonials-section__error {
+  text-align: center;
+  padding: $sp-6 0;
+  font-family: $font-body;
+  font-size: clamp(13px, 1.5vw, 15px);
+  color: $color-muted;
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 6. ENTRANCE ANIMATIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+.section-header__index,
+.section-header__eyebrow,
+.section-header__title,
+.section-header__subtitle {
+  opacity: 0;
+}
+
+.testimonials-section__rows {
+  opacity: 0;
+}
+
+.testimonials-section.is-visible {
+  .section-header__index    { animation: fade-up 0.4s  $ease-out 0.05s both; }
+  .section-header__eyebrow  { animation: fade-up $dur-slow $ease-out 0.12s both; }
+  .section-header__title    { animation: fade-up 0.55s $ease-out 0.22s both; }
+  .section-header__subtitle { animation: fade-up $dur-slow $ease-out 0.34s both; }
+
+  .testimonials-section__rows { animation: fade-in-up 0.5s $ease-out 0.5s both; }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 7. RESPONSIVE
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Tablet ───────────────────────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .testimonials-section {
+    gap: $sp-6;
+  }
+
+  .section-header {
+    gap: $sp-2;
+  }
+
+  // Slightly faster on tablet so enough cards are visible with narrower rows
+  .marquee__track {
+    --marquee-duration: 32s;
+  }
+}
+
+// ── Mobile ────────────────────────────────────────────────────────────────────
+@media (max-width: 480px) {
+  .testimonials-section {
+    // Tighter vertical rhythm on phone
+    gap: $sp-5;
+    padding-bottom: $sp-5;
+  }
+
+  .testimonials-section__rows {
+    gap: $sp-2;
+    // Zero out block padding — section padding already gives breathing room
+    padding-block: 0;
+  }
+
+  // FIX: cards at 72vw are too wide — only ~1.3 cards visible, so scrolling
+  // feels slow and heavy. At ~56vw you see ~1.7 cards, giving motion context.
+  .t-card {
+    width: clamp(180px, 56vw, 240px);
+    // Reduce padding so cards stay compact at narrower widths
+    padding: $sp-3 $sp-4;
+  }
+
+  // Speed up on phone — short viewport means fewer px of card visible per
+  // second, so the same duration feels sluggish.
+  .marquee__track {
+    --marquee-duration: 46s;
+  }
+
+  // Row gap already tightened above; also tighten the marquee gap between cards
+  .marquee {
+    --marquee-gap: 0.75rem;
+  }
+}
+
+// ── Very small phones (≤ 360px) ──────────────────────────────────────────────
+@media (max-width: 360px) {
+  .t-card {
+    width: clamp(160px, 62vw, 220px);
+    padding: $sp-3;
+  }
+
+  .section-header__title {
+    // The heading size clamp already scales down, but ensure no overflow
+    word-break: break-word;
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 8. REDUCED MOTION
+// ─────────────────────────────────────────────────────────────────────────────
+
+@media (prefers-reduced-motion: reduce) {
+  .section-header__index,
+  .section-header__eyebrow,
+  .section-header__title,
+  .section-header__subtitle,
+  .testimonials-section__rows {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .marquee__track { animation: none !important; }
+
+  .t-card,
+  .t-card::before { transition: none; }
+}
