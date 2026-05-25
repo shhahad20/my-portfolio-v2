@@ -20,6 +20,7 @@ import "../26/style/Footer.scss";
 import TestimonialsSection from "../26/Marquee";
 // import BigPicture from "../26/BigPicture";
 import BigPicture2 from "../26/BigPicture2";
+import BigPictureStats from "../26/BigPicture";
 // import { ScrollTextAnimation } from "../26/Textanimation";
 const Home: React.FC = () => {
   return (
@@ -44,13 +45,9 @@ const Home: React.FC = () => {
         <LandingPage imageSrc="../public/Landingill.svg" />
         <AboutMe />
         <BigPicture2 />
-
         <WhatKeepsMeBusy />
-
-        {/* <TestimonialsSection /> */}
         {/* <img src={"../public/sectionImg.png"} width="100%" height="auto" /> */}
-        {/* <BigPicture/> */}
-        {/* <ScrollTextAnimation /> */}
+        <BigPictureStats/>
         <TestimonialsSection />
         <StickyFooter />
       </main>
