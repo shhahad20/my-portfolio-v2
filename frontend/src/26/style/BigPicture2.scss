@@ -1,0 +1,335 @@
+@use "./variables" as *;
+
+.big-picture-section {
+  background-color: $color-bg;
+  padding: $section-padding;
+  padding-top: 0;
+  margin: 0 auto;
+
+  margin-bottom: clamp(3rem, 5vw, 4.5rem);
+  overflow: hidden;
+  max-width: $max-width;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.bigpicture-heading-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  margin-bottom: clamp(1rem, 2vw, 1.6rem);
+}
+
+.bigpicture-title {
+  font-family: $font-display;
+  font-size: $heading-size;
+  font-weight: $heading-weight;
+  line-height: $heading-lh;
+  letter-spacing: $heading-ls;
+  color: $color-text;
+  margin: 0;
+}
+
+.bigpicture-number {
+  font-family: $font-light;
+  font-size: $num-size;
+  font-weight: $num-weight;
+  letter-spacing: $num-ls;
+  color: $color-muted;
+  line-height: 1;
+
+  padding-bottom: 0.12em;
+}
+
+.bp-rows-wrap {
+  display: flex;
+  flex-direction: column;
+
+  gap: clamp(0.08rem, 0.2vw, 0.2rem);
+
+  width: 80%;
+  margin-inline: auto;
+
+  position: relative;
+}
+
+// ─────────────────────────────────────────────────────────────
+// Velocity rows
+// ─────────────────────────────────────────────────────────────
+
+.vt-row {
+  width: 100%;
+  overflow: hidden;
+
+  padding-block: clamp(0.18rem, 0.45vw, 0.35rem);
+
+  border-top: 1px solid rgba($color-border, 0.5);
+
+  &:last-child {
+    border-bottom: 1px solid rgba($color-border, 0.5);
+  }
+
+  // smoother + wider fade edges
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.15) 6%,
+    #000 14%,
+    #000 86%,
+    rgba(0, 0, 0, 0.15) 94%,
+    transparent 100%
+  );
+
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.15) 6%,
+    #000 14%,
+    #000 86%,
+    rgba(0, 0, 0, 0.15) 94%,
+    transparent 100%
+  );
+}
+.vt-logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  line-height: 1;
+}
+
+.vt-logo {
+  height: clamp(14px, 1.8vw, 18px);
+  width: auto;
+
+  display: block;
+  object-fit: contain;
+
+  opacity: 0.82;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+
+  // keeps logos aligned naturally with typography baseline
+  transform: translateY(0.5px);
+
+  user-select: none;
+  pointer-events: none;
+}
+
+.vt-row--logos {
+  .vt-logo:hover {
+    opacity: 1;
+    transform: translateY(0.5px) scale(1.04);
+  }
+}
+// ─────────────────────────────────────────────────────────────
+// Moving track
+// ─────────────────────────────────────────────────────────────
+
+.vt-track {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+
+  will-change: transform;
+}
+
+// ─────────────────────────────────────────────────────────────
+// Repeated strip
+// ─────────────────────────────────────────────────────────────
+
+.vt-strip {
+  display: inline-flex;
+  align-items: center;
+
+  gap: clamp(0.7rem, 1.2vw, 1.1rem);
+  padding-right: clamp(0.7rem, 1.2vw, 1.1rem);
+
+  flex-shrink: 0;
+}
+
+// ─────────────────────────────────────────────────────────────
+// Tokens
+// ─────────────────────────────────────────────────────────────
+
+.vt-word {
+  display: inline-flex;
+  align-items: center;
+
+  color: $color-text;
+
+  user-select: none;
+
+  font-family: $font-display;
+
+  // updated typography scale
+  font-size: clamp(15px, 2.2vw, 18px);
+
+  font-weight: 400;
+  line-height: 1;
+
+  // tighter tracking because text is now larger
+  letter-spacing: 0.015em;
+
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+
+  &--accent {
+    color: $color-body;
+    font-weight: 500;
+  }
+}
+
+.vt-sep {
+  display: inline-flex;
+  align-items: center;
+
+  color: $color-muted;
+
+  opacity: 0.35;
+
+  user-select: none;
+
+  // separators slightly smaller than text
+  font-size: clamp(13px, 1.8vw, 16px);
+
+  line-height: 1;
+}
+
+// ─────────────────────────────────────────────────────────────
+// Small refined rows
+// ─────────────────────────────────────────────────────────────
+
+.vt-row--sm {
+  .vt-word {
+    font-size: clamp(15px, 2.2vw, 18px);
+
+    font-family: $font-display;
+    font-weight: 400;
+
+    line-height: 1;
+
+    letter-spacing: 0.015em;
+  }
+
+  .vt-sep {
+    font-size: clamp(13px, 1.8vw, 16px);
+  }
+}
+// ─────────────────────────────────────────────────────────────
+// Logos row
+// ─────────────────────────────────────────────────────────────
+
+.vt-row--logos {
+  .vt-word {
+    font-size: clamp(15px, 2.2vw, 18px);
+
+    font-family: $font-display;
+    font-weight: 500;
+
+    text-transform: uppercase;
+
+    // cleaner spacing at larger scale
+    letter-spacing: 0.045em;
+
+    opacity: 0.82;
+  }
+
+  .vt-word--accent {
+    opacity: 1;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Responsive
+// ─────────────────────────────────────────────────────────────
+@media (max-width: 1024px) {
+  .bp-rows-wrap {
+    width: 82%;
+  }
+    .vt-row {
+    padding-block: 0.5rem;
+  }
+}
+@media (max-width: 768px) {
+  .bp-rows-wrap {
+    gap: 0.08rem;
+    width: 92%;
+  }
+
+  .vt-row {
+    padding-block: 0.5rem;
+  }
+  .vt-logo {
+    height: clamp(13px, 2.5vw, 16px);
+  }
+  .vt-strip {
+    gap: 0.8rem;
+    padding-right: 0.8rem;
+  }
+
+  .vt-word {
+    letter-spacing: 0.012em;
+  }
+
+  .vt-sep {
+    font-size: clamp(0.46rem, 1.7vw, 0.54rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .bigpicture-heading-row {
+    margin-bottom: 0.9rem;
+  }
+  .bp-rows-wrap {
+    width: 100%;
+  }
+  .bp-divider {
+    margin-bottom: 0.75rem;
+  }
+
+  .vt-row {
+    padding-block: 0.5rem;
+  }
+  .vt-logo {
+    height: clamp(12px, 4vw, 15px);
+  }
+  .vt-strip {
+    gap: 0.65rem;
+    padding-right: 0.65rem;
+  }
+
+  .vt-word {
+    font-size: clamp(14px, 4vw, 16px);
+
+    line-height: 1.08;
+  }
+
+  .vt-sep {
+    font-size: clamp(12px, 3vw, 14px);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Reduced motion
+// ─────────────────────────────────────────────────────────────
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-track {
+    transform: none !important;
+  }
+
+  .vt-row {
+    mask-image: none;
+    -webkit-mask-image: none;
+
+    overflow: auto;
+  }
+}

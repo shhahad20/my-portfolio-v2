@@ -1,221 +1,779 @@
-import AnimatedCounter from "../components/AnimationCounter";
-import "./style/BigPicture.scss";
-/* ─── Animated People Icon ─────────────────────────────────────────────── */
-const PeopleIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 89.16 83.84"
-    fill="currentColor"
-    style={{ width: "100%", height: "100%", overflow: "visible" }}
-    className="people-icon"
-  >
-    {/* Person 1 — body */}
-    <path d="M3,47.18c.54-8.96.97-18.16,3.33-26.87.43-1.6,1-3.27,2.06-4.57.29-.36,1.23-1.45,1.76-1.41.14.01.11.12.23.54.2.63.35,1.29.53,1.93,1.25,4.57,2.5,9.15,3.75,13.72,1.43,5.22,2.85,10.43,4.28,15.65.51,1.86,3.4,1.07,2.89-.8-1.45-5.3-2.89-10.59-4.34-15.89-.72-2.65-1.45-5.3-2.17-7.95s-1.28-5.24-2.13-7.78c-.71-2.13-2.45-3.04-4.53-2.02-1.71.84-3,2.41-3.85,4.09-2.09,4.14-2.65,9.17-3.27,13.7C.74,35.38.36,41.28,0,47.18c-.12,1.93,2.88,1.92,3,0h0Z" />
-    {/* Person 1 — head */}
-    <path d="M10.42,7.34c3.86,0,3.87-6,0-6s-3.87,6,0,6h0Z" />
-    {/* Person 1 — waving arm, pivots from shoulder (bottom-left of path bbox) */}
-    <g className="p-arm1">
-      <path d="M15.69,24.84c3.12-.46,5.89-2.43,7.83-4.86,2.24-2.81,3.54-6.15,4.8-9.48.29-.76-.32-1.64-1.05-1.85-.84-.23-1.56.29-1.85,1.05-1.91,5.04-4.47,11.34-10.53,12.24-.8.12-1.24,1.13-1.05,1.85.24.86,1.04,1.17,1.85,1.05h0Z" />
-    </g>
+// 'use client'; // ← Uncomment if using Next.js App Router
 
-    {/* Person 2 — body (static anchor) */}
-    <path d="M35.1,81.43c-.15-7.11.44-14.23,1.82-21.21.62-3.13,1.31-6.31,2.39-9.32.92-2.57,2.29-5.06,4.68-6.5h-1.51c2.35,1.43,2.79,5.18,3.44,7.6.9,3.38,1.73,6.78,2.5,10.19,1.54,6.82,2.86,13.7,4.18,20.57.36,1.89,3.26,1.09,2.89-.8-1.41-7.35-2.83-14.7-4.51-21.99-.84-3.64-1.75-7.27-2.75-10.88-.77-2.78-1.63-5.69-4.24-7.28-.45-.28-1.06-.27-1.51,0-5.61,3.38-7.03,10.75-8.26,16.67-1.57,7.54-2.28,15.24-2.12,22.94.04,1.93,3.04,1.93,3,0h0Z" />
-    {/* Person 2 — head */}
-    <path d="M43.53,37c3.86,0,3.87-6,0-6s-3.87,6,0,6h0Z" />
+import React, { useRef, useState, useEffect } from 'react';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  animate,
+} from 'framer-motion';
+import './style/BigPicture.scss';
 
-    {/* Person 3 — head */}
-    <path d="M78.53,6c3.86,0,3.87-6,0-6s-3.87,6,0,6h0Z" />
-    {/* Person 3 — body diagonal */}
-    <path d="M76.37,13.89c-4.81,10.98-8.63,22.37-11.35,34.05-.44,1.88,2.45,2.68,2.89.8,2.66-11.42,6.34-22.59,11.04-33.33.77-1.75-1.82-3.28-2.59-1.51h0Z" />
-    {/* Person 3 — waving arm, pivots from right side (shoulder) */}
-    <path d="M77.82,16.09c.52.06,1.02-.04,1.51-.22.08-.03,1.35-.5,1.36-.58l-.59-.32c.05.18.1.37.15.55.1.39.19.79.29,1.18.19.79.38,1.57.56,2.36.72,3.07,1.38,6.16,1.99,9.26,1.24,6.3,2.27,12.64,3.07,19.01.24,1.89,3.24,1.91,3,0-.9-7.2-2.06-14.37-3.51-21.48-.71-3.49-1.49-6.96-2.34-10.42-.31-1.28-.66-2.73-2.13-3.08-1.29-.3-2.19.87-3.36.73-1.91-.23-1.9,2.78,0,3h0Z" />
+// ─────────────────────────────────────────────────────────────────────────────
+// Types
+// ─────────────────────────────────────────────────────────────────────────────
 
-    <g className="p-arm3">
-      <path d="M74.6,19.04c-2.02.02-4.03.04-6.05.04-1.01,0-2.02,0-3.02,0-.12,0-.23,0-.35,0l.16.06c.2.31.23.31.15-.04-.11-.48-.16-.98-.23-1.47-.62-4.08-1.23-8.16-1.85-12.24-.12-.8-1.13-1.24-1.85-1.05-.86.24-1.17,1.04-1.05,1.85.34,2.28.69,4.57,1.03,6.85s.58,4.53,1.02,6.76c.21,1.04.85,1.91,1.9,2.19s2.19.1,3.22.1c2.3,0,4.61-.01,6.91-.04,1.93-.02,1.93-3.02,0-3h0Z" />
-    </g>
-  </svg>
-);
+interface IconProps {
+  /** triggers SVG path-draw animation once */
+  active: boolean;
+}
 
-/* ─── Animated Project Icon ─────────────────────────────────────────────── */
-const ProjectIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 68.63 89.06"
-    fill="currentColor"
-    style={{ width: "100%", height: "100%", overflow: "visible" }}
-    className="project-icon"
-  >
-    {/* Bottom box — static */}
-    <path d="M7.37,57.89c15.2.87,30.43,1.2,45.66.99,1.45-.02,1.45-2.27,0-2.25-15.23.21-30.46-.12-45.66-.99-1.45-.08-1.44,2.17,0,2.25h0Z" />
-    <path d="M52.08,57.86c3.55,9.5,2.32,19.87,4.37,29.68.3,1.42,2.47.82,2.17-.6-2.05-9.81-.81-20.16-4.37-29.68-.5-1.34-2.68-.76-2.17.6h0Z" />
-    <path d="M57.34,86.54c-17.18-3.19-34.77-3.45-52.04-.8-1.43.22-.82,2.39.6,2.17,16.84-2.58,34.09-2.31,50.85.8,1.42.26,2.02-1.91.6-2.17h0Z" />
-    <path d="M5.5,56.78c0,10.4,0,20.79,0,31.19,0,1.45,2.25,1.45,2.25,0,0-10.4,0-20.79,0-31.19,0-1.45-2.25-1.45-2.25,0h0Z" />
-    <path d="M7.62,56.3c-1.42.07-3.18.2-4.4-.67-.89-.64-1.4-2.04-.44-2.84l-.8.33c18.97-1.28,38.03-.84,56.93,1.32l-1.12-1.12c-.05,1.15-.1,2.31-.15,3.46-.02.41.1,1.15-.29,1.44-.31.23-1.18.09-1.52.09-2.32-.03-4.64-.07-6.96-.11-4.72-.07-9.45-.15-14.17-.22s-9.45-.15-14.17-.22-9.47.07-14.09-.83c-1.41-.28-2.02,1.89-.6,2.17,3.86.76,7.78.81,11.7.87,4.14.06,8.29.13,12.43.19,8.37.13,16.74.26,25.11.39,1.54.02,3.5.22,4.39-1.34.41-.73.38-1.61.42-2.42.05-1.15.1-2.31.15-3.46.03-.66-.54-1.06-1.12-1.12-10.18-1.16-20.4-1.84-30.64-2-5.08-.08-10.16-.04-15.24.13-2.54.08-5.08.2-7.61.34-1.89.11-4.28-.31-5.14,1.77-.66,1.59-.05,3.55,1.2,4.69,1.64,1.5,4.07,1.53,6.15,1.44,1.44-.07,1.45-2.32,0-2.25h0Z" />
-    <path d="M24.96,70.75c2.47,0,4.94,0,7.4,0h3.7c.25,0,.5-.01.74,0,.21.01.05-.1.12.02.18.34.05,1.02.05,1.4-.01,1.2-.08,2.39-.19,3.58-.02.18-.13.49.11.3-.11.09-.36.08-.5.09-.6.07-1.21.1-1.82.14-2.43.17-4.87.23-7.3.2-.13,0-.26-.02-.39,0-.21.02-.21-.08-.1.06-.15-.18-.2-.6-.27-.82-.19-.64-.34-1.29-.46-1.94-.23-1.29-.29-2.61-.23-3.92.06-1.45-2.19-1.44-2.25,0s.04,2.94.29,4.39c.12.7.28,1.38.48,2.06s.39,1.41.92,1.9,1.3.51,2,.52c.78.01,1.57.01,2.35,0,1.52-.02,3.04-.08,4.56-.17.69-.04,1.39-.1,2.08-.16.61-.05,1.25-.1,1.78-.44,1.25-.81,1.05-2.83,1.12-4.14.06-1.23.28-2.74-.16-3.91-.59-1.56-2.21-1.43-3.6-1.43-3.48,0-6.96,0-10.45,0-1.45,0-1.45,2.25,0,2.25h0Z" />
+interface StatConfig {
+  id: string;
+  target: number | null; // null → "Unlimited / ∞"
+  suffix: string;
+  primaryLine: string;
+  secondaryLine: string;
+  description: string;
+  index: string;
+  Icon: React.FC<IconProps>;
+}
 
-    {/* Middle box — static */}
-    <path d="M12.14,29.25c12,.69,24.02.95,36.04.78,1.45-.02,1.45-2.27,0-2.25-12.02.17-24.04-.1-36.04-.78-1.45-.08-1.44,2.17,0,2.25h0Z" />
-    <path d="M47.2,29.05c2.79,7.5,1.84,15.68,3.45,23.43.3,1.42,2.46.82,2.17-.6-1.61-7.75-.65-15.91-3.45-23.43-.5-1.34-2.68-.76-2.17.6h0Z" />
-    <path d="M51.65,51.39c-13.61-2.52-27.53-2.73-41.21-.63-1.43.22-.82,2.39.6,2.17,13.26-2.03,26.83-1.81,40.01.63,1.42.26,2.02-1.91.6-2.17h0Z" />
-    <path d="M10.42,28.13c0,8.21,0,16.41,0,24.62,0,1.45,2.25,1.45,2.25,0,0-8.21,0-16.41,0-24.62,0-1.45-2.25-1.45-2.25,0h0Z" />
-    <path d="M12.33,27.52c-1.01.05-2.25.16-3.16-.38-.69-.41-1.21-1.37-.5-1.99l-.8.33c14.98-1.01,30.02-.66,44.94,1.04l-1.12-1.12c-.04.93,0,1.89-.12,2.81-.05.39.03.68-.33.88-.22.12-.71.01-.96,0-1.83-.02-3.66-.06-5.48-.09-3.74-.06-7.48-.12-11.22-.17s-7.31-.11-10.97-.17-7.5.06-11.16-.65c-1.41-.27-2.02,1.89-.6,2.17,4.11.8,8.34.68,12.51.74,4.24.07,8.47.13,12.71.2s8.47.13,12.71.2c1.39.02,3.42.4,4.44-.82s.65-3.64.72-5.1c.03-.66-.54-1.06-1.12-1.12-10.49-1.2-21.04-1.74-31.6-1.59-2.64.04-5.28.12-7.91.24-1.32.06-2.63.13-3.95.21-1.05.07-1.97-.05-2.67.84-1,1.26-.68,3.18.36,4.33,1.33,1.47,3.44,1.55,5.28,1.47,1.44-.07,1.45-2.32,0-2.25h0Z" />
-    <path d="M26.03,39.4c1.95,0,3.9,0,5.85,0,.97,0,1.95,0,2.92,0,.07,0,.55.05.58,0,.06-.08.06.31-.06-.08-.03-.11-.05-.17-.07-.08-.07.2.03.76.03,1.04-.01.94-.06,1.89-.15,2.83-.07.75.12-.15.26.01,0,0-.35.07-.33.06-.48.05-.96.08-1.44.11-1.92.13-3.84.18-5.76.16-.1,0-.22-.02-.31,0-.43.08.21.04.13.17.04-.06-.16-.51-.19-.59-.15-.5-.27-1.01-.36-1.53-.18-1-.22-2.02-.18-3.03.06-1.45-2.19-1.44-2.25,0-.05,1.18.04,2.36.24,3.53.1.55.22,1.09.38,1.63.17.57.34,1.18.79,1.6.48.45,1.13.47,1.75.48s1.24,0,1.85,0c1.2-.02,2.4-.06,3.6-.14.55-.04,1.1-.08,1.64-.12s1.07-.09,1.53-.38c1.09-.69.94-2.34,1-3.47.05-.99.22-2.2-.14-3.15-.51-1.36-1.86-1.3-3.07-1.3-2.75,0-5.5,0-8.25,0-1.45,0-1.45,2.25,0,2.25h0Z" />
+// ─────────────────────────────────────────────────────────────────────────────
+// SVG Icon: Clients & Students
+// ─────────────────────────────────────────────────────────────────────────────
 
-    {/* Top box — ANIMATED tilt & bounce, pivots from bottom-right corner */}
-    <g className="top-box">
-      <path d="M34.08,5.65c9.73,1.77,19.52,3.19,29.35,4.26,1.44.16,1.43-2.09,0-2.25-9.63-1.05-19.22-2.45-28.75-4.18-1.42-.26-2.02,1.91-.6,2.17h0Z" />
-      <path d="M62.44,8.97c1.48,6.23-.11,12.67.42,18.98.12,1.43,2.37,1.45,2.25,0-.54-6.53,1.04-13.11-.5-19.57-.33-1.41-2.5-.81-2.17.6h0Z" />
-      <path d="M63.94,27.07c-10.67-3.36-21.87-4.92-33.05-4.6-1.44.04-1.45,2.29,0,2.25,11-.32,21.96,1.21,32.46,4.52,1.38.44,1.98-1.74.6-2.17h0Z" />
-      <path d="M32.77,4.51c-.82,6.63-1.63,13.26-2.45,19.9-.18,1.43,2.07,1.42,2.25,0,.82-6.63,1.63-13.26,2.45-19.9.18-1.43-2.07-1.42-2.25,0h0Z" />
-      <path d="M34.48,3.88c-.73-.06-1.59-.1-2.21-.54-.3-.21-.74-.79-.48-1.09.16-.19,2.08.13,2.41.15.8.06,1.6.12,2.4.18,3.47.28,6.94.65,10.4,1.12,6.8.92,13.55,2.2,20.22,3.8l-.79-1.38c-.12.73-.24,1.46-.37,2.2-.12.68.05.75-.62.68-1.55-.15-3.09-.43-4.63-.64-3.09-.43-6.17-.86-9.26-1.29-3-.42-6.01-.84-9.01-1.25s-5.93-.72-8.77-1.64c-1.38-.45-1.97,1.73-.6,2.17,3.22,1.04,6.65,1.35,9.99,1.81s6.98.97,10.47,1.46,6.98.97,10.47,1.46c1.13.16,2.55.53,3.46-.41s.84-2.76,1.03-3.94c.1-.58-.15-1.23-.79-1.38-8.54-2.05-17.2-3.56-25.94-4.5-2.16-.23-4.32-.43-6.48-.59-1.04-.08-2.08-.15-3.13-.21-.9-.05-1.55-.08-2.17.63-.9,1.03-.75,2.66,0,3.72.99,1.38,2.79,1.63,4.36,1.76,1.44.11,1.44-2.14,0-2.25h0Z" />
-      <path d="M44.58,15.28c1.57.19,3.13.39,4.7.58l2.31.29c.11.01.22.02.33.04.17.03.05,0,0,0,.13,0,.07.07.05,0l-.13-.17c-.11-.19-.15-.23-.11-.11.04,0,0,.1,0-.02,0,.08,0,.16,0,.23-.01.16-.03.31-.05.47-.1.76-.24,1.52-.41,2.27,0,.03-.08.24-.06.26-.03-.04.3-.27.2-.19.26-.2.22-.12-.04-.12-.38,0-.76-.03-1.14-.05-1.5-.08-3-.21-4.5-.41-.1-.01-.2-.03-.3-.04-.04,0-.07-.01-.11-.02-.06-.02-.07-.02-.02,0,.07-.07.25.47.27.22,0-.09-.04-.21-.06-.3-.07-.37-.11-.75-.14-1.13-.05-.83-.03-1.67.11-2.49.1-.6-.16-1.21-.79-1.38-.54-.15-1.28.18-1.38.79-.17,1-.25,2-.2,3.01.03.53.09,1.05.18,1.57s.2,1.05.58,1.44c.34.34.79.44,1.24.51.56.08,1.12.15,1.68.21.97.11,1.95.19,2.93.25.9.05,2.1.29,2.9-.22.85-.54.91-1.78,1.06-2.68s.46-1.99.17-2.88c-.38-1.18-1.57-1.23-2.61-1.36-2.23-.28-4.45-.55-6.68-.83-.6-.07-1.12.57-1.12,1.12,0,.67.52,1.05,1.12,1.12h0Z" />
-    </g>
-  </svg>
-);
+const ClientsIcon: React.FC<IconProps> = ({ active }) => {
+  const draw = {
+    hidden: { pathLength: 0, opacity: 0 },
+    visible: (i: number) => ({
+      pathLength: 1,
+      opacity: 1,
+      transition: {
+        pathLength: { delay: i * 0.22, duration: 0.9, ease: [0.23, 1, 0.32, 1] as const },
+        opacity: { delay: i * 0.22, duration: 0.25 },
+      },
+    }),
+  };
+  const pop = {
+    hidden: { scale: 0, opacity: 0 },
+    visible: (i: number) => ({
+      scale: 1,
+      opacity: 1,
+      transition: {
+        scale: { delay: i * 0.22, duration: 0.38, ease: [0.34, 1.56, 0.64, 1] as const },
+        opacity: { delay: i * 0.22, duration: 0.2 },
+      },
+    }),
+  };
 
-/* ─── Animated Coffee Icon ──────────────────────────────────────────────── */
-const CoffeeIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 56.98 52.41"
-    fill="currentColor"
-    style={{ width: "100%", height: "100%", overflow: "visible" }}
-    className="coffee-icon"
-  >
-    {/* Static — cup rim line */}
-    <path d="M1.9,23.41c12.46,0,24.92-.27,37.37-.8,1.92-.08,1.93-3.08,0-3-12.45.53-24.91.79-37.37.8-1.93,0-1.93,3,0,3h0Z" />
-    {/* Static — cup body */}
-    <path d="M.25,21.71c-1,5.77,1.18,11.23,4.52,15.85,1.67,2.32,3.13,4.78,4.74,7.14,1.5,2.19,3.23,4.86,5.48,6.34,1.16.77,2.48.95,3.84,1.01,1.74.08,3.48.12,5.21.18,1.53.05,3.18.3,4.71.11,1.42-.17,2.01-1.09,2.73-2.19,1.24-1.9,3.34-3.23,5.11-4.59,1.96-1.5,3.58-3.07,5.04-5.07,1.83-2.53,3.26-5.4,3.54-8.55.31-3.54-.94-6.96-2.2-10.2-.69-1.78-3.59-1.01-2.89.8.96,2.49,2.02,5.1,2.13,7.8.1,2.5-.73,4.8-2.02,6.92-1.13,1.86-2.47,3.55-4.15,4.95s-3.39,2.52-4.96,3.94c-.67.61-1.29,1.26-1.83,1.99-.21.29-.49.99-.77,1.16-.43.26-1.42.04-1.93.02-1.41-.05-2.83-.1-4.24-.15s-3.15.1-4.61-.22c-1.17-.25-1.9-1.13-2.66-1.99-.88-.99-1.7-2.03-2.47-3.11-1.37-1.95-2.59-3.99-3.92-5.97-3.13-4.65-6.54-9.43-5.5-15.38.33-1.89-2.56-2.7-2.89-.8H.25Z" />
-    {/* Static — handle */}
-    <path d="M42.8,22.85c1.47-1.77,3.73-2.64,5.99-2.03s3.77,2.66,4.62,4.82c.43,1.1.77,2.32.43,3.49-.27.91-.94,1.68-1.72,2.2-1.01.67-2.2.95-3.4.97-.65.02-1.3-.02-1.93-.13-.25-.04-.57-.18-.81-.18-.21,0-.19-.25-.03.14-.3-.75-1-1.28-1.85-1.05-.71.2-1.35,1.09-1.05,1.85.55,1.37,1.67,1.94,3.07,2.16,1.48.23,2.93.28,4.42.02,2.59-.45,4.97-2.13,5.98-4.6,1.09-2.66.05-5.65-1.31-8.01s-3.56-4.25-6.32-4.73c-3.05-.53-6.22.55-8.22,2.95-.52.62-.61,1.51,0,2.12.53.53,1.6.63,2.12,0h0Z" />
-
-    {/* Smoke wisp A — existing left curl, now animated upward */}
-    <path
-      className="smk-a"
-      d="M19.66,25c-1.24-1.54-1.98-3.51-2.08-5.48-.11-2.2.72-4.15,1.28-6.24,1.19-4.42-.2-8.54-2.14-12.52-.85-1.74-3.43-.22-2.59,1.51,1.03,2.1,2.02,4.35,2.2,6.72s-.68,4.3-1.26,6.47c-1.11,4.14-.21,8.32,2.47,11.66,1.21,1.51,3.32-.63,2.12-2.12h0Z"
-    />
-
-    {/* Smoke wisp B — existing right curl, now animated upward (offset phase) */}
-    <path
-      className="smk-b"
-      d="M29.21,27.76c-1.11-1.55-1.91-3.24-2.34-5.1s-.35-3.91-.22-5.87.32-4.05.1-6.08c-.2-1.78-.59-3.55-2.18-4.58s-3.13,1.54-1.51,2.59c.55.36.62,1.41.69,1.99.12.9.12,1.82.1,2.73-.05,1.91-.29,3.8-.3,5.71-.04,3.63.96,7.15,3.08,10.12,1.11,1.56,3.72.06,2.59-1.51h0Z"
-    />
-
-    {/* Smoke wisp C — a third fresh wisp drawn centre, for triple steam effect */}
-    <path
-      className="smk-c"
+  return (
+    <motion.svg
+      viewBox="0 0 100 100"
       fill="none"
-      stroke="currentColor"
-      strokeWidth="2.4"
-      strokeLinecap="round"
-      d="M24,25 Q21.5,20 24,15 Q26.5,10 24,5 Q22.5,2 24,0"
-    />
-  </svg>
-);
+      xmlns="http://www.w3.org/2000/svg"
+      className="bp-icon"
+    >
+      {/* Person 2 – back */}
+      <motion.circle
+        cx="68" cy="29" r="12"
+        stroke="currentColor" strokeWidth="2"
+        variants={draw} custom={2}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+        style={{ opacity: 0.45 }}
+      />
+      <motion.path
+        d="M 44 82 C 44 61 94 61 94 82"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        variants={draw} custom={3}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+        style={{ opacity: 0.38 }}
+      />
+      {/* Person 1 – front */}
+      <motion.circle
+        cx="34" cy="26" r="15"
+        stroke="currentColor" strokeWidth="2.5"
+        variants={draw} custom={0}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+      />
+      <motion.path
+        d="M 5 82 C 5 57 65 57 65 82"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+        variants={draw} custom={1}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+      />
+      {/* Connection arc */}
+      <motion.path
+        d="M 34 41 Q 51 55 68 41"
+        stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+        strokeDasharray="4 3"
+        variants={draw} custom={4}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+        style={{ opacity: 0.4 }}
+      />
+      {/* Center node */}
+      <motion.circle
+        cx="51" cy="54" r="3.5"
+        fill="currentColor"
+        variants={pop} custom={5}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+        style={{ opacity: 0.55 }}
+      />
+    </motion.svg>
+  );
+};
 
-/* ─── Git Icon (static) ──────────────────────────────────────────────────── */
-const GitIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 30.55 43.5"
-    fill="currentColor"
-    style={{ width: "100%", height: "100%" }}
-  >
-    <path d="M23.69,10.78c-4.12,9.74-10.42,18.38-18.45,25.26-1.47,1.26.66,3.37,2.12,2.12,8.2-7.02,14.72-15.92,18.92-25.87.32-.75.22-1.6-.54-2.05-.63-.37-1.74-.21-2.05.54h0Z" />
-    <path d="M14.25,26.87c-5.19-5.05-7.87-12.22-7.32-19.44.15-1.93-2.86-1.92-3,0-.6,7.96,2.48,16,8.2,21.56,1.38,1.35,3.51-.77,2.12-2.12h0Z" />
-    <path d="M.4,2.84v.09c0-.13.03-.27.04-.4-.06.3-.2.56-.3.85-.18.52-.18,1.07-.07,1.6.15.77.59,1.46,1.08,2.05,1,1.22,2.52,1.81,4.07,1.58s2.66-1.55,3.05-3.04c.25-.94.27-1.89-.16-2.78-.3-.62-.84-1.12-1.34-1.57C6.02.56,5.21.11,4.2.01c-.8-.07-1.71.16-2.36.64-.33.24-.58.49-.69.9-.1.36-.05.84.15,1.16.4.62,1.38,1.03,2.05.54.07-.05.13-.09.2-.14.05-.03.37-.18.11-.07s.03,0,.09-.02c.09-.02.18-.04.28-.06l-.4.05c.22-.03.43-.03.65,0l-.4-.05c.13.02.26.06.39.1.24.07-.24-.13-.08-.03.06.04.13.07.2.11.05.03.1.07.15.1.26.17-.18-.16-.05-.04.11.1.23.2.34.3.21.19.41.39.6.6.18.19-.13-.21-.05-.06.02.04.08.16.11.19-.05-.03-.1-.32-.05-.11.02.09.05.18.06.27l-.05-.4c.03.22.02.43,0,.65l.05-.4c-.04.28-.11.56-.2.84-.02.07-.06.14-.08.21.01-.06.14-.29.04-.12-.06.11-.18.25-.22.37.02-.05.21-.24.07-.1-.05.05-.11.1-.15.15-.1.11.31-.2.08-.06-.05.03-.09.06-.14.08-.04.02-.29.13-.04.03s0,0-.05,0c-.13.04-.26.06-.4.08l.4-.05c-.22.02-.43.02-.65,0l.4.05c-.15-.02-.29-.05-.44-.1-.06-.02-.13-.05-.19-.07.35.08.21.09.07.01-.07-.04-.14-.08-.21-.12-.05-.03-.25-.18-.05-.02s0,0-.04-.04c-.06-.05-.12-.11-.18-.17-.09-.09-.17-.22-.27-.3.14.19.18.23.11.14-.02-.03-.05-.07-.07-.1-.05-.07-.09-.14-.13-.21-.04-.06-.07-.13-.11-.19-.11-.21-.01-.06.01.06-.04-.18-.11-.34-.14-.53l.05.4c-.01-.12-.01-.24,0-.36l-.05.4c.04-.24.13-.46.22-.69.14-.33.19-.64.22-1s-.19-.82-.44-1.06c-.26-.26-.69-.46-1.06-.44s-.79.14-1.06.44c-.28.31-.39.64-.44,1.06H.4Z" />
-    <path d="M22.49,7.09v.09c0-.13.03-.27.04-.4-.06.3-.2.56-.3.85-.18.52-.18,1.07-.07,1.6.15.77.59,1.46,1.08,2.05,1,1.22,2.52,1.81,4.07,1.58s2.66-1.55,3.05-3.04c.25-.94.27-1.89-.16-2.78-.3-.62-.84-1.12-1.34-1.57-.75-.67-1.56-1.12-2.58-1.21-.8-.07-1.71.16-2.36.64-.33.24-.58.49-.69.9-.1.36-.05.84.15,1.16.4.62,1.38,1.03,2.05.54.07-.05.13-.09.2-.14.05-.03.37-.18.11-.07s.03,0,.09-.02c.09-.02.18-.04.28-.06l-.4.05c.22-.03.43-.03.65,0l-.4-.05c.13.02.26.06.39.1.24.07-.24-.13-.08-.03.06.04.13.07.2.11.05.03.1.07.15.1.26.17-.18-.16-.05-.04.11.1.23.2.34.3.21.19.41.39.6.6.18.19-.13-.21-.05-.06.02.04.08.16.11.19-.05-.03-.1-.32-.05-.11.02.09.05.18.06.27l-.05-.4c.03.22.02.43,0,.65l.05-.4c-.04.28-.11.56-.2.84-.02.07-.06.14-.08.21.01-.06.14-.29.04-.12-.06.11-.18.25-.22.37.02-.05.21-.24.07-.1-.05.05-.11.1-.15.15-.1.11.31-.2.08-.06-.05.03-.09.06-.14.08-.04.02-.29.13-.04.03s0,0-.05,0c-.13.04-.26.06-.4.08l.4-.05c-.22.02-.43.02-.65,0l.4.05c-.15-.02-.29-.05-.44-.1-.06-.02-.13-.05-.19-.07.35.08.21.09.07.01-.07-.04-.14-.08-.21-.12-.05-.03-.25-.18-.05-.02s0,0-.04-.04c-.06-.05-.12-.11-.18-.17-.09-.09-.17-.22-.27-.3.14.19.18.23.11.14-.02-.03-.05-.07-.07-.1-.05-.07-.09-.14-.13-.21-.04-.06-.07-.13-.11-.19-.11-.21-.01-.06.01.06-.04-.18-.11-.34-.14-.53l.05.4c-.01-.12-.01-.24,0-.36l-.05.4c.04-.24.13-.46.22-.69.14-.33.19-.64.22-1s-.19-.82-.44-1.06c-.26-.26-.69-.46-1.06-.44s-.79.14-1.06.44c-.28.31-.39.64-.44,1.06h0Z" />
-    <path d="M.4,37.68v.09c0-.13.03-.27.04-.4-.06.3-.2.56-.3.85-.18.52-.18,1.07-.07,1.6.15.77.59,1.46,1.08,2.05,1,1.22,2.52,1.81,4.07,1.58s2.66-1.55,3.05-3.04c.25-.94.27-1.89-.16-2.78-.3-.62-.84-1.12-1.34-1.57-.75-.67-1.56-1.12-2.58-1.21-.8-.07-1.71.16-2.36.64-.33.24-.58.49-.69.9-.1.36-.05.84.15,1.16.4.62,1.38,1.03,2.05.54.07-.05.13-.09.2-.14.05-.03.37-.18.11-.07s.03,0,.09-.02c.09-.02.18-.04.28-.06l-.4.05c.22-.03.43-.03.65,0l-.4-.05c.13.02.26.06.39.1.24.07-.24-.13-.08-.03.06.04.13.07.2.11.05.03.1.07.15.1.26.17-.18-.16-.05-.04.11.1.23.2.34.3.21.19.41.39.6.6.18.19-.13-.21-.05-.06.02.04.08.16.11.19-.05-.03-.1-.32-.05-.11.02.09.05.18.06.27l-.05-.4c.03.22.02.43,0,.65l.05-.4c-.04.28-.11.56-.2.84-.02.07-.06.14-.08.21.01-.06.14-.29.04-.12-.06.11-.18.25-.22.37.02-.05.21-.24.07-.1-.05.05-.11.1-.15.15-.1.11.31-.2.08-.06-.05.03-.09.06-.14.08-.04.02-.29.13-.04.03s0,0-.05,0c-.13.04-.26.06-.4.08l.4-.05c-.22.02-.43.02-.65,0l.4.05c-.15-.02-.29-.05-.44-.1-.06-.02-.13-.05-.19-.07.35.08.21.09.07.01-.07-.04-.14-.08-.21-.12-.05-.03-.25-.18-.05-.02s0,0-.04-.04c-.06-.05-.12-.11-.18-.17-.09-.09-.17-.22-.27-.3.14.19.18.23.11.14-.02-.03-.05-.07-.07-.1-.05-.07-.09-.14-.13-.21-.04-.06-.07-.13-.11-.19-.11-.21-.01-.06.01.06-.04-.18-.11-.34-.14-.53l.05.4c-.01-.12-.01-.24,0-.36l-.05.4c.04-.24.13-.46.22-.69.14-.33.19-.64.22-1s-.19-.82-.44-1.06c-.26-.26-.69-.46-1.06-.44s-.79.14-1.06.44c-.28.31-.39.64-.44,1.06H.4Z" />
-  </svg>
-);
-const stats = [
+// ─────────────────────────────────────────────────────────────────────────────
+// SVG Icon: Projects & Designs
+// ─────────────────────────────────────────────────────────────────────────────
+
+const ProjectsIcon: React.FC<IconProps> = ({ active }) => {
+  const revealRect = {
+    hidden: { scaleX: 0, opacity: 0 },
+    visible: (i: number) => ({
+      scaleX: 1,
+      opacity: 1,
+      transition: {
+        scaleX: { delay: i * 0.18, duration: 0.55, ease: [0.23, 1, 0.32, 1] as const },
+        opacity: { delay: i * 0.18, duration: 0.22 },
+      },
+    }),
+  };
+  const revealLine = {
+    hidden: { pathLength: 0, opacity: 0 },
+    visible: (i: number) => ({
+      pathLength: 1,
+      opacity: 1,
+      transition: {
+        pathLength: { delay: 0.6 + i * 0.14, duration: 0.45, ease: [0.23, 1, 0.32, 1] as const },
+        opacity: { delay: 0.6 + i * 0.14, duration: 0.18 },
+      },
+    }),
+  };
+  const popDot = {
+    hidden: { scale: 0, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 0.75,
+      transition: { delay: 1.0, duration: 0.36, ease: [0.34, 1.56, 0.64, 1] as const },
+    },
+  };
+
+  return (
+    <motion.svg
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="bp-icon"
+    >
+      {/* Layer 3 (bottom) */}
+      <motion.rect
+        x="16" y="68" width="68" height="22" rx="3"
+        stroke="currentColor" strokeWidth="2"
+        variants={revealRect} custom={2}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+        style={{ transformOrigin: '50px 79px', opacity: 0.3 }}
+      />
+      {/* Layer 2 (middle) */}
+      <motion.rect
+        x="10" y="44" width="80" height="26" rx="3"
+        stroke="currentColor" strokeWidth="2"
+        variants={revealRect} custom={1}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+        style={{ transformOrigin: '50px 57px', opacity: 0.58 }}
+      />
+      {/* Layer 1 (top) */}
+      <motion.rect
+        x="6" y="14" width="88" height="32" rx="4"
+        stroke="currentColor" strokeWidth="2.5"
+        variants={revealRect} custom={0}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+        style={{ transformOrigin: '50px 30px' }}
+      />
+      {/* Title line */}
+      <motion.line
+        x1="18" y1="30" x2="68" y2="30"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        variants={revealLine} custom={0}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+      />
+      {/* Sub-line */}
+      <motion.line
+        x1="18" y1="22" x2="46" y2="22"
+        stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+        style={{ opacity: 0.6 }}
+        variants={revealLine} custom={1}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+      />
+      {/* Accent dot */}
+      <motion.circle
+        cx="80" cy="22" r="3.5"
+        fill="currentColor"
+        variants={popDot}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+      />
+    </motion.svg>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SVG Icon: GitHub Repos
+// ─────────────────────────────────────────────────────────────────────────────
+
+const ReposIcon: React.FC<IconProps> = ({ active }) => {
+  const drawLine = {
+    hidden: { pathLength: 0, opacity: 0 },
+    visible: (i: number) => ({
+      pathLength: 1,
+      opacity: 1,
+      transition: {
+        pathLength: { delay: i * 0.2, duration: 0.68, ease: [0.23, 1, 0.32, 1] as const },
+        opacity: { delay: i * 0.2, duration: 0.2 },
+      },
+    }),
+  };
+  const popCircle = {
+    hidden: { scale: 0, opacity: 0 },
+    visible: (i: number) => ({
+      scale: 1,
+      opacity: 1,
+      transition: {
+        scale: { delay: 0.08 + i * 0.16, duration: 0.3, ease: [0.34, 1.56, 0.64, 1] as const },
+        opacity: { delay: 0.08 + i * 0.16, duration: 0.18 },
+      },
+    }),
+  };
+
+  const mainCy = [8, 36, 64, 92];
+
+  return (
+    <motion.svg
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="bp-icon"
+    >
+      {/* Main branch */}
+      <motion.line
+        x1="28" y1="8" x2="28" y2="92"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+        variants={drawLine} custom={0}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+      />
+      {/* Feature branch 1 */}
+      <motion.path
+        d="M 28 36 Q 50 36 50 52 L 50 92"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"
+        variants={drawLine} custom={1}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+        style={{ opacity: 0.7 }}
+      />
+      {/* Feature branch 2 */}
+      <motion.path
+        d="M 50 68 Q 66 68 66 80 L 66 92"
+        stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"
+        variants={drawLine} custom={2}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+        style={{ opacity: 0.42 }}
+      />
+      {/* Main commits */}
+      {mainCy.map((cy, i) => (
+        <motion.circle
+          key={`mc-${cy}`}
+          cx="28" cy={cy} r={i === 0 ? 5.5 : 4}
+          stroke="currentColor" strokeWidth="2.5" fill="var(--bp-surface)"
+          variants={popCircle} custom={i}
+          initial="hidden" animate={active ? 'visible' : 'hidden'}
+        />
+      ))}
+      {/* Branch 1 commit */}
+      <motion.circle
+        cx="50" cy="92" r="3.5"
+        stroke="currentColor" strokeWidth="2" fill="var(--bp-surface)"
+        variants={popCircle} custom={4}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+        style={{ opacity: 0.8 }}
+      />
+      {/* Branch 2 commit */}
+      <motion.circle
+        cx="66" cy="92" r="3"
+        stroke="currentColor" strokeWidth="2" fill="var(--bp-surface)"
+        variants={popCircle} custom={5}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+        style={{ opacity: 0.5 }}
+      />
+    </motion.svg>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SVG Icon: Cups of Coffee
+// ─────────────────────────────────────────────────────────────────────────────
+
+const CoffeeIcon: React.FC<IconProps> = ({ active }) => {
+  const drawPath = {
+    hidden: { pathLength: 0, opacity: 0 },
+    visible: (i: number) => ({
+      pathLength: 1,
+      opacity: 1,
+      transition: {
+        pathLength: { delay: i * 0.2, duration: 0.72, ease: [0.23, 1, 0.32, 1] as const },
+        opacity: { delay: i * 0.2, duration: 0.22 },
+      },
+    }),
+  };
+  const revealRim = {
+    hidden: { scaleX: 0, opacity: 0 },
+    visible: {
+      scaleX: 1,
+      opacity: 1,
+      transition: { delay: 0.08, duration: 0.5, ease: [0.23, 1, 0.32, 1] as const },
+    },
+  };
+
+  const steamPaths = [
+    'M 28 18 Q 34 10 28 3',
+    'M 43 18 Q 49 10 43 3',
+    'M 58 18 Q 64 10 58 3',
+  ];
+
+  return (
+    <motion.svg
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="bp-icon bp-icon--coffee"
+    >
+      {/* Steam wrapper – reveals after cup is drawn */}
+      <motion.g
+        initial={{ opacity: 0 }}
+        animate={active ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ delay: 1.1, duration: 0.4 }}
+      >
+        {steamPaths.map((d, i) => (
+          <path
+            key={i}
+            d={d}
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            fill="none"
+            className="bp-steam"
+            style={{ '--steam-delay': `${i * 0.4}s` } as React.CSSProperties}
+          />
+        ))}
+      </motion.g>
+
+      {/* Cup rim */}
+      <motion.rect
+        x="14" y="22" width="58" height="8" rx="3"
+        stroke="currentColor" strokeWidth="2.5"
+        variants={revealRim}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+        style={{ transformOrigin: '43px 26px' }}
+      />
+      {/* Cup body */}
+      <motion.path
+        d="M 18 30 L 24 88 Q 24 94 30 94 L 56 94 Q 62 94 62 88 L 68 30"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+        variants={drawPath} custom={1}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+      />
+      {/* Handle */}
+      <motion.path
+        d="M 68 44 Q 84 44 84 60 Q 84 76 68 76"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none"
+        variants={drawPath} custom={2}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+      />
+      {/* Liquid surface */}
+      <motion.path
+        d="M 22 52 Q 43 58 68 52"
+        stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"
+        variants={drawPath} custom={3}
+        initial="hidden" animate={active ? 'visible' : 'hidden'}
+        style={{ opacity: 0.42 }}
+      />
+    </motion.svg>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Stat Configuration
+// ─────────────────────────────────────────────────────────────────────────────
+
+const STATS: StatConfig[] = [
   {
-    id: "people",
-    Icon: PeopleIcon,
-    value: 105,
-    suffix: "+",
-    lines: ["Client", "160 + Students"],
-    row: 0,
-    col: 0,
+    id: 'clients',
+    target: 105,
+    suffix: '+',
+    primaryLine: 'Clients &',
+    secondaryLine: '160 Students',
+    description: 'Trusted by professionals and learners across the globe.',
+    index: '01',
+    Icon: ClientsIcon,
   },
   {
-    id: "projects",
-    Icon: ProjectIcon,
-    value: 272,
-    suffix: "+",
-    lines: ["Projects", "& Designs"],
-    row: 0,
-    col: 1,
+    id: 'projects',
+    target: 272,
+    suffix: '+',
+    primaryLine: 'Projects &',
+    secondaryLine: 'Designs',
+    description: 'From early explorations to production-grade digital products.',
+    index: '02',
+    Icon: ProjectsIcon,
   },
   {
-    id: "git",
-    Icon: GitIcon,
-    value: 71,
-    suffix: "+",
-    lines: ["Github Repos"],
-    row: 1,
-    col: 0,
+    id: 'repos',
+    target: 71,
+    suffix: '+',
+    primaryLine: 'GitHub',
+    secondaryLine: 'Repositories',
+    description: 'Open-source contributions and personal experiments in code.',
+    index: '03',
+    Icon: ReposIcon,
   },
   {
-    id: "coffee",
+    id: 'coffee',
+    target: null,
+    suffix: '',
+    primaryLine: 'Cups of',
+    secondaryLine: 'Coffee',
+    description: 'The only resource that remains truly inexhaustible.',
+    index: '04',
     Icon: CoffeeIcon,
-    value: null,
-    prefix: "∞",
-    lines: ["Cup of", "Coffee"],
-    row: 1,
-    col: 1,
   },
 ];
 
-export default function BigPictureStats() {
+// ─────────────────────────────────────────────────────────────────────────────
+// BigPicture Component
+// ─────────────────────────────────────────────────────────────────────────────
 
+const BigPicture: React.FC = () => {
+  /* ── Refs & Scroll ──────────────────────────────────────────────────────── */
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
+  /**
+   * Smooth spring wrapper – stiffness/damping tuned for cinematic feel.
+   * Increase stiffness or remove spring for sharper tracking on mobile.
+   */
+  const smooth = useSpring(scrollYProgress, {
+    stiffness: 78,
+    damping: 26,
+    restDelta: 0.001,
+  });
+
+  /* ── Local state ────────────────────────────────────────────────────────── */
+  const [activeStats, setActiveStats] = useState([false, false, false, false]);
+  const [counts, setCounts] = useState(['0', '0', '0', '0']);
+
+  /* ── Scroll Transforms ──────────────────────────────────────────────────── */
+
+  // Progress bar width
+  const progressWidth = useTransform(smooth, [0, 1], ['0%', '100%']);
+
+  // Parallax backdrop drift
+  const backdropY = useTransform(smooth, [0, 1], ['0%', '-12%']);
+
+  // ── Scene 0: Intro ──────────────────────────────────────────────────────
+  // Range: 0 → 0.15
+  const s0Opacity = useTransform(smooth, [0, 0.04, 0.10, 0.16], [0, 1, 1, 0]);
+  const s0Y       = useTransform(smooth, [0, 0.04, 0.10, 0.16], [28, 0, 0, -24]);
+
+  // ── Scene 1: Clients ────────────────────────────────────────────────────
+  // Range: 0.13 → 0.33
+  const s1Opacity = useTransform(smooth, [0.13, 0.20, 0.27, 0.33], [0, 1, 1, 0]);
+  const s1Y       = useTransform(smooth, [0.13, 0.20, 0.27, 0.33], [56, 0, 0, -44]);
+  const s1Scale   = useTransform(smooth, [0.13, 0.20, 0.27, 0.33], [0.95, 1, 1, 1.04]);
+
+  // ── Scene 2: Projects ───────────────────────────────────────────────────
+  // Range: 0.30 → 0.50
+  const s2Opacity = useTransform(smooth, [0.30, 0.37, 0.44, 0.50], [0, 1, 1, 0]);
+  const s2Y       = useTransform(smooth, [0.30, 0.37, 0.44, 0.50], [56, 0, 0, -44]);
+  const s2Scale   = useTransform(smooth, [0.30, 0.37, 0.44, 0.50], [0.95, 1, 1, 1.04]);
+
+  // ── Scene 3: Repos ──────────────────────────────────────────────────────
+  // Range: 0.47 → 0.67
+  const s3Opacity = useTransform(smooth, [0.47, 0.54, 0.61, 0.67], [0, 1, 1, 0]);
+  const s3Y       = useTransform(smooth, [0.47, 0.54, 0.61, 0.67], [56, 0, 0, -44]);
+  const s3Scale   = useTransform(smooth, [0.47, 0.54, 0.61, 0.67], [0.95, 1, 1, 1.04]);
+
+  // ── Scene 4: Coffee ─────────────────────────────────────────────────────
+  // Range: 0.64 → 0.83
+  const s4Opacity = useTransform(smooth, [0.64, 0.71, 0.78, 0.83], [0, 1, 1, 0]);
+  const s4Y       = useTransform(smooth, [0.64, 0.71, 0.78, 0.83], [56, 0, 0, -44]);
+  const s4Scale   = useTransform(smooth, [0.64, 0.71, 0.78, 0.83], [0.95, 1, 1, 1.04]);
+
+  // ── Scene 5: Grid ───────────────────────────────────────────────────────
+  // Range: 0.80 → 1.00 (persistent)
+  const s5Opacity = useTransform(smooth, [0.80, 0.87], [0, 1]);
+  const s5Y       = useTransform(smooth, [0.80, 0.87], [44, 0]);
+
+  // Grid card stagger
+  const gc0Opacity = useTransform(smooth, [0.81, 0.87], [0, 1]);
+  const gc1Opacity = useTransform(smooth, [0.84, 0.90], [0, 1]);
+  const gc2Opacity = useTransform(smooth, [0.87, 0.93], [0, 1]);
+  const gc3Opacity = useTransform(smooth, [0.90, 0.96], [0, 1]);
+  const gc0Y       = useTransform(smooth, [0.81, 0.88], [28, 0]);
+  const gc1Y       = useTransform(smooth, [0.84, 0.91], [28, 0]);
+  const gc2Y       = useTransform(smooth, [0.87, 0.94], [28, 0]);
+  const gc3Y       = useTransform(smooth, [0.90, 0.97], [28, 0]);
+
+  /* ── Counter & activation triggers ─────────────────────────────────────── */
+  useEffect(() => {
+    /**
+     * Each threshold maps to when a stat scene is "fully in" (peak opacity).
+     * Once crossed the counter animates and the SVG icon activates.
+     */
+    const TRIGGER_POINTS = [0.20, 0.37, 0.54, 0.71] as const;
+    const triggered = [false, false, false, false];
+
+    const unsub = smooth.onChange((v: number) => {
+      TRIGGER_POINTS.forEach((tp, i) => {
+        if (v >= tp && !triggered[i]) {
+          triggered[i] = true;
+
+          // Activate SVG icon animation
+          setActiveStats((prev) => {
+            const next = [...prev];
+            next[i] = true;
+            return next;
+          });
+
+          const target = STATS[i].target;
+          if (target !== null) {
+            // Smooth numeric counter
+            animate(0, target, {
+              duration: 1.85,
+              ease: [0.23, 1, 0.32, 1],
+              onUpdate: (val) =>
+                setCounts((prev) => {
+                  const next = [...prev];
+                  next[i] = Math.round(val).toString();
+                  return next;
+                }),
+            });
+          } else {
+            // Unlimited: rapid flip → ∞
+            const flips = ['1', '7', '42', '99', '∞'];
+            flips.forEach((s, j) =>
+              setTimeout(
+                () =>
+                  setCounts((prev) => {
+                    const next = [...prev];
+                    next[i] = s;
+                    return next;
+                  }),
+                j * 130,
+              ),
+            );
+          }
+        }
+      });
+
+      // Safety net: ensure everything is initialised when grid appears
+      if (v >= 0.87 && triggered.some((t) => !t)) {
+        STATS.forEach((stat, i) => {
+          if (!triggered[i]) {
+            triggered[i] = true;
+            setActiveStats((prev) => {
+              const next = [...prev];
+              next[i] = true;
+              return next;
+            });
+            setCounts((prev) => {
+              const next = [...prev];
+              next[i] = stat.target !== null ? stat.target.toString() : '∞';
+              return next;
+            });
+          }
+        });
+      }
+    });
+
+    return () => unsub();
+    // smooth is a stable MotionValue ref – intentionally omitted from deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /* ── Zipped transform arrays ────────────────────────────────────────────── */
+  const sceneTransforms = [
+    { opacity: s1Opacity, y: s1Y, scale: s1Scale },
+    { opacity: s2Opacity, y: s2Y, scale: s2Scale },
+    { opacity: s3Opacity, y: s3Y, scale: s3Scale },
+    { opacity: s4Opacity, y: s4Y, scale: s4Scale },
+  ];
+
+  const cardTransforms = [
+    { opacity: gc0Opacity, y: gc0Y },
+    { opacity: gc1Opacity, y: gc1Y },
+    { opacity: gc2Opacity, y: gc2Y },
+    { opacity: gc3Opacity, y: gc3Y },
+  ];
+
+  /* ── Render ─────────────────────────────────────────────────────────────── */
   return (
-    <div className="big-picture-section">
-      {/* ── Heading ── */}
-      <div className="heading-anim">
-        <div className="bigpicture-heading-row">
-          <h2 className="bigpicture-title">The Big Picture</h2>
-          <span className="bigpicture-number">04</span>
-        </div>
-      </div>
+    <section
+      ref={containerRef}
+      className="big-picture"
+      aria-label="Career statistics"
+    >
+      <div className="big-picture__sticky">
 
-      {/* ── Stats 2×2 grid ── */}
-      <div className="stats-grid">
-        {stats.map((stat, i) => (
-          <div key={stat.id} className={`stat-item stat-item-${i}`}>
-            {/* Icon */}
-            <div className="stat-icon-wrap">
-              <stat.Icon />
-            </div>
+        {/* ── Scroll progress bar ──────────────────────────────────────── */}
+        <motion.div
+          className="bp-progress-bar"
+          style={{ width: progressWidth }}
+          aria-hidden="true"
+        />
 
-            {/* Text lines */}
-            <div className="stat-lines">
-              <div className="stat-line">
-                {stat.value !== null ? (
-                  <>
-                    <AnimatedCounter
-                      target={stat.value}
-                      duration={2.5}
-                      suffix={stat.suffix ?? ""}
-                    />{" "}
-                    {stat.lines[0]}
-                  </>
-                ) : (
-                  <>
-                    {stat.prefix} {stat.lines[0]}
-                  </>
-                )}
-              </div>
+        {/* ── Parallax backdrop glow ───────────────────────────────────── */}
+        <motion.div
+          className="bp-backdrop"
+          style={{ y: backdropY }}
+          aria-hidden="true"
+        />
 
-              {stat.lines.slice(1).map((line, li) => (
-                <div key={li} className="stat-line">
-                  {line}
-                </div>
-              ))}
-            </div>
+        {/* ══════════════════════════════════════════════════════════════ */}
+        {/* Scene 0 – Intro                                               */}
+        {/* ══════════════════════════════════════════════════════════════ */}
+        <motion.div
+          className="bp-scene bp-scene--intro"
+          style={{ opacity: s0Opacity, y: s0Y }}
+          aria-hidden="true"
+        >
+          <div className="bp-intro__content">
+            <span className="bp-eyebrow">The Big Picture</span>
+            <h2 className="bp-intro__heading">
+              Numbers that
+              <br />
+              <em>tell the story.</em>
+            </h2>
+            <p className="bp-intro__sub">Scroll to explore</p>
+            <span className="bp-scroll-indicator" aria-hidden="true" />
           </div>
-        ))}
+        </motion.div>
+
+        {/* ══════════════════════════════════════════════════════════════ */}
+        {/* Scenes 1–4 – Individual stats                                 */}
+        {/* ══════════════════════════════════════════════════════════════ */}
+        {STATS.map((stat, i) => {
+          const { opacity, y, scale } = sceneTransforms[i];
+          const isInfinity = stat.target === null;
+
+          return (
+            <motion.div
+              key={stat.id}
+              className={`bp-scene bp-scene--stat bp-scene--${stat.id}`}
+              style={{ opacity, y, scale }}
+              aria-hidden="true"
+            >
+              {/* Large decorative index watermark */}
+              <span className="bp-watermark" aria-hidden="true">
+                {stat.index}
+              </span>
+
+              <div className="bp-stat__layout">
+
+                {/* Left column: typography */}
+                <div className="bp-stat__text">
+
+                  <span className="bp-stat__index-label">
+                    <span className="bp-stat__index-accent">{stat.index}</span>
+                    {' / '}
+                    <span className="bp-stat__index-total">04</span>
+                  </span>
+
+                  <div className="bp-stat__counter-row">
+                    <span
+                      className={`bp-stat__number${isInfinity ? ' bp-stat__number--inf' : ''}`}
+                    >
+                      {counts[i]}
+                    </span>
+                    {stat.suffix && (
+                      <span className="bp-stat__suffix">{stat.suffix}</span>
+                    )}
+                  </div>
+
+                  <h3 className="bp-stat__headline">
+                    {stat.primaryLine}
+                    <br />
+                    <span className="bp-stat__headline-b">{stat.secondaryLine}</span>
+                  </h3>
+
+                  <p className="bp-stat__desc">{stat.description}</p>
+
+                  {/* Accent reveal line driven by scene opacity */}
+                  <motion.div
+                    className="bp-stat__accent-line"
+                    style={{ scaleX: opacity }}
+                    aria-hidden="true"
+                  />
+                </div>
+
+                {/* Right column: animated SVG icon */}
+                <div className="bp-stat__icon-wrap" aria-hidden="true">
+                  <stat.Icon active={activeStats[i]} />
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+
+        {/* ══════════════════════════════════════════════════════════════ */}
+        {/* Scene 5 – Final 2×2 grid                                      */}
+        {/* ══════════════════════════════════════════════════════════════ */}
+        <motion.div
+          className="bp-scene bp-scene--grid"
+          style={{ opacity: s5Opacity, y: s5Y }}
+        >
+          <div className="bp-grid__container">
+
+            <header className="bp-grid__header">
+              <span className="bp-eyebrow">The full picture</span>
+            </header>
+
+            {/* Accessible, semantic summary */}
+            <div className="bp-grid" role="list">
+              {STATS.map((stat, i) => {
+                const { opacity: cOp, y: cY } = cardTransforms[i];
+                const isInfinity = stat.target === null;
+
+                return (
+                  <motion.article
+                    key={stat.id}
+                    className={`bp-card bp-card--${stat.id}`}
+                    style={{ opacity: cOp, y: cY }}
+                    role="listitem"
+                    tabIndex={0}
+                    aria-label={`${counts[i]}${stat.suffix} ${stat.primaryLine} ${stat.secondaryLine}`}
+                  >
+                    <div className="bp-card__icon-wrap" aria-hidden="true">
+                      <stat.Icon active={activeStats[i]} />
+                    </div>
+
+                    <div className="bp-card__body">
+                      <div className="bp-card__value-row">
+                        <span
+                          className={`bp-card__value${isInfinity ? ' bp-card__value--inf' : ''}`}
+                        >
+                          {counts[i]}
+                        </span>
+                        {stat.suffix && (
+                          <span className="bp-card__suffix">{stat.suffix}</span>
+                        )}
+                      </div>
+                      <h3 className="bp-card__label">
+                        {stat.primaryLine} {stat.secondaryLine}
+                      </h3>
+                    </div>
+                  </motion.article>
+                );
+              })}
+            </div>
+
+          </div>
+        </motion.div>
+
       </div>
-    </div>
+    </section>
   );
-}
+};
+
+export default BigPicture;

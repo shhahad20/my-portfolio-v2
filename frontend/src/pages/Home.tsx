@@ -12,15 +12,15 @@
 // import Testimonials from "../components/Testimonials";
 
 import AboutMe from "../26/Aboutme";
-import BigPictureStats from "../26/BigPicture";
 import StickyFooter from "../26/Footer";
 import LandingPage from "../26/LandingPage";
-// import MarqueeDemo from "../26/MTestimonials";
 import NavigationMenu from "../26/Nav";
 import WhatKeepsMeBusy from "../26/Projects";
-// import TestimonialsSection from "../26/Testimonials";
 import "../26/style/Footer.scss";
 import TestimonialsSection from "../26/Marquee";
+// import BigPicture from "../26/BigPicture";
+import BigPicture2 from "../26/BigPicture2";
+// import { ScrollTextAnimation } from "../26/Textanimation";
 const Home: React.FC = () => {
   return (
     // <>
@@ -43,10 +43,14 @@ const Home: React.FC = () => {
         <NavigationMenu />
         <LandingPage imageSrc="../public/Landingill.svg" />
         <AboutMe />
+        <BigPicture2 />
+
         <WhatKeepsMeBusy />
+
         {/* <TestimonialsSection /> */}
-        <BigPictureStats />
-        <img src={"../public/sectionImg.png"} width="100%" height="auto" />
+        {/* <img src={"../public/sectionImg.png"} width="100%" height="auto" /> */}
+        {/* <BigPicture/> */}
+        {/* <ScrollTextAnimation /> */}
         <TestimonialsSection />
         <StickyFooter />
       </main>
