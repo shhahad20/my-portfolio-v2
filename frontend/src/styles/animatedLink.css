@@ -2,6 +2,8 @@
   display: inline-block;
   text-decoration: none;
   color: inherit;
+  --link-color: #000000;
+  --hover-link-color: #6b7280;
 }
 
 .animated-link .text-wrapper {
@@ -21,11 +23,11 @@
 }
 
 .animated-link .default-text {
-  color: #000000;
+  color: var(--link-color);
 }
 
 .animated-link .hover-text {
-  color: #818180;
+  color: var(--hover-link-color);
   position: absolute;
   top: 0;
   left: 0;
@@ -33,7 +35,7 @@
 
 @media (max-width: 768px) {
   .animated-link .default-text {
-    color: #000000;
+    color: var(--link-color);
   }
 }
 /*# sourceMappingURL=animatedLink.css.map */

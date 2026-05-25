@@ -29,36 +29,30 @@
   // ── Header ─────────────────────────────────────────────────────────────────
   &__header {
     display: flex;
-    flex-direction: column;
-    gap: 0;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
   }
 
   &__title {
-    // font-size: clamp(42px, 10vw, 96px); 
-    font-size: $heading-size;
-    font-weight: 300;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    margin: 0;
-    padding: 0;
     font-family: $font-display;
-    text-transform: uppercase;
-    display: inline-block;
-
-    @media (max-width: 768px) {
-      letter-spacing: -0.01em;
-    }
+    font-size: $heading-size;
+    font-weight: $heading-weight;
+    line-height: $heading-lh;
+    letter-spacing: $heading-ls;
+    color: $color-text;
+    margin: 0;
   }
 
   &__number {
     font-family: $font-light;
-    display: inline;
     font-size: $num-size;
     font-weight: $num-weight;
     color: $color-muted;
     letter-spacing: $num-ls;
-    margin-left: clamp(8px, 2vw, 16px);
     white-space: nowrap;
+    align-self: flex-start;
   }
 
   // ── Navigation / Links ─────────────────────────────────────────────────────
@@ -152,6 +146,17 @@
   }
 
   // ── Responsive ─────────────────────────────────────────────────────────────
+
+  @media (max-width: 768px) {
+    &__header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &__number {
+      display: none;
+    }
+  }
 
   @media (max-width: 480px) {
     padding: clamp(36px, 6vw, 48px) clamp(16px, 4vw, 24px);
@@ -250,10 +255,6 @@
       max-width: 950px;
     }
 
-    &__title {
-      font-size: 96px;
-    }
-
     &__nav-button {
       transition: all $dur-slow $ease-out;
       padding: 10px 16px;
@@ -274,10 +275,6 @@
     &__container {
       max-width: 1100px;
       gap: 100px;
-    }
-
-    &__title {
-      font-size: 120px;
     }
 
     &__number {
@@ -302,10 +299,6 @@
 
     &__container {
       gap: clamp(24px, 4vh, 40px);
-    }
-
-    &__title {
-      font-size: clamp(36px, 8vw, 64px);
     }
 
     &__paragraph {

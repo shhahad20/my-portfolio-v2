@@ -309,10 +309,8 @@ const TestimonialsSection: React.FC = () => {
           The Word,
           <br />
           From Others
-          <span className="section-header__index" aria-hidden="true">
-            05
-          </span>
         </h2>
+        <span className="section-header__index" aria-hidden="true">05</span>
       </header>
 
       {/* ── Marquee rows ─────────────────────────────────────────────────────── */}

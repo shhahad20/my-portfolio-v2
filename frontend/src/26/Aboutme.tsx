@@ -103,9 +103,8 @@ const AboutMe: React.FC = () => {
           viewport={{ once: true, margin: "-100px" }}
           variants={headerVariants}
         >
-          <h1 className="about__title">
-            ABOUT ME <span className="about__number">01</span>
-          </h1>
+          <h1 className="about__title">ABOUT ME</h1>
+          <span className="about__number" aria-hidden="true">01</span>
         </motion.div>
 
         {/* ── Navigation ─────────────────────────────────────────────────── */}
