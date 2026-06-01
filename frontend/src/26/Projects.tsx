@@ -558,18 +558,18 @@ export default function WhatKeepsMeBusy() {
             <br />
             ME BUSY
           </h1>
-          <nav className="wkmb-nav" aria-label="External links">
-            {NAV_LINKS.map(({ id, label, href }) => (
-              <AnimatedLink
-                key={id}
-                linkText={label}
-                hoverText={label}
-                href={href}
-              />
-            ))}
-          </nav>
+          <span className="wkmb-page-num">02</span>
         </div>
-        <span className="wkmb-page-num" aria-hidden="true">02</span>
+        <nav className="wkmb-nav" aria-label="External links">
+          {NAV_LINKS.map(({ id, label, href }) => (
+            <AnimatedLink
+              key={id}
+              linkText={label}
+              hoverText={label}
+              href={href}
+            />
+          ))}
+        </nav>
       </header>
 
       {/* ── Circle field ────────────────────────────────────────────────── */}

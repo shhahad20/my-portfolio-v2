@@ -1,8 +1,9 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./style/blog.scss";
 import NavigationMenu from "./Nav";
 import StickyFooter from "./Footer";
+import { blogApi, type ApiBlogPost } from "../api/blogApi";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -136,10 +137,23 @@ export const BLOG_POSTS: BlogPost[] = [
   },
 ];
 
-const ALL_CATEGORIES = [
-  "All",
-  ...Array.from(new Set(BLOG_POSTS.map((p) => p.category))),
-];
+const AUTHOR = { name: "Shahad Altharwa", initials: "SA" };
+
+function mapApiPost(p: ApiBlogPost): BlogPost {
+  return {
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt,
+    coverImage: p.cover_image_url ?? undefined,
+    category: p.category,
+    tags: p.tags,
+    publishDate: p.published_at ?? p.created_at,
+    readTime: p.read_time,
+    featured: p.featured,
+    author: AUTHOR,
+  };
+}
 
 // ── Framer Motion Variants ─────────────────────────────────────────────────────
 
@@ -317,15 +331,32 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, index }) => (
 // ── BlogPage ───────────────────────────────────────────────────────────────────
 
 const BlogPage: React.FC = () => {
+  const [posts, setPosts] = useState<BlogPost[]>(BLOG_POSTS);
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
 
-  const featuredPost = useMemo(() => BLOG_POSTS.find((p) => p.featured), []);
+  useEffect(() => {
+    blogApi
+      .getPosts()
+      .then((data) => {
+        if (data.length > 0) setPosts(data.map(mapApiPost));
+      })
+      .catch(() => {
+        // Keep sample data on API failure
+      });
+  }, []);
+
+  const allCategories = useMemo(
+    () => ["All", ...Array.from(new Set(posts.map((p) => p.category)))],
+    [posts],
+  );
+
+  const featuredPost = useMemo(() => posts.find((p) => p.featured), [posts]);
 
   const filteredPosts = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
-    return BLOG_POSTS.filter((p) => {
+    return posts.filter((p) => {
       if (p.featured) return false;
       const matchesCategory =
         activeCategory === "All" || p.category === activeCategory;
@@ -336,7 +367,7 @@ const BlogPage: React.FC = () => {
         p.tags.some((t) => t.toLowerCase().includes(q));
       return matchesCategory && matchesSearch;
     });
-  }, [activeCategory, searchQuery]);
+  }, [posts, activeCategory, searchQuery]);
 
   const handleReset = () => {
     setActiveCategory("All");
@@ -421,7 +452,7 @@ const BlogPage: React.FC = () => {
               role="group"
               aria-label="Filter by category"
             >
-              {ALL_CATEGORIES.map((cat) => (
+              {allCategories.map((cat) => (
                 <CategoryPill
                   key={cat}
                   label={cat}

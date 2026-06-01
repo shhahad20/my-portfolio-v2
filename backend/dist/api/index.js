@@ -7,6 +7,8 @@ import apiErrorHandler from '../src/middlewares/errorHandler.js';
 import homeRouter from '../src/routers/homeRouter.js';
 import projectsRouter from '../src/routers/projectsRouter.js';
 import testimonialsRoutes from '../src/routers/testimonialsRouter.js';
+import blogPublicRouter from '../src/routers/blogPublicRouter.js';
+import adminRouter from '../src/routers/adminRouter.js';
 config();
 const app = express();
 const PORT = 3001;
@@ -38,6 +40,8 @@ app.use('/api', itemsRouter);
 app.use('/api', projectsRouter);
 app.use('/api', aiChatRouter);
 app.use("/api", testimonialsRoutes);
+app.use('/api', blogPublicRouter);
+app.use('/api', adminRouter);
 app.use(apiErrorHandler);
 app.listen(PORT, async () => {
     console.log('Server running http://localhost:' + PORT);

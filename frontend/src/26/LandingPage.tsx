@@ -123,7 +123,11 @@ const LandingPage: React.FC<Props> = () => {
     <div className="landing">
       {/* ── Aurora canvas background ────────────────────────────────────── */}
       {/* <AuroraBackground theme="light" /> */}
-
+        {/* <div className="spotlight">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div> */}
       {/* Hidden SVG — defines the goo filter for HTML elements */}
       <svg
         aria-hidden="true"

@@ -21,19 +21,14 @@
 .wkmb-header {
   display: flex;
   align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
   padding: $section-padding;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
 
 .wkmb-title-block {
   display: flex;
-  flex-direction: column;
+  align-items: flex-end;
   gap: 0.6rem;
 }
 
@@ -49,21 +44,19 @@
 
 .wkmb-page-num {
   font-family: $font-light;
+  display: inline;
   font-size: $num-size;
   font-weight: $num-weight;
   color: $color-muted;
   letter-spacing: $num-ls;
+  margin-left: clamp(8px, 2vw, 16px);
   white-space: nowrap;
-  align-self: flex-start;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
 }
 
 .wkmb-nav {
   display: flex;
   gap: 1.4rem;
+  padding-bottom: 0.4rem;
   margin-left: 0.25rem;
 }
 

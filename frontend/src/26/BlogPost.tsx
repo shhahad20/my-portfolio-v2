@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -6,6 +6,7 @@ import "./style/blogpost.scss";
 import NavigationMenu from "./Nav";
 import StickyFooter from "./Footer";
 import { BLOG_POSTS, type BlogPost } from "./Blog";
+import { blogApi, type ApiPostDetail, type ApiContentBlock } from "../api/blogApi";
 
 // ── Content block types ────────────────────────────────────────────────────────
 // Swap `ContentBlock[]` arrays below with CMS/API/markdown data later.
@@ -256,6 +257,22 @@ const ARTICLE_CONTENTS: Record<string, ContentBlock[]> = {
 
 function getContent(post: BlogPost): ContentBlock[] {
   return ARTICLE_CONTENTS[post.slug] ?? makeFallback(post);
+}
+
+function mapApiBlock(b: ApiContentBlock): ContentBlock | null {
+  const d = b.data as Record<string, unknown>;
+  switch (b.type) {
+    case "paragraph": return { type: "paragraph", text: (d.text as string) || "" };
+    case "heading": return { type: "heading", level: ([2, 3].includes(Number(d.level)) ? Number(d.level) : 2) as 2 | 3, text: (d.text as string) || "" };
+    case "code": return { type: "code", language: (d.language as string) || "text", code: (d.code as string) || "", filename: d.filename as string | undefined };
+    case "quote": return { type: "quote", text: (d.text as string) || "", author: d.attribution as string | undefined };
+    case "image": return { type: "image", src: (d.url as string) || "", alt: (d.alt as string) || "", caption: d.caption as string | undefined };
+    case "video": return { type: "video", src: (d.url as string) || "", title: d.caption as string | undefined };
+    case "list": return { type: "list", ordered: Boolean(d.ordered), items: (d.items as string[]) || [] };
+    case "divider": return { type: "divider" };
+    case "callout": return { type: "callout", variant: (["tip", "note", "warning"].includes(d.variant as string) ? d.variant : "note") as "tip" | "note" | "warning", text: (d.text as string) || "" };
+    default: return null;
+  }
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -635,21 +652,35 @@ const AuthorBio: React.FC<{ author: BlogPost["author"] }> = ({ author }) => (
 
 // ── RelatedPosts ───────────────────────────────────────────────────────────────
 
-const RelatedPosts: React.FC<{ currentSlug: string; category: string }> = ({
+interface RelatedPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  cover_image_url?: string | null;
+  published_at?: string | null;
+  read_time?: number;
+}
+
+const RelatedPosts: React.FC<{ currentSlug: string; category: string; apiRelated?: RelatedPost[] }> = ({
   currentSlug,
   category,
+  apiRelated,
 }) => {
   const navigate = useNavigate();
 
-  const sameCategory = BLOG_POSTS.filter(
-    (p) => p.slug !== currentSlug && p.category === category
-  );
-  const others = BLOG_POSTS.filter(
-    (p) =>
-      p.slug !== currentSlug &&
-      !sameCategory.find((r) => r.slug === p.slug)
-  );
-  const posts = [...sameCategory, ...others].slice(0, 3);
+  const posts: RelatedPost[] = apiRelated && apiRelated.length > 0
+    ? apiRelated
+    : (() => {
+        const sameCategory = BLOG_POSTS.filter(p => p.slug !== currentSlug && p.category === category);
+        const others = BLOG_POSTS.filter(p => p.slug !== currentSlug && !sameCategory.find(r => r.slug === p.slug));
+        return [...sameCategory, ...others].slice(0, 3).map(p => ({
+          id: p.id, slug: p.slug, title: p.title, excerpt: p.excerpt,
+          category: p.category, cover_image_url: p.coverImage,
+          published_at: p.publishDate, read_time: p.readTime,
+        }));
+      })();
 
   if (posts.length === 0) return null;
 
@@ -682,8 +713,8 @@ const RelatedPosts: React.FC<{ currentSlug: string; category: string }> = ({
             }}
           >
             <div className="blogpost-rcard__cover" aria-hidden="true">
-              {post.coverImage ? (
-                <img src={post.coverImage} alt={post.title} loading="lazy" />
+              {post.cover_image_url ? (
+                <img src={post.cover_image_url} alt={post.title} loading="lazy" />
               ) : (
                 <div className="blogpost-rcard__cover-placeholder">
                   <span>{post.title.charAt(0)}</span>
@@ -694,7 +725,7 @@ const RelatedPosts: React.FC<{ currentSlug: string; category: string }> = ({
               <span className="blogpost-rcard__category">{post.category}</span>
               <h3 className="blogpost-rcard__title">{post.title}</h3>
               <span className="blogpost-rcard__meta">
-                {formatDate(post.publishDate)} · {post.readTime} min read
+                {post.published_at ? formatDate(post.published_at) : ""}{post.read_time ? ` · ${post.read_time} min read` : ""}
               </span>
             </div>
           </motion.a>
@@ -706,32 +737,72 @@ const RelatedPosts: React.FC<{ currentSlug: string; category: string }> = ({
 
 // ── BlogPostPage ───────────────────────────────────────────────────────────────
 
+const AUTHOR = { name: "Shahad Altharwa", initials: "SA" };
+
 const BlogPostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const [apiPost, setApiPost] = useState<ApiPostDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
-  const post = BLOG_POSTS.find((p) => p.slug === slug);
+  useEffect(() => {
+    if (!slug) return;
+    setLoading(true);
+    setNotFound(false);
+    blogApi
+      .getPost(slug)
+      .then(setApiPost)
+      .catch(() => {
+        const fallback = BLOG_POSTS.find((p) => p.slug === slug);
+        if (!fallback) setNotFound(true);
+      })
+      .finally(() => setLoading(false));
+  }, [slug]);
 
-  // 404 state
-  if (!post) {
+  // Derive display data from API response or fallback to sample data
+  const samplePost = BLOG_POSTS.find((p) => p.slug === slug);
+
+  const title = apiPost?.title ?? samplePost?.title ?? "";
+  const excerpt = apiPost?.excerpt ?? samplePost?.excerpt ?? "";
+  const coverImage = apiPost?.cover_image_url ?? samplePost?.coverImage ?? null;
+  const category = apiPost?.category ?? samplePost?.category ?? "";
+  const tags = apiPost?.tags ?? samplePost?.tags ?? [];
+  const publishDate = apiPost?.published_at ?? samplePost?.publishDate ?? "";
+  const readTime = apiPost?.read_time ?? samplePost?.readTime ?? 1;
+
+  const content: ContentBlock[] = apiPost?.blocks?.length
+    ? (apiPost.blocks.map(mapApiBlock).filter(Boolean) as ContentBlock[])
+    : samplePost
+    ? getContent(samplePost)
+    : [{ type: "paragraph", text: excerpt }];
+
+  if (loading) {
     return (
       <div className="page-shell">
         <main className="page-shell-content">
           <NavigationMenu />
-          
+          <div className="blogpost-loading" aria-label="Loading article">
+            <div className="blogpost-loading__bar" />
+            <div className="blogpost-loading__title" />
+            <div className="blogpost-loading__line" />
+            <div className="blogpost-loading__line blogpost-loading__line--short" />
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (notFound) {
+    return (
+      <div className="page-shell">
+        <main className="page-shell-content">
+          <NavigationMenu />
           <div className="blogpost-notfound">
-            <span className="blogpost-notfound__eyebrow" aria-hidden="true">
-              404
-            </span>
+            <span className="blogpost-notfound__eyebrow" aria-hidden="true">404</span>
             <h1 className="blogpost-notfound__title">Article not found</h1>
-            <p className="blogpost-notfound__sub">
-              This article doesn't exist or may have been moved.
-            </p>
-            <button
-              className="blogpost-notfound__btn"
-              onClick={() => navigate("/blog")}
-              type="button"
-            >
+            <p className="blogpost-notfound__sub">This article doesn't exist or may have been moved.</p>
+            <button className="blogpost-notfound__btn" onClick={() => navigate("/blog")} type="button">
               ← Back to Blog
             </button>
           </div>
@@ -740,8 +811,6 @@ const BlogPostPage: React.FC = () => {
       </div>
     );
   }
-
-  const content = getContent(post);
 
   return (
     <div className="page-shell">
@@ -766,48 +835,43 @@ const BlogPostPage: React.FC = () => {
 
         {/* ── Post header ───────────────────────────────────────────────── */}
         <header className="blogpost-header">
-          {/* Cover image / placeholder */}
           <motion.div
             className="blogpost-cover"
             initial={{ opacity: 0, scale: 0.99 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.65, ease: EASE_OUT }}
           >
-            {post.coverImage ? (
-              <img src={post.coverImage} alt={post.title} />
+            {coverImage ? (
+              <img src={coverImage} alt={title} />
             ) : (
               <div className="blogpost-cover-placeholder" aria-hidden="true">
-                <span>{post.title.charAt(0)}</span>
+                <span>{title.charAt(0)}</span>
               </div>
             )}
           </motion.div>
 
-          {/* Title area */}
           <div className="blogpost-title-area">
-            {/* Category + tags */}
             <motion.div
               className="blogpost-category-row"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.25, ease: EASE_OUT }}
             >
-              <span className="blogpost-category">{post.category}</span>
-              {post.tags.map((tag) => (
+              <span className="blogpost-category">{category}</span>
+              {tags.map((tag) => (
                 <span key={tag} className="blogpost-tag">{tag}</span>
               ))}
             </motion.div>
 
-            {/* Title */}
             <motion.h1
               className="blogpost-title"
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.32, ease: EASE_OUT }}
             >
-              {post.title}
+              {title}
             </motion.h1>
 
-            {/* Meta row */}
             <motion.div
               className="blogpost-meta"
               initial={{ opacity: 0 }}
@@ -817,40 +881,33 @@ const BlogPostPage: React.FC = () => {
               aria-label="Article metadata"
             >
               <div className="blogpost-author">
-                <div className="blogpost-author__avatar" aria-hidden="true">
-                  {post.author.initials ?? post.author.name.slice(0, 2).toUpperCase()}
-                </div>
-                <span className="blogpost-author__name">{post.author.name}</span>
+                <div className="blogpost-author__avatar" aria-hidden="true">{AUTHOR.initials}</div>
+                <span className="blogpost-author__name">{AUTHOR.name}</span>
               </div>
-
               <span className="blogpost-meta__sep" aria-hidden="true" />
-
-              <time className="blogpost-meta__item" dateTime={post.publishDate}>
-                {formatDate(post.publishDate)}
-              </time>
-
+              {publishDate && (
+                <time className="blogpost-meta__item" dateTime={publishDate}>
+                  {formatDate(publishDate)}
+                </time>
+              )}
               <span className="blogpost-meta__sep" aria-hidden="true" />
-
-              <span className="blogpost-meta__item">
-                {post.readTime} min read
-              </span>
+              <span className="blogpost-meta__item">{readTime} min read</span>
             </motion.div>
           </div>
         </header>
 
         {/* ── Article content ───────────────────────────────────────────── */}
-        <article aria-label={`Article: ${post.title}`}>
+        <article aria-label={`Article: ${title}`}>
           <ContentRenderer blocks={content} />
         </article>
 
-        {/* ── Share ─────────────────────────────────────────────────────── */}
-        <ShareButtons title={post.title} />
-
-        {/* ── Author bio ────────────────────────────────────────────────── */}
-        <AuthorBio author={post.author} />
-
-        {/* ── Related posts ─────────────────────────────────────────────── */}
-        <RelatedPosts currentSlug={post.slug} category={post.category} />
+        <ShareButtons title={title} />
+        <AuthorBio author={AUTHOR} />
+        <RelatedPosts
+          currentSlug={slug ?? ""}
+          category={category}
+          apiRelated={apiPost?.related}
+        />
 
         <StickyFooter />
       </main>

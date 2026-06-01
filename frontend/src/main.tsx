@@ -13,6 +13,7 @@ import Components from "./pages/Components.tsx";
 import ProjectDetail from "./26/ProjectDetails.tsx";
 import BlogPage from "./26/Blog.tsx";
 import BlogPostPage from "./26/BlogPost.tsx";
+import BlogAdmin from "./26/admin/BlogAdmin.tsx";
 
 const prefersReducedMotion =
   window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
@@ -31,6 +32,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="/projects/:id" element={<ProjectDetail />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPostPage />} />
+            <Route path="/admin" element={<BlogAdmin />} />
           </Routes>
         ) : (
           <ReactLenis
@@ -51,6 +53,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/projects/:id" element={<ProjectDetail />} />
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/blog/:slug" element={<BlogPostPage />} />
+              <Route path="/admin" element={<BlogAdmin />} />
             </Routes>
           </ReactLenis>
         )}

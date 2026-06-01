@@ -230,9 +230,15 @@
   margin-inline: auto;
   width: 100%;
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: $sp-3;
+
+  // FIX: row layout on desktop, column on mobile so index + title don't squash
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: $sp-2;
+  }
 }
 
 .section-header__index {
@@ -242,8 +248,12 @@
   letter-spacing: $num-ls;
   color: $color-muted;
   line-height: 1;
-  white-space: nowrap;
-  align-self: flex-start;
+  padding-left: clamp(10px, 2.2vw, 18px);
+
+  // On mobile the index sits above the title — remove left-pad to keep it flush
+  @media (max-width: 600px) {
+    padding-left: 0;
+  }
 }
 
 .section-header__title {
@@ -357,13 +367,7 @@
   }
 
   .section-header {
-    flex-direction: column;
-    align-items: flex-start;
     gap: $sp-2;
-  }
-
-  .section-header__index {
-    display: none;
   }
 
   // Slightly faster on tablet so enough cards are visible with narrower rows
