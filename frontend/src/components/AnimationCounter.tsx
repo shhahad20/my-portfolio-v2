@@ -1,5 +1,5 @@
 import { animate, useMotionValue, useInView } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 
 interface AnimatedCounterProps {
   target: number;
@@ -7,30 +7,55 @@ interface AnimatedCounterProps {
   suffix?: string;
 }
 
-const AnimatedCounter : React.FC<AnimatedCounterProps> = ({ target, duration = 2, suffix = "" }) => {
-  // Create a ref to attach to the element you want to observe.
-  const ref = useRef(null);
-  // Check if the element is in view. 'once: true' ensures the animation only runs once.
+const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
+  target,
+  duration = 2.5,
+  suffix = "",
+}) => {
+  const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true });
-  // Create a motion value that starts at 0.
   const motionValue = useMotionValue(0);
   const [count, setCount] = useState(0);
 
+  // Reserve space equal to the widest possible value (the target + suffix)
+  // so the counter never shifts surrounding elements as it counts up.
+  const minWidth = useMemo(() => {
+    const maxStr = `${target}${suffix}`;
+    return `${maxStr.length}ch`;
+  }, [target, suffix]);
+
   useEffect(() => {
-    if (isInView) {
-      // Animate the motion value from 0 to target over the specified duration.
-      const controls = animate(motionValue, target, {
-        duration: duration,
-        onUpdate: (latest) => {
-          setCount(Math.round(latest));
-        },
-      });
-      // Clean up the animation on component unmount.
-      return () => controls.stop();
-    }
+    if (!isInView) return;
+
+    const controls = animate(motionValue, target, {
+      duration,
+      // Smooth deceleration: fast start, gentle ease into the final value.
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (latest) => {
+        setCount(Math.round(latest));
+      },
+    });
+
+    return () => controls.stop();
   }, [isInView, target, duration, motionValue]);
 
-  return <span ref={ref}>{count}{suffix}</span>;
+  return (
+    <span
+    className="animated-counter"
+      ref={ref}
+      style={{
+        display: "inline-block",
+        fontFamily: "monospace",
+        fontWeight: "bold",
+        minWidth,
+        // Tabular nums keeps each digit the same width so the text
+        // doesn't wobble horizontally as digits change.
+        fontVariantNumeric: "tabular-nums",
+      }}
+    >
+      {count}{suffix}
+    </span>
+  );
 };
 
 export default AnimatedCounter;
