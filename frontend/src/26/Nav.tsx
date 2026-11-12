@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { useLenis } from "lenis/react";
+import NavStatus from "./NavStatus";
 import "./style/Nav.scss";
 
 // ─────────────────────────────────────────────
@@ -428,32 +429,35 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({
           {brand}
         </a>
 
-        {/* Menu toggle */}
-        <button
-          className={`nm-bar__toggle${isActive ? " nm-bar__toggle--active" : ""}`}
-          onClick={handleToggle}
-          aria-expanded={isActive}
-          aria-controls="navigation-panel"
-          aria-label={isActive ? "Close menu" : "Open menu"}
-        >
-          <AnimatedBurger isActive={isActive} />
-          <div className="nm-bar__label" aria-hidden="true">
-            <motion.span
-              className="nm-bar__label-text"
-              variants={opacityVariants}
-              animate={isActive ? "closed" : "open"}
-            >
-              Menu
-            </motion.span>
-            <motion.span
-              className="nm-bar__label-text nm-bar__label-text--abs"
-              variants={opacityVariants}
-              animate={isActive ? "open" : "closed"}
-            >
-              Close
-            </motion.span>
-          </div>
-        </button>
+        {/* Status (time + battery) and menu toggle */}
+        <div className="nm-bar__end">
+          <NavStatus />
+          <button
+            className={`nm-bar__toggle${isActive ? " nm-bar__toggle--active" : ""}`}
+            onClick={handleToggle}
+            aria-expanded={isActive}
+            aria-controls="navigation-panel"
+            aria-label={isActive ? "Close menu" : "Open menu"}
+          >
+            <AnimatedBurger isActive={isActive} />
+            <div className="nm-bar__label" aria-hidden="true">
+              <motion.span
+                className="nm-bar__label-text"
+                variants={opacityVariants}
+                animate={isActive ? "closed" : "open"}
+              >
+                Menu
+              </motion.span>
+              <motion.span
+                className="nm-bar__label-text nm-bar__label-text--abs"
+                variants={opacityVariants}
+                animate={isActive ? "open" : "closed"}
+              >
+                Close
+              </motion.span>
+            </div>
+          </button>
+        </div>
       </div>
 
       {/* Expanding background */}

@@ -123,16 +123,114 @@
     }
   }
 
+  &__end {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    @media (max-width: 768px) {
+      gap: 1.25rem;
+    }
+  }
+
   &.is-open {
     .nm-bar__brand,
     .nm-bar__toggle,
-    .nm-bar__label-text {
+    .nm-bar__label-text,
+    .nm-status {
       color: #ffffff;
     }
 
     .nm-burger__bar {
       background: #ffffff;
     }
+  }
+}
+
+// ── Status (time + battery) ───────────────────────────────────────────────────
+
+.nm-status {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  color: #000000;
+  font-family: var(--nm-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  user-select: none;
+  transition: color 0.28s var(--nm-ease);
+
+  &__battery {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__cell {
+    position: relative;
+    display: block;
+    width: 22px;
+    height: 11px;
+    padding: 1px;
+    border: 1px solid currentColor;
+    border-radius: 3px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      right: -4px;
+      width: 2px;
+      height: 3px;
+      background: currentColor;
+      border-radius: 0 1px 1px 0;
+    }
+  }
+
+  &__fill {
+    display: block;
+    height: 100%;
+    background: currentColor;
+    border-radius: 1px;
+    transition: width 0.4s ease;
+  }
+
+  &__battery.is-low &__fill {
+    background: var(--nm-accent);
+  }
+
+  &__bolt {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 7px;
+    height: 9px;
+    transform: translate(-50%, -50%);
+    color: var(--nm-accent);
+  }
+
+  // Small screens: keep time + battery icon, drop the percentage.
+  @media (max-width: 480px) {
+    gap: 0.75rem;
+
+    &__pct {
+      display: none;
+    }
+  }
+
+  // Narrow phones: time only — the brand and menu need the room.
+  @media (max-width: 400px) {
+    &__battery {
+      display: none;
+    }
+  }
+
+  // Very narrow: hide the status entirely.
+  @media (max-width: 320px) {
+    display: none;
   }
 }
 

@@ -44,7 +44,8 @@ const Home: React.FC = () => {
         <NavigationMenu />
         <LandingPage imageSrc="../public/Landingill.svg" />
         <AboutMe />
-        <BigPicture2 />
+        {/* <BigPicture2 /> */}
+        <div style={{ marginTop: "10rem" }}/>
         <WhatKeepsMeBusy />
         {/* <img src={"../public/sectionImg.png"} width="100%" height="auto" /> */}
         <BigPictureStats/>
